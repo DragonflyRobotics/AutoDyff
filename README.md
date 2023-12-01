@@ -4,7 +4,7 @@
 
 
 # Vision Statement
-Givn some input equation, provide a numerical derivative at a given point. The user have a standard text input for the equation and point and the algorithm will provide the numerical derivative along with the steps the algorithm took to derive it. This algorithm will be able to differentiate trigonometric function, logarithmic, and exponential functions. It will not do implicit differentiation, inverse functions, or hyperbolic trigonometric functions. The algorithm will provide a RESTful API that will interface with a web app, Android, and iOS app to provide good user experience. 
+Given some input equation, provide a numerical derivative at a given point. The user have a standard text input for the equation and point and the algorithm will provide the numerical derivative along with the steps the algorithm took to derive it. This algorithm will be able to differentiate trigonometric function, logarithmic, and exponential functions. It will not do implicit differentiation, inverse functions, or hyperbolic trigonometric functions. The algorithm will provide a RESTful API that will interface with a web app, Android, and iOS app to provide good user experience. 
 
 
 # Roles 
