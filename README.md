@@ -1,5 +1,5 @@
 # CS-II-ISP-Automatic-Differentiation
-
+***NOTE: This staging is entirely unstable and not ready for use!***
 [![Pylint](https://github.com/DragonflyRobotics/CS-II-ISP-Automatic-Differentiation/actions/workflows/pylint.yml/badge.svg)](https://github.com/DragonflyRobotics/CS-II-ISP-Automatic-Differentiation/actions/workflows/pylint.yml) [![Poetry Build](https://github.com/DragonflyRobotics/CS-II-ISP-Automatic-Differentiation/actions/workflows/build_pkg.yml/badge.svg)](https://github.com/DragonflyRobotics/CS-II-ISP-Automatic-Differentiation/actions/workflows/build_pkg.yml)
 
 
@@ -13,4 +13,3 @@ Given some input equation, provide a numerical derivative at a given point. The 
 * Karthik Peravali -QA Analyst- @KarthikPeravali - https://codermerlin.academy/users/karthik-peravali/Digital%20Portfolio/
 * NIKSON THAPA - RELEASE MANAGER - @N1ks0n08 - https://codermerlin.academy/users/nikson-thapa/Digital%20Portfolio/
 * Brennan Coil - UI/UX Designer - @Hambreyola - https://codermerlin.academy/users/brennan-coil/Digital%20Portfolio/ 
-
