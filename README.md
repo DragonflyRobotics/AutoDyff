@@ -10,5 +10,5 @@ Givn some input equation, provide a numerical derivative at a given point. The u
 # Roles 
 * Krishna Shah - Product Manager - @DragonflyRobotics - https://codermerlin.academy/users/krishna-shah/Digital%20Portfolio/
 * Aryan Verma - Project Manager - @aryanjverma - https://codermerlin.academy/users/aryan-verma/Digital%20Portfolio/
-* Karthik Peravali -QA Analyst- @KarthikPeravali - https://codermerlin.academy/users/karthik-peravali
+* Karthik Peravali -QA Analyst- @KarthikPeravali - https://codermerlin.academy/users/karthik-peravali/Digital%20Portfolio/
 * NIKSON THAPA - RELEASE MANAGER - @N1ks0n08 - https://codermerlin.academy/users/nikson-thapa/Digital%20Portfolio/
