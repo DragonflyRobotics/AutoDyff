@@ -8,8 +8,9 @@ Given some input equation, provide a numerical derivative at a given point. The 
 
 
 # Roles 
-* Krishna Shah - Product Manager - @DragonflyRobotics - https://codermerlin.academy/users/krishna-shah/Digital%20Portfolio/
-* Aryan Verma - Project Manager - @aryanjverma - https://codermerlin.academy/users/aryan-verma/Digital%20Portfolio/
-* Karthik Peravali -QA Analyst- @KarthikPeravali - https://codermerlin.academy/users/karthik-peravali/Digital%20Portfolio/
-* NIKSON THAPA - RELEASE MANAGER - @N1ks0n08 - https://codermerlin.academy/users/nikson-thapa/Digital%20Portfolio/
-* Brennan Coil - UI/UX Designer - @Hambreyola - https://codermerlin.academy/users/brennan-coil/Digital%20Portfolio/ 
+* Krishna Shah - Product Manager - @DragonflyRobotics - [Digital Portfolio](https://codermerlin.academy/users/krishna-shah/Digital%20Portfolio/)
+* Aryan Verma - Project Manager - @aryanjverma - [Digital Portfolio](https://codermerlin.academy/users/aryan-verma/Digital%20Portfolio/)
+* Karthik Peravali -QA Analyst- @KarthikPeravali - [Digital Portfolio](https://codermerlin.academy/users/karthik-peravali/Digital%20Portfolio/)
+* Nikson Thapa - Release Manager - @N1ks0n08 - [Digital Portfolio](https://codermerlin.academy/users/nikson-thapa/Digital%20Portfolio/) 
+* Brennan Coil - UI/UX Designer - @Hambreyola - [Digital Portfolio](https://codermerlin.academy/users/brennan-coil/Digital%20Portfolio/) 
+
