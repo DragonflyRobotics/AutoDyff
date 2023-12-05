@@ -13,4 +13,4 @@ Given some input equation, provide a numerical derivative at a given point. The 
 * Karthik Peravali -QA Analyst- @KarthikPeravali - [Digital Portfolio](https://codermerlin.academy/users/karthik-peravali/Digital%20Portfolio/)
 * Nikson Thapa - Release Manager - @N1ks0n08 - [Digital Portfolio](https://codermerlin.academy/users/nikson-thapa/Digital%20Portfolio/) 
 * Brennan Coil - UI/UX Designer - @Hambreyola - [Digital Portfolio](https://codermerlin.academy/users/brennan-coil/Digital%20Portfolio/) 
-* Shivanshi Das - 
+* Shivanshi Das - Backend Engineer - @ShivanshiDas - [Digital Portfolio](https://codermerlin.academy/users/shivanshi-das/Digital%20Portfolio/) 
