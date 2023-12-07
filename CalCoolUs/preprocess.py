@@ -162,7 +162,15 @@ class ASTGraph:
 					random.choices(string.ascii_uppercase +
 					               string.digits, k=3))
 				graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
+				if str(shuntyardresult[counter - 2]) == 'x':
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR}})
+				else:
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.CONST}})
 				graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
+				if str(shuntyardresult[counter - 1]) == 'x':
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR}})
+				else:
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.CONST}})
 				print(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
 				print(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
