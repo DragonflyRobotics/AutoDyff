@@ -11,10 +11,11 @@ from CalCoolUs.preprocess import ShuntingYard, OpType
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.tokenize("2-x")
+shuntres = myshunt.tokenize("-x-1-(x-1-x)+-(-x-1)")
 print(shuntres)
-shuntres = myshunt.getPostfix("2-x")
 
+shuntres = myshunt.getPostfix("-x-1-(x-1-x)+-(-x-1)")
+exit(3)
 from CalCoolUs.preprocess import ASTGraph
 
 myASTGraph = ASTGraph()

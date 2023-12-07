@@ -20,10 +20,14 @@ class ShuntingYard:
 		lowerBound = 0
 		upperBound = len(string)
 		for i in string:
-			if (i.isdigit() or i == ".") and self.isfloat(tokenized[-1]):
-				tokenized[-1] = tokenized[-1] + i
-			else:
+			
+			if len(tokenized) == 0:
 				tokenized.append(i)
+			else:
+				if (i.isdigit() or i == ".") and self.isfloat(tokenized[-1]):
+					tokenized[-1] = tokenized[-1] + i
+				else:
+					tokenized.append(i)
 		lowerBound = 0    
 		upperBound = len(tokenized) - 1
 		while lowerBound < upperBound:
