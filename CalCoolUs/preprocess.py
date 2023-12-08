@@ -5,6 +5,9 @@ from matplotlib import pyplot as plt
 
 from CalCoolUs.ops.op_types import OpType
 
+from CalCoolUs.ops.var import Var
+from CalCoolUs.ops.const import Const
+
 
 
 
@@ -167,18 +170,18 @@ class ASTGraph:
 					               string.digits, k=3))
 				graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
 				if str(shuntyardresult[counter - 2]) == 'x':
-					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR}})
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
 				else:
-					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.CONST}})
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
 				graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
 				if str(shuntyardresult[counter - 1]) == 'x':
-					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR}})
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
 				else:
-					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.CONST}})
+					nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
 				print(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
 				print(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
-				nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter])}})
+				nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
 
 				for _ in range(3):
 					shuntyardresult.pop(counter - 2)

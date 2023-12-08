@@ -5,7 +5,7 @@ class Mul(Generic_Op):
 		super().__init__(name)
 
 	def getDerivative(self, a, b, *args, **kwargs):
-		return a.getDerivative()*b. + b.getDerivative()*a 
+		return a.getDerivative()*b.value + b.getDerivative()*a.value 
 
 	def __call__(self, a, b):
 		return a*b

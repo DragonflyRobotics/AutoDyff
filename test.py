@@ -14,13 +14,13 @@ myshunt = ShuntingYard()
 shuntres = myshunt.tokenize("-x-1-(x-1-x)+-(-x-1)")
 print(shuntres)
 
-shuntres = myshunt.getPostfix("-x-1-(x-1-x)+-(-x-1)")
-exit(3)
+shuntres = myshunt.getPostfix("2*x")
+
 from CalCoolUs.preprocess import ASTGraph
 
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
-pos = nx.planar_layout(graph, scale=10)
+#pos = nx.planar_layout(graph, scale=10)
 nx.draw_networkx(nx.DiGraph.reverse(graph, copy=False), with_labels=True)
 plt.savefig("fig.png")
 
@@ -31,13 +31,13 @@ for n, z in zip(graph.nodes(data=True), graph.nodes):
 	if len(neighbors):
 		# print(n[1])
 		# print(neighbors)
-		print(n[1]["Op"].value.getDerivative(a=1, b=2))
+		# print(n[1]["Op"].value.getDerivative(a=1, b=2))
 		all_operands = []
 		for operands in neighbors:
 			print(graph.nodes(data=True)[operands])
-			all_operands.append(graph.nodes(data=True)[operands]['Op'].value)
+			all_operands.append(graph.nodes(data=True)[operands]['Op'])
 		print(all_operands)
 		print(z, neighbors)
-		print(n[1]["Op"].value.getDerivative(a=all_operands[0], b=all_operands[1]))
+		print(n[1]["Op"].getDerivative(a=all_operands[0], b=all_operands[1]))
 
 	print("-------------------------------------------------------")
