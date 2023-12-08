@@ -14,7 +14,7 @@ myshunt = ShuntingYard()
 shuntres = myshunt.tokenize("-x-1-(x-1-x)+-(-x-1)")
 print(shuntres)
 
-shuntres = myshunt.getPostfix("(x+2)*(x+3)")
+shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
 
 from CalCoolUs.preprocess import ASTGraph
 
@@ -24,19 +24,12 @@ graph = myASTGraph.getAST(shuntres)
 nx.draw_networkx(graph, with_labels=True)
 plt.savefig("fig.png")
 
-def getFinalNode(graph):
-    for n in graph.nodes:
-        #print(graph.degree[n])
-        if graph.out_degree[n] <= 0:
-            print(n)
-            return n
-        else:
-            pass
-
-print(list(nx.all_simple_paths(graph, source='x', target=getFinalNode(graph))))
-
+print(myASTGraph.getFinalNode(graph))
+ #exit(3)
+print(myASTGraph.getNodes(graph))
+exit(3)
 # plt.show(bbox_inches='tight')
-exit()
+
 for n, z in zip(graph.nodes(data=True), graph.nodes):
 	neighbors = list(nx.DiGraph.reverse(graph, copy=False).neighbors(z))
 	if len(neighbors):
