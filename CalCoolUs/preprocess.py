@@ -194,10 +194,21 @@ class ASTGraph:
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.savefig(filename)
-
+    def getFinalNode(self, graph):
+        for n in graph.nodes:
+            #print(graph.degree[n])
+            if graph.out_degree[n] <= 0:
+                
+                return n
+            else:
+                pass
+    def getNodes(self, graph):
+        return (list(nx.all_simple_paths(graph, source='x', target=self.getFinalNode(graph))))
     def displayGraph(self, graph):
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.show(bbox_inches='tight')
-
+#class AutoDiff:
+    
+    
 
