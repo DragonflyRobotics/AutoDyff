@@ -33,7 +33,7 @@ def getFinalNode(graph):
         else:
             pass
 
-print(list(nx.all_simple_paths(graph, source='x', target=getFinalNode(graph))))
+print(list(list(nx.all_simple_paths(graph, source='x', target=getFinalNode(graph))).reverse))
 
 # plt.show(bbox_inches='tight')
 exit()
