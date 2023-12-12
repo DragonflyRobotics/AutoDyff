@@ -172,7 +172,7 @@ class ASTGraph:
                 if str(shuntyardresult[counter - 2]) == 'x':
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
                 elif self.isfloat(shuntyardresult[counter - 2]):
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
+                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
                 graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
                 if str(shuntyardresult[counter - 1]) == 'x':
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
