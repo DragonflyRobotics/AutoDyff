@@ -7,14 +7,9 @@ class Mul(Generic_Op):
         super().__init__(name)
         self.value = self
 
-    def getDerivative(self, a, b, *args, **kwargs):
-        if type(a) == Const:
-            return b.value
-        elif type(b) == Const:
-            return a.value
-        else:
-            raise RuntimeError("At least one value in Mul must be cast to const to differentiate the partial derivative")
-        
+    def getDerivative(self, a, b, a_val, b_val, *args, **kwargs):
+        print(f"MUL GOT: {a}, {b}, {a_val}, {b_val}")
+        return a*b_val + a_val*b 
 
     def __call__(self, a, b):
         return a*b
