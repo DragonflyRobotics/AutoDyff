@@ -154,7 +154,8 @@ class ASTGraph:
         return "UNK"
 
     def getAST(self, shuntyardresult):
-        graph = nx.DiGraph()
+        #graph = nx.DiGraph()
+        graph = nx.MultiDiGraph()
 
         opDict = {}
 
@@ -172,12 +173,17 @@ class ASTGraph:
                 if str(shuntyardresult[counter - 2]) == 'x':
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
                 elif self.isfloat(shuntyardresult[counter - 2]):
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
+                    print("AHHHHHHH", shuntyardresult[counter - 2])
+                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
+                #else:
+                #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
                 graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
                 if str(shuntyardresult[counter - 1]) == 'x':
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
                 elif self.isfloat(shuntyardresult[counter - 1]):
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
+                #else:
+                #    raise RuntimeError("Couldn't classify counter-1")
                 print(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
                 print(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 

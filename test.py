@@ -14,7 +14,9 @@ myshunt = ShuntingYard()
 shuntres = myshunt.tokenize("-x-1-(x-1-x)+-(-x-1)")
 print(shuntres)
 
-shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
+#shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
+shuntres = myshunt.getPostfix("(2^x)*((x+3)*x) + ((x+10)/7)")
+#shuntres = myshunt.getPostfix("x*x")
 
 from CalCoolUs.preprocess import ASTGraph
 
@@ -30,7 +32,7 @@ og_nodes = myASTGraph.getNodes(graph)
 x = 5
 
 def solve(node):
-    #print(f"Working on: {node}")
+    #print(f"Working on: {graph.nodes[node]}")
     if node == "x":
         graph.nodes(data=True)['x']['Op'].numerical_value = x
         #print(f"x={x}")
