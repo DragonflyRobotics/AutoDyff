@@ -40,27 +40,61 @@ class ShuntingYard:
                 tokenized.pop(lowerBound + 1)
                 upperBound -=1
             lowerBound += 1
-    
-        lowerBound = 0
-        upperBound = len(tokenized) - 1
-        while lowerBound < upperBound:
-            if tokenized[lowerBound] == "-x":
-                tokenized[lowerBound] = "-1"
-                tokenized.insert(lowerBound + 1, "*")
-                tokenized.insert(lowerBound + 2, "x")
-                lowerBound += 2
-                upperBound += 2
-            lowerBound += 1
         lowerBound = 0
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
             if tokenized[lowerBound] == "-(":
-                tokenized[lowerBound] = "-1"
-                tokenized.insert(lowerBound + 1, "*")
-                tokenized.insert(lowerBound + 2, "(")
-                lowerBound += 2
-                upperBound += 2
+                tokenized[lowerBound] = "("
+                tokenized.insert(lowerBound + 1, "-1")
+                tokenized.insert(lowerBound + 2, "*")
+                tokenized.insert(lowerBound + 3, "(")
+                lowerBound += 3
+                upperBound += 3
+                endIndex = lowerBound + 4
+                flag = 1
+                while flag != 0:
+                    if tokenized[endIndex] == "(":
+                        flag += 1
+                    if tokenized[endIndex] == ")":
+                        flag -= 1
+                    endIndex += 1
+                #if endIndex == "^":
+                #   
+                tokenized.insert(endIndex, ")")
+                lowerBound += 1
+                upperBound += 1
             lowerBound += 1
+        lowerBound = 0
+        upperBound = len(tokenized) - 1
+        while lowerBound < upperBound:
+            if tokenized[lowerBound] == "-x":
+                tokenized[lowerBound] = "("
+                tokenized.insert(lowerBound + 1, "-1")
+                tokenized.insert(lowerBound + 2, "*")
+                tokenized.insert(lowerBound + 3, "x")
+                if tokenized[lowerBound + 4] == "^":
+                    if tokenized[lowerBound + 5] == "(":
+                        endIndex = lowerBound + 5
+                        flag = 1
+                        while flag != 0:  
+                            endIndex += 1
+                            if tokenized[endIndex] == "(":
+                                flag += 1
+                            if tokenized[endIndex] == ")":
+                                flag -= 1
+                        tokenized.insert(endIndex, ")")
+                        lowerBound += 1
+                        upperBound += 1
+                    else:
+                        tokenized.insert(lowerBound + 6, ")")
+                        lowerBound += 1
+                        upperBound += 1
+                else:
+                    tokenized.insert(lowerBound + 4, ")")
+                lowerBound += 3
+                upperBound += 3
+            lowerBound += 1
+            
         return tokenized
 
     def isfloat(self, number):

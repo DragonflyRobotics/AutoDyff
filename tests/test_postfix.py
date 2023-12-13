@@ -4,5 +4,6 @@ myShunt = ShuntingYard()
 
 
 def test_postfix():
-    assert True #myShunt.getPostfix("x+2") == ["x", "2", "+"]
-    #assert myShunt.getPostfix("2^-x") == ["2", "x", "-1", "*", "^"]
+    assert myShunt.getPostfix("x+2") == ["x", "2", "+"]
+    assert myShunt.getPostfix("2^-x") == ["2", "x", "-1", "*", "^"]
+
