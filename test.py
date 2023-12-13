@@ -11,6 +11,12 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
+<<<<<<< HEAD
+shuntres = myshunt.tokenize("-x*(-1-x-1)*-(-x-1)")
+print(shuntres)
+
+shuntres = myshunt.getPostfix("-x*(-1-x-1)*-(-x-1)")
+=======
 shuntres = myshunt.tokenize("-(x+1)")
 #shuntres = myshunt.tokenize("-(x+1)")
 
@@ -19,6 +25,7 @@ exit(3)
 #shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
 shuntres = myshunt.getPostfix("2^(-x^2+(-x-1))*4*-(6+4*x)")
 #shuntres = myshunt.getPostfix("x*x")
+>>>>>>> 72e2775e10c085db109dccc99e87c25c780b1226
 
 from CalCoolUs.preprocess import ASTGraph
 
@@ -27,6 +34,8 @@ graph = myASTGraph.getAST(shuntres)
 #pos = nx.planar_layout(graph, scale=10)
 nx.draw_networkx(graph, with_labels=True)
 plt.savefig("fig.png")
+<<<<<<< HEAD
+=======
 
 
 from CalCoolUs.numerical_engine import Numerical_Engine
@@ -110,6 +119,7 @@ for o in og_nodes:
                 print(graph.nodes(data=True)[z]["Op"].getDerivative(a=graph.nodes(data=True)[neighbors[0]]["Op"], b=Const(neighbors[1], graph.nodes(data=True)[neighbors[1]]["Op"])))
     print("----")
 exit()
+>>>>>>> 72e2775e10c085db109dccc99e87c25c780b1226
 # plt.show(bbox_inches='tight')
 
 for n, z in zip(graph.nodes(data=True), graph.nodes):
