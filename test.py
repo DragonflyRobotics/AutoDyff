@@ -26,6 +26,15 @@ graph = myASTGraph.getAST(shuntres)
 nx.draw_networkx(graph, with_labels=True)
 plt.savefig("fig.png")
 
+
+from CalCoolUs.numerical_engine import Numerical_Engine
+
+ne = Numerical_Engine(graph, myASTGraph)
+
+ne.solve(5)
+ne.differentiate(5)
+
+"""
 print(myASTGraph.getFinalNode(graph))
  #exit(3)
 og_nodes = myASTGraph.getNodes(graph)
@@ -116,3 +125,4 @@ for n, z in zip(graph.nodes(data=True), graph.nodes):
         print(n[1]["Op"].getDerivative(a=all_operands[0], b=all_operands[1]))
 
     print("-------------------------------------------------------")
+"""
