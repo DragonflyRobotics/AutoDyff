@@ -12,7 +12,7 @@ from CalCoolUs.ops.const import Const
 myshunt = ShuntingYard()
 
 #shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
-shuntres = myshunt.getPostfix("2^(-x^2+(-x-1))*4*-(6+4*x)")
+shuntres = myshunt.getPostfix("((((x+1)^2)/((x+3)^3)) * 2^x) * (2-x)")
 #shuntres = myshunt.getPostfix("x*x")
 
 
@@ -30,8 +30,8 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 
 ne = Numerical_Engine(graph, myASTGraph)
 
-ne.solve(5)
-ne.differentiate(5)
+ne.differentiate(6)
+
 
 """
 print(myASTGraph.getFinalNode(graph))
