@@ -7,8 +7,7 @@ from CalCoolUs.ops.op_types import OpType
 
 from CalCoolUs.ops.var import Var
 from CalCoolUs.ops.const import Const
-
-
+from CalCoolUs.log_init import MainLogger
 
 
 
@@ -16,7 +15,10 @@ from CalCoolUs.ops.const import Const
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
-    
+        root_log = MainLogger()
+        self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
+
+   
     def tokenize(self, string):
         string = string.replace(" ", "")
         tokenized = []
