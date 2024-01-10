@@ -11,14 +11,11 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.tokenize("-(x+1)")
-#shuntres = myshunt.tokenize("-(x+1)")
 
-print(shuntres)
-exit(3)
-#shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
+
+
 shuntres = myshunt.getPostfix("2^(-x^2+(-x-1))*4*-(6+4*x)")
-#shuntres = myshunt.getPostfix("x*x")
+
 
 from CalCoolUs.preprocess import ASTGraph
 
