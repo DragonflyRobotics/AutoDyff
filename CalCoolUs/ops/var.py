@@ -1,5 +1,6 @@
 from CalCoolUs.ops.op import Generic_Op
 from CalCoolUs.ops.const import Const
+
 class Var(Generic_Op):
     def __init__(self, name):
         self.value = self
@@ -13,3 +14,4 @@ class Var(Generic_Op):
 
     def __call__(self, a):
         return a
+
