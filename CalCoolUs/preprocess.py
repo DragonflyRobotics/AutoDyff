@@ -8,11 +8,18 @@ from CalCoolUs.ops.op_types import OpType
 from CalCoolUs.ops.var import Var
 from CalCoolUs.ops.const import Const
 
+from CalCoolUs.log_init import MainLogger
+
+
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
-    
+        root_log = MainLogger()
+        self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
+
+   
     def tokenize(self, string):
+        self.log.info(f"Starting grand tokenizer...")
         string = string.replace(" ", "")
         tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
                 
@@ -121,6 +128,7 @@ class ShuntingYard:
         return 0
 
     def getPostfix(self, diffEquation):
+        self.log.info(f"Computing postfix of {diffEquation}")
         diffEquation = diffEquation.replace(" ", "")
         diffEquation = self.tokenize(diffEquation)
         outputQueue = []
@@ -147,7 +155,7 @@ class ShuntingYard:
         while operatorStack:
             outputQueue.append(operatorStack.pop())
 
-        print(outputQueue)
+        self.log.info(f"Computed Output Queue: {outputQueue}")
 
         return outputQueue
 
@@ -155,6 +163,9 @@ class ShuntingYard:
 class ASTGraph:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
+        root_log = MainLogger()
+        self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
+
 
     def isValue(self, number):
         return self.isfloat(number) or number == 'x' or isinstance(number, str)
@@ -187,7 +198,7 @@ class ASTGraph:
         return "UNK"
 
     def getAST(self, shuntyardresult):
-        #graph = nx.DiGraph()
+        self.log.info(f"Running AST compute from the Shunt Yard: {shuntyardresult}")
         graph = nx.MultiDiGraph()
 
         opDict = {}
@@ -206,7 +217,6 @@ class ASTGraph:
                 if str(shuntyardresult[counter - 2]) == 'x':
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
                 elif self.isfloat(shuntyardresult[counter - 2]):
-                    print("AHHHHHHH", shuntyardresult[counter - 2])
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
                 #else:
                 #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
@@ -217,8 +227,8 @@ class ASTGraph:
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
                 #else:
                 #    raise RuntimeError("Couldn't classify counter-1")
-                print(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
-                print(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
+                self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
+                self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
                 nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
 
@@ -230,6 +240,7 @@ class ASTGraph:
         return graph
 
     def saveGraph(self, graph, filename):
+        self.log.info(f"Saving graph to {filename}")
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.savefig(filename)
@@ -237,7 +248,7 @@ class ASTGraph:
         for n in graph.nodes:
             #print(graph.degree[n])
             if graph.out_degree[n] <= 0:
-                
+                self.log.info(f"Got final node called {n}")
                 return n
             else:
                 pass

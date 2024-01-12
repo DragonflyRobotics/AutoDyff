@@ -15,3 +15,4 @@ class Const(Generic_Op):
 
     def __call__(self, a):
         return a
+
