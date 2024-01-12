@@ -10,18 +10,14 @@ from CalCoolUs.ops.const import Const
 # print(sub.value.)
 
 myshunt = ShuntingYard()
-
-shuntres = myshunt.tokenize("-(x+1)")
-#shuntres = myshunt.tokenize("-(x+1)")
-
+equation = "-(-x-1)-(-2-x)"
+shuntres = myshunt.tokenize(equation)
 print(shuntres)
-exit(3)
-#shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
-shuntres = myshunt.getPostfix("2^(-x^2+(-x-1))*4*-(6+4*x)")
-#shuntres = myshunt.getPostfix("x*x")
-
+#exit(3)
+shuntres = myshunt.getPostfix(equation)
+print(shuntres)
 from CalCoolUs.preprocess import ASTGraph
-
+exit(3)
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
 #pos = nx.planar_layout(graph, scale=10)

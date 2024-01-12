@@ -1,17 +1,12 @@
 import random, string
 import networkx as nx
 from matplotlib import pyplot as plt
-
+import re
 
 from CalCoolUs.ops.op_types import OpType
 
 from CalCoolUs.ops.var import Var
 from CalCoolUs.ops.const import Const
-
-
-
-
-
 
 class ShuntingYard:
     def __init__(self):
@@ -19,18 +14,8 @@ class ShuntingYard:
     
     def tokenize(self, string):
         string = string.replace(" ", "")
-        tokenized = []
-        lowerBound = 0
-        upperBound = len(string)
-        for i in string:
-            
-            if len(tokenized) == 0:
-                tokenized.append(i)
-            else:
-                if (i.isdigit() or i == ".") and self.isfloat(tokenized[-1]):
-                    tokenized[-1] = tokenized[-1] + i
-                else:
-                    tokenized.append(i)
+        tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
+                
         lowerBound = 0    
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
@@ -40,70 +25,84 @@ class ShuntingYard:
                 tokenized.pop(lowerBound + 1)
                 upperBound -=1
             lowerBound += 1
+        
+                
         lowerBound = 0
-        upperBound = len(tokenized) - 1
-        while lowerBound < upperBound:
-            if tokenized[lowerBound] == "-(":
-                tokenized[lowerBound] = "("
-                tokenized.insert(lowerBound + 1, "-1")
-                tokenized.insert(lowerBound + 2, "*")
-                tokenized.insert(lowerBound + 3, "(")
-                lowerBound += 3
-                upperBound += 3
-                endIndex = lowerBound + 4
-                flag = 1
-                while flag != 0:
-                    if tokenized[endIndex] == "(":
-                        flag += 1
-                    if tokenized[endIndex] == ")":
-                        flag -= 1
-                    endIndex += 1
-                #if endIndex == "^":
-                #   
-                tokenized.insert(endIndex, ")")
-                lowerBound += 1
-                upperBound += 1
-            lowerBound += 1
-        lowerBound = 0
-        upperBound = len(tokenized) - 1
+        upperBound = len(tokenized) 
+                
         while lowerBound < upperBound:
             if tokenized[lowerBound] == "-x":
-                tokenized[lowerBound] = "("
-                tokenized.insert(lowerBound + 1, "-1")
-                tokenized.insert(lowerBound + 2, "*")
-                tokenized.insert(lowerBound + 3, "x")
-                if tokenized[lowerBound + 4] == "^":
-                    if tokenized[lowerBound + 5] == "(":
-                        endIndex = lowerBound + 5
-                        flag = 1
-                        while flag != 0:  
-                            endIndex += 1
-                            if tokenized[endIndex] == "(":
-                                flag += 1
-                            if tokenized[endIndex] == ")":
-                                flag -= 1
-                        tokenized.insert(endIndex, ")")
-                        lowerBound += 1
-                        upperBound += 1
-                    else:
-                        tokenized.insert(lowerBound + 6, ")")
-                        lowerBound += 1
-                        upperBound += 1
-                else:
-                    tokenized.insert(lowerBound + 4, ")")
-                lowerBound += 3
-                upperBound += 3
-            lowerBound += 1
+                tokenized[lowerBound] = "-("
+                tokenized.insert(lowerBound + 1, "x")
+                tokenized.insert(lowerBound + 2 , ")")
+                lowerBound += 2
+                upperBound += 2
+            lowerBound += 1 
+        lowerBound = 0
+        upperBound = len(tokenized) - 1
+        
+        while lowerBound < upperBound:
             
-        return tokenized
+            if tokenized[lowerBound] == "-(":
 
+                original = len(tokenized)
+                tokenized = self.negParenth(tokenized, lowerBound)
+                change = len(tokenized) - original
+                lowerBound += 1
+                upperBound += change
+            
+            lowerBound += 1
+    
+        return tokenized
+    def negParenth(self, array, startIndex):
+        array[startIndex] = "("
+        array.insert(startIndex + 1, "-1")
+        array.insert(startIndex + 2, "*")
+        array.insert(startIndex + 3, "(")
+        endIndex = startIndex + 4
+        array.insert(self.findEnd(array, endIndex), ")")
+        #print(array)
+        return array
+                   
+    def findEnd(self, array, startIndex):
+        endIndex = startIndex
+        flag = 1
+        while flag != 0:
+            #print(array[endIndex])
+            if endIndex - 1 == len(array):
+                print("e")
+                return endIndex
+            if array[endIndex] == "(" or array[endIndex] == "-(":
+                flag += 1
+            if array[endIndex] == ")":
+                flag -= 1
+            """if array[endIndex] == "-(":"""
+                
+            endIndex += 1
+        endIndex -= 1
+        if len(array) == endIndex + 1:
+            return endIndex    
+        if array[endIndex + 1] == "^":    
+            if array[endIndex + 2] == "(":
+                return self.findEnd(array, endIndex + 3)
+            if array[endIndex + 2] == "-(":
+                return self.findEnd(self.negParenth(array, endIndex + 2), endIndex + 3)
+            else: 
+                return endIndex + 3        
+        return endIndex
+		           	
     def isfloat(self, number):
         try:
             float(number)
             return True
         except:
             return False
-
+    def isAlphanumeric(self, string):
+        alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z"]
+        for letter in string:
+            if letter not in alphabet:
+                return False
+        return True
     def isValue(self, number):
         return self.isfloat(number) or number == 'x' or isinstance(number, str)
 
