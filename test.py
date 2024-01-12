@@ -11,15 +11,21 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
+equation = "-(-x-1)-(-2-x)"
+shuntres = myshunt.tokenize(equation)
+print(shuntres)
+#exit(3)
+shuntres = myshunt.getPostfix(equation)
+print(shuntres)
+
+
 
 #shuntres = myshunt.getPostfix("(x+1)*(x+3)*(x+4)")
 shuntres = myshunt.getPostfix("((((x+1)^2)/((x+3)^3)) * 2^x) * (2-x)")
 #shuntres = myshunt.getPostfix("x*x")
 
-
-
 from CalCoolUs.preprocess import ASTGraph
-
+exit(3)
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
 #pos = nx.planar_layout(graph, scale=10)
