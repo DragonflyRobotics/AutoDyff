@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TestingApplication</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="shimmy_shimmy">Shimmy Shimmy Yay\n Shimmy Yay Shimmy Ya\n  Drank Swalalala\n  Drank Swalalala\n Swalalalaaa</string>
+    <string name="test_button_text">Is this faxx???</string>
+    <string name="toast_TestButtonText">HARD FAX! &#128224;&#128224;&#128224;</string>
+</resources>
