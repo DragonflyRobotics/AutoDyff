@@ -145,13 +145,16 @@ class ShuntingYard:
                     outputQueue.append(operatorStack.pop())
                 assert (operatorStack[-1] == "(")
                 operatorStack.pop()
+                if self.isAlphanumeric(operatorStack[-1]) == True:
+                     outputQueue.append(operatorStack.pop())
             elif value in self.operations:
 
                 while (operatorStack and operatorStack[-1] != "("
                        and self.precedence(operatorStack[-1]) >= self.precedence(value)):
                     outputQueue.append(operatorStack.pop())
                 operatorStack.append(value)
-            
+            elif self.isAlphanumeric(value) == True:
+                operatorStack.append(value)
         while operatorStack:
             outputQueue.append(operatorStack.pop())
 
