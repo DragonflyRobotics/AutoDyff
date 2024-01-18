@@ -32,7 +32,17 @@ class ShuntingYard:
                 tokenized.pop(lowerBound + 1)
                 upperBound -=1
             lowerBound += 1
-        
+        lowerBound = 0    
+        upperBound = len(tokenized) - 1
+        while lowerBound < upperBound:
+            if self.isNegFunction(tokenized[lowerBound]) == True:
+                temp = tokenized[lowerBound][1:]
+                tokenized[lowerBound] = "-("
+                tokenized.insert(lowerBound + 1 , temp)
+                end = self.findEnd(tokenized, lowerBound + 3)
+                tokenized.insert(end , ")")
+                upperBound -=1
+            lowerBound += 1
                 
         lowerBound = 0
         upperBound = len(tokenized) 
@@ -104,7 +114,9 @@ class ShuntingYard:
             return True
         except:
             return False
-    def isAlphanumeric(self, string):
+    def isFunction(self, string):
+        if len(string) < 2:
+            return False
         alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z"]
         for letter in string:
             if letter not in alphabet:
@@ -112,7 +124,14 @@ class ShuntingYard:
         return True
     def isValue(self, number):
         return self.isfloat(number) or number == 'x' or isinstance(number, str)
-
+    def isNegFunction(self, string):
+        if string[0] != "-":
+            return False
+        temp = string[1:]
+        if self.isFunction(temp) == False:
+            return False
+        return True
+        
     def precedence(self, operator):
         match operator:
             case "+":
@@ -145,6 +164,11 @@ class ShuntingYard:
                     outputQueue.append(operatorStack.pop())
                 assert (operatorStack[-1] == "(")
                 operatorStack.pop()
+                if len(operatorStack) != 0:
+                    if self.isFunction(operatorStack[-1]) == True:
+                        outputQueue.append(operatorStack.pop())
+            elif self.isFunction(value) == True:
+                operatorStack.append(value)
             elif value in self.operations:
 
                 while (operatorStack and operatorStack[-1] != "("

@@ -5,10 +5,13 @@ from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
-shuntres = myshunt.getPostfix("((((-x+1)^-2)/((x-3)^-3)) * 2^-x) * -(2-x)")
+print(myshunt.tokenize("-sin(x)"))
+shuntres = myshunt.getPostfix("-sin(-x^2)")
+
 #shuntres = myshunt.getPostfix("((-x+1)^-2)/((x-3)^-3)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
+exit(3)
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
