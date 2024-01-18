@@ -29,10 +29,17 @@ class Numerical_Engine:
             #print(f"{node}={a}")
             return a
         else:
-            neighbors = list(nx.DiGraph.reverse(self.graph, copy=False).neighbors(node))
-            self.graph.nodes(data=True)[node]["Op"].numerical_value = self.graph.nodes(data=True)[node]["Op"](self.solve(x, neighbors[0]), self.solve(x, neighbors[1]))
-            a = self.graph.nodes(data=True)[node]["Op"].numerical_value
-            self.log.info(f"{node}={a}")
+            if self.graph.nodes(data=True)[node]["Op"].unary:
+                neighbors = list(nx.DiGraph.reverse(self.graph, copy=False).neighbors(node))
+                self.graph.nodes(data=True)[node]["Op"].numerical_value = self.graph.nodes(data=True)[node]["Op"](self.solve(x, neighbors[0]))
+                a = self.graph.nodes(data=True)[node]["Op"].numerical_value
+                self.log.info(f"{node}={a}")
+
+            else:
+                neighbors = list(nx.DiGraph.reverse(self.graph, copy=False).neighbors(node))
+                self.graph.nodes(data=True)[node]["Op"].numerical_value = self.graph.nodes(data=True)[node]["Op"](self.solve(x, neighbors[0]), self.solve(x, neighbors[1]))
+                a = self.graph.nodes(data=True)[node]["Op"].numerical_value
+                self.log.info(f"{node}={a}")
             return a
 
     def differentiate(self, x, node=None):
@@ -49,9 +56,17 @@ class Numerical_Engine:
             self.log.info(f"{node}'={0}")
             return 0
         else:
-            neighbors = list(nx.DiGraph.reverse(self.graph, copy=False).neighbors(node))
-            #a = graph.nodes(data=True)[node]["Op"].getDerivative(differentiate(neighbors[0]), differentiate(neighbors[1]), graph.nodes(data=True)[neighbors[0]]["Op"].numerical_value, graph.nodes(data=True)[neighbors[1]]["Op"].numerical_value)
-            a = self.graph.nodes(data=True)[node]["Op"].getDerivative(self.differentiate(x, neighbors[0]), self.differentiate(x, neighbors[1]), self.solve(x, neighbors[0]), self.solve(x, neighbors[1]))
+            if self.graph.nodes(data=True)[node]["Op"].unary:
+                neighbors = list(nx.DiGraph.reverse(self.graph, copy=False).neighbors(node))
+                #a = graph.nodes(data=True)[node]["Op"].getDerivative(differentiate(neighbors[0]), differentiate(neighbors[1]), graph.nodes(data=True)[neighbors[0]]["Op"].numerical_value, graph.nodes(data=True)[neighbors[1]]["Op"].numerical_value)
+                a = self.graph.nodes(data=True)[node]["Op"].getDerivative(self.differentiate(x, neighbors[0]), self.solve(x, neighbors[0]))
 
-            self.log.info(f"{node}'={a}")
+                self.log.info(f"{node}'={a}")
+
+            else:
+                neighbors = list(nx.DiGraph.reverse(self.graph, copy=False).neighbors(node))
+                #a = graph.nodes(data=True)[node]["Op"].getDerivative(differentiate(neighbors[0]), differentiate(neighbors[1]), graph.nodes(data=True)[neighbors[0]]["Op"].numerical_value, graph.nodes(data=True)[neighbors[1]]["Op"].numerical_value)
+                a = self.graph.nodes(data=True)[node]["Op"].getDerivative(self.differentiate(x, neighbors[0]), self.differentiate(x, neighbors[1]), self.solve(x, neighbors[0]), self.solve(x, neighbors[1]))
+
+                self.log.info(f"{node}'={a}")
             return a

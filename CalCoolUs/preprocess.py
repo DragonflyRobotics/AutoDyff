@@ -186,7 +186,8 @@ class ShuntingYard:
 
 class ASTGraph:
     def __init__(self):
-        self.operations = ["+", "-", "/", "*", "^"]
+        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log"]
+        self.unary = ["sin", "cos", "tan", "ln", "log"]            
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
 
@@ -219,6 +220,8 @@ class ASTGraph:
                 return OpType.DIV
             case "^":
                 return OpType.POW
+            case "sin":
+                return OpType.SIN
         return "UNK"
 
     def getAST(self, shuntyardresult):
@@ -233,32 +236,57 @@ class ASTGraph:
                 counter += 1
             # print(f"Stopped @: {shuntyardresult[counter]}")
 
-            if (counter - 2 >= 0 and self.isValue(shuntyardresult[counter - 1]) and self.isValue(shuntyardresult[counter - 2])):
-                node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
-                    random.choices(string.ascii_uppercase +
-                                   string.digits, k=3))
-                graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
-                if str(shuntyardresult[counter - 2]) == 'x':
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
-                elif self.isfloat(shuntyardresult[counter - 2]):
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
-                #else:
-                #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
-                graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
-                if str(shuntyardresult[counter - 1]) == 'x':
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
-                elif self.isfloat(shuntyardresult[counter - 1]):
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
-                #else:
-                #    raise RuntimeError("Couldn't classify counter-1")
-                self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
-                self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
+            if shuntyardresult[counter] in self.unary:
+                if (counter - 1 >= 0 and self.isValue(shuntyardresult[counter - 1])):
+                    node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
+                        random.choices(string.ascii_uppercase +
+                                       string.digits, k=3))
+                    
+                    #else:
+                    #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
+                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
+                    if str(shuntyardresult[counter - 1]) == 'x':
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
+                    elif self.isfloat(shuntyardresult[counter - 1]):
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
+                    #else:
+                    #    raise RuntimeError("Couldn't classify counter-1")
+                    self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
+                    self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
-                nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
+                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
 
-                for _ in range(3):
-                    shuntyardresult.pop(counter - 2)
-                shuntyardresult.insert(counter - 2, node_name)
+                    for _ in range(2):
+                        shuntyardresult.pop(counter - 1)
+                    shuntyardresult.insert(counter - 1, node_name)
+
+            else:
+                if (counter - 2 >= 0 and self.isValue(shuntyardresult[counter - 1]) and self.isValue(shuntyardresult[counter - 2])):
+                    node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
+                        random.choices(string.ascii_uppercase +
+                                       string.digits, k=3))
+                    graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
+                    if str(shuntyardresult[counter - 2]) == 'x':
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
+                    elif self.isfloat(shuntyardresult[counter - 2]):
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
+                    #else:
+                    #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
+                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
+                    if str(shuntyardresult[counter - 1]) == 'x':
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
+                    elif self.isfloat(shuntyardresult[counter - 1]):
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
+                    #else:
+                    #    raise RuntimeError("Couldn't classify counter-1")
+                    self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
+                    self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
+
+                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
+
+                    for _ in range(3):
+                        shuntyardresult.pop(counter - 2)
+                    shuntyardresult.insert(counter - 2, node_name)
                 
 
         return graph

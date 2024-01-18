@@ -6,6 +6,7 @@ class Generic_Op(ABC):
         self.name = name
         self.differentiable = True
         self.numerical_value = None
+        self.unary = False
 
     def getName(self):
         return self.name
