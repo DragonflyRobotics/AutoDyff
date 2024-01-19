@@ -12,6 +12,9 @@ from CalCoolUs.ops.cos import Cos
 from CalCoolUs.ops.tan import Tan
 from CalCoolUs.ops.log import Log
 from CalCoolUs.ops.ln import Ln
+from CalCoolUs.ops.arcsin import Arcsin
+from CalCoolUs.ops.arccos import Arccos
+from CalCoolUs.ops.arctan import Arctan
 
 class OpType(Enum):
     ADD = Add("ADD")
@@ -26,3 +29,6 @@ class OpType(Enum):
     TAN = Tan("Tan")
     LOG = Log("Log")
     LN = Ln("Ln")
+    ARCSIN = Arcsin("Arcsin")
+    ARCCOS = Arccos("Arccos")
+    ARCTAN = Arctan("Arctan")

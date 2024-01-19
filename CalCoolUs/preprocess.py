@@ -186,8 +186,8 @@ class ShuntingYard:
 
 class ASTGraph:
     def __init__(self):
-        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log"]
-        self.unary = ["sin", "cos", "tan", "ln", "log"]            
+        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan"]
+        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan"]            
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
 
@@ -230,6 +230,12 @@ class ASTGraph:
                 return OpType.LOG
             case "ln":
                 return OpType.LN
+            case "arcsin":
+                return OpType.ARCSIN
+            case "arccos":
+                return OpType.ARCCOS
+            case "arctan":
+                return OpType.ARCTAN       
         return "UNK"
 
     def getAST(self, shuntyardresult):
