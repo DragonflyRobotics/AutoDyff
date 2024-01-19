@@ -1,36 +1,28 @@
 import random, string
 import networkx as nx
 from matplotlib import pyplot as plt
-
+import re
 
 from CalCoolUs.ops.op_types import OpType
 
 from CalCoolUs.ops.var import Var
 from CalCoolUs.ops.const import Const
 
-
-
-
+from CalCoolUs.log_init import MainLogger
 
 
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
-    
+        root_log = MainLogger()
+        self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
+
+   
     def tokenize(self, string):
+        self.log.info(f"Starting grand tokenizer...")
         string = string.replace(" ", "")
-        tokenized = []
-        lowerBound = 0
-        upperBound = len(string)
-        for i in string:
-            
-            if len(tokenized) == 0:
-                tokenized.append(i)
-            else:
-                if (i.isdigit() or i == ".") and self.isfloat(tokenized[-1]):
-                    tokenized[-1] = tokenized[-1] + i
-                else:
-                    tokenized.append(i)
+        tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
+                
         lowerBound = 0    
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
@@ -40,70 +32,84 @@ class ShuntingYard:
                 tokenized.pop(lowerBound + 1)
                 upperBound -=1
             lowerBound += 1
+        
+                
         lowerBound = 0
-        upperBound = len(tokenized) - 1
-        while lowerBound < upperBound:
-            if tokenized[lowerBound] == "-(":
-                tokenized[lowerBound] = "("
-                tokenized.insert(lowerBound + 1, "-1")
-                tokenized.insert(lowerBound + 2, "*")
-                tokenized.insert(lowerBound + 3, "(")
-                lowerBound += 3
-                upperBound += 3
-                endIndex = lowerBound + 4
-                flag = 1
-                while flag != 0:
-                    if tokenized[endIndex] == "(":
-                        flag += 1
-                    if tokenized[endIndex] == ")":
-                        flag -= 1
-                    endIndex += 1
-                #if endIndex == "^":
-                #   
-                tokenized.insert(endIndex, ")")
-                lowerBound += 1
-                upperBound += 1
-            lowerBound += 1
-        lowerBound = 0
-        upperBound = len(tokenized) - 1
+        upperBound = len(tokenized) 
+                
         while lowerBound < upperBound:
             if tokenized[lowerBound] == "-x":
-                tokenized[lowerBound] = "("
-                tokenized.insert(lowerBound + 1, "-1")
-                tokenized.insert(lowerBound + 2, "*")
-                tokenized.insert(lowerBound + 3, "x")
-                if tokenized[lowerBound + 4] == "^":
-                    if tokenized[lowerBound + 5] == "(":
-                        endIndex = lowerBound + 5
-                        flag = 1
-                        while flag != 0:  
-                            endIndex += 1
-                            if tokenized[endIndex] == "(":
-                                flag += 1
-                            if tokenized[endIndex] == ")":
-                                flag -= 1
-                        tokenized.insert(endIndex, ")")
-                        lowerBound += 1
-                        upperBound += 1
-                    else:
-                        tokenized.insert(lowerBound + 6, ")")
-                        lowerBound += 1
-                        upperBound += 1
-                else:
-                    tokenized.insert(lowerBound + 4, ")")
-                lowerBound += 3
-                upperBound += 3
-            lowerBound += 1
+                tokenized[lowerBound] = "-("
+                tokenized.insert(lowerBound + 1, "x")
+                tokenized.insert(lowerBound + 2 , ")")
+                lowerBound += 2
+                upperBound += 2
+            lowerBound += 1 
+        lowerBound = 0
+        upperBound = len(tokenized) - 1
+        
+        while lowerBound < upperBound:
             
-        return tokenized
+            if tokenized[lowerBound] == "-(":
 
+                original = len(tokenized)
+                tokenized = self.negParenth(tokenized, lowerBound)
+                change = len(tokenized) - original
+                lowerBound += 1
+                upperBound += change
+            
+            lowerBound += 1
+    
+        return tokenized
+    def negParenth(self, array, startIndex):
+        array[startIndex] = "("
+        array.insert(startIndex + 1, "-1")
+        array.insert(startIndex + 2, "*")
+        array.insert(startIndex + 3, "(")
+        endIndex = startIndex + 4
+        array.insert(self.findEnd(array, endIndex), ")")
+        #print(array)
+        return array
+                   
+    def findEnd(self, array, startIndex):
+        endIndex = startIndex
+        flag = 1
+        while flag != 0:
+            #print(array[endIndex])
+            if endIndex - 1 == len(array):
+                print("e")
+                return endIndex
+            if array[endIndex] == "(" or array[endIndex] == "-(":
+                flag += 1
+            if array[endIndex] == ")":
+                flag -= 1
+            """if array[endIndex] == "-(":"""
+                
+            endIndex += 1
+        endIndex -= 1
+        if len(array) == endIndex + 1:
+            return endIndex    
+        if array[endIndex + 1] == "^":    
+            if array[endIndex + 2] == "(":
+                return self.findEnd(array, endIndex + 3)
+            if array[endIndex + 2] == "-(":
+                return self.findEnd(self.negParenth(array, endIndex + 2), endIndex + 3)
+            else: 
+                return endIndex + 3        
+        return endIndex
+		           	
     def isfloat(self, number):
         try:
             float(number)
             return True
         except:
             return False
-
+    def isAlphanumeric(self, string):
+        alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z"]
+        for letter in string:
+            if letter not in alphabet:
+                return False
+        return True
     def isValue(self, number):
         return self.isfloat(number) or number == 'x' or isinstance(number, str)
 
@@ -122,6 +128,7 @@ class ShuntingYard:
         return 0
 
     def getPostfix(self, diffEquation):
+        self.log.info(f"Computing postfix of {diffEquation}")
         diffEquation = diffEquation.replace(" ", "")
         diffEquation = self.tokenize(diffEquation)
         outputQueue = []
@@ -138,17 +145,20 @@ class ShuntingYard:
                     outputQueue.append(operatorStack.pop())
                 assert (operatorStack[-1] == "(")
                 operatorStack.pop()
+                if self.isAlphanumeric(operatorStack[-1]) == True:
+                     outputQueue.append(operatorStack.pop())
             elif value in self.operations:
 
                 while (operatorStack and operatorStack[-1] != "("
                        and self.precedence(operatorStack[-1]) >= self.precedence(value)):
                     outputQueue.append(operatorStack.pop())
                 operatorStack.append(value)
-            
+            elif self.isAlphanumeric(value) == True:
+                operatorStack.append(value)
         while operatorStack:
             outputQueue.append(operatorStack.pop())
 
-        print(outputQueue)
+        self.log.info(f"Computed Output Queue: {outputQueue}")
 
         return outputQueue
 
@@ -156,6 +166,9 @@ class ShuntingYard:
 class ASTGraph:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
+        root_log = MainLogger()
+        self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
+
 
     def isValue(self, number):
         return self.isfloat(number) or number == 'x' or isinstance(number, str)
@@ -188,7 +201,7 @@ class ASTGraph:
         return "UNK"
 
     def getAST(self, shuntyardresult):
-        #graph = nx.DiGraph()
+        self.log.info(f"Running AST compute from the Shunt Yard: {shuntyardresult}")
         graph = nx.MultiDiGraph()
 
         opDict = {}
@@ -207,7 +220,6 @@ class ASTGraph:
                 if str(shuntyardresult[counter - 2]) == 'x':
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
                 elif self.isfloat(shuntyardresult[counter - 2]):
-                    print("AHHHHHHH", shuntyardresult[counter - 2])
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
                 #else:
                 #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
@@ -218,8 +230,8 @@ class ASTGraph:
                     nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
                 #else:
                 #    raise RuntimeError("Couldn't classify counter-1")
-                print(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
-                print(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
+                self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
+                self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
                 nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
 
@@ -231,6 +243,7 @@ class ASTGraph:
         return graph
 
     def saveGraph(self, graph, filename):
+        self.log.info(f"Saving graph to {filename}")
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.savefig(filename)
@@ -238,7 +251,7 @@ class ASTGraph:
         for n in graph.nodes:
             #print(graph.degree[n])
             if graph.out_degree[n] <= 0:
-                
+                self.log.info(f"Got final node called {n}")
                 return n
             else:
                 pass
