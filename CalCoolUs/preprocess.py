@@ -222,6 +222,14 @@ class ASTGraph:
                 return OpType.POW
             case "sin":
                 return OpType.SIN
+            case "cos":
+                return OpType.COS
+            case "tan":
+                return OpType.TAN
+            case "log":
+                return OpType.LOG
+            case "ln":
+                return OpType.LN
         return "UNK"
 
     def getAST(self, shuntyardresult):
