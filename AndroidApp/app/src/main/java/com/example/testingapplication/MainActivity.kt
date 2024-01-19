@@ -21,10 +21,16 @@ private lateinit var binding: ActivityMainBinding
         buttonEvent.setOnClickListener{
             Toast.makeText(this, "@string/toast_TestButtonText", Toast.LENGTH_SHORT).show()
         }  USE getString FUNCTION INSTEAD OF @string*/
-
+        /*
         val buttonEvent = findViewById<Button>(R.id.faxButton)
         buttonEvent.setOnClickListener {
             Toast.makeText(this, getString(R.string.toast_TestButtonText), Toast.LENGTH_SHORT).show()
+        }
+         */
+
+        val myButton: Button = findViewById(R.id.faxButton)
+        myButton.setOnClickListener {
+            Toast.makeText(this@MainActivity, "Button clicked!", Toast.LENGTH_SHORT).show()
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
