@@ -8,6 +8,7 @@ from CalCoolUs.ops.const import Const
 from CalCoolUs.ops.div import Div
 from CalCoolUs.ops.pow import Pow
 from CalCoolUs.ops.sin import Sin
+from CalCoolUs.ops.cos import Cos
 
 class OpType(Enum):
     ADD = Add("ADD")
@@ -18,3 +19,4 @@ class OpType(Enum):
 #   CONST = Const("Const")
     VAR = Var("Var")
     SIN = Sin("SIN")
+    COS = Cos("COS")
