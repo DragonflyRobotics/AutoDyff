@@ -6,12 +6,11 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("-(x)")
 
 #shuntres = myshunt.getPostfix("((-x+1)^-2)/((x-3)^-3)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
-exit(3)
+
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
@@ -25,5 +24,5 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 
 ne = Numerical_Engine(graph, myASTGraph)
 
-ne.solve(6)
-ne.differentiate(6)
+ne.solve(0.2)
+ne.differentiate(0.2)

@@ -9,6 +9,12 @@ from CalCoolUs.ops.div import Div
 from CalCoolUs.ops.pow import Pow
 from CalCoolUs.ops.sin import Sin
 from CalCoolUs.ops.cos import Cos
+from CalCoolUs.ops.tan import Tan
+from CalCoolUs.ops.log import Log
+from CalCoolUs.ops.ln import Ln
+from CalCoolUs.ops.arcsin import Arcsin
+from CalCoolUs.ops.arccos import Arccos
+from CalCoolUs.ops.arctan import Arctan
 
 class OpType(Enum):
     ADD = Add("ADD")
@@ -18,5 +24,11 @@ class OpType(Enum):
     POW = Pow("POW")
 #   CONST = Const("Const")
     VAR = Var("Var")
-    SIN = Sin("SIN")
-    COS = Cos("COS")
+    SIN = Sin("Sis")
+    COS = Cos("Cos")
+    TAN = Tan("Tan")
+    LOG = Log("Log")
+    LN = Ln("Ln")
+    ARCSIN = Arcsin("Arcsin")
+    ARCCOS = Arccos("Arccos")
+    ARCTAN = Arctan("Arctan")
