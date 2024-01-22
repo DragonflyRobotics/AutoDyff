@@ -6,7 +6,7 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("cos(x)")
+shuntres = myshunt.getPostfix("-(x)")
 
 #shuntres = myshunt.getPostfix("((-x+1)^-2)/((x-3)^-3)")
 #shuntres = myshunt.getPostfix("2^x")

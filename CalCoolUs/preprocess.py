@@ -17,13 +17,23 @@ class ShuntingYard:
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
-   
+    
     def tokenize(self, string):
         self.log.info(f"Starting grand tokenizer...")
         string = string.replace(" ", "")
         tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
-                
-        lowerBound = 0    
+        print(tokenized)    
+        for index in range(0,len(tokenized)):
+            value = tokenized[index]
+            if value == "-" and index < (len(tokenized) - 1 ):
+                assert tokenized[index + 1] != "-", "Can't have two negatives in a row"
+            if (self.isfloat(value) == True or value == "x") and index < (len(tokenized) - 1 ):
+                assert tokenized[index + 1] != "x", "Coefficients not accepted, use multiplication signs"
+                assert tokenized[index + 1] != "(", "Coefficients not accepted, use multiplication signs"
+                assert self.isFunction(tokenized[index + 1]) != True, "Coefficients not accepted, use multiplication signs"
+            assert(self.isfloat(value) == True or self.isFunction(value) == True or value == "(" or value == ")" or value == "x" or value in self.operations), "Coefficients not accepted, use multiplication signs"
+            
+        lowerBound = 0
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
             if tokenized[lowerBound] == "-" and (tokenized[lowerBound - 1] in self.operations or tokenized[lowerBound - 1] == "(" or tokenized[lowerBound - 1] == "-(" or lowerBound == 0):
