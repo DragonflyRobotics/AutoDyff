@@ -17,13 +17,23 @@ class ShuntingYard:
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
-   
+    
     def tokenize(self, string):
         self.log.info(f"Starting grand tokenizer...")
         string = string.replace(" ", "")
         tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
-                
-        lowerBound = 0    
+        print(tokenized)    
+        for index in range(0,len(tokenized)):
+            value = tokenized[index]
+            if value == "-" and index < (len(tokenized) - 1 ):
+                assert tokenized[index + 1] != "-", "Can't have two negatives in a row"
+            if (self.isfloat(value) == True or value == "x") and index < (len(tokenized) - 1 ):
+                assert tokenized[index + 1] != "x", "Coefficients not accepted, use multiplication signs"
+                assert tokenized[index + 1] != "(", "Coefficients not accepted, use multiplication signs"
+                assert self.isFunction(tokenized[index + 1]) != True, "Coefficients not accepted, use multiplication signs"
+            assert(self.isfloat(value) == True or self.isFunction(value) == True or value == "(" or value == ")" or value == "x" or value in self.operations), "Coefficients not accepted, use multiplication signs"
+            
+        lowerBound = 0
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
             if tokenized[lowerBound] == "-" and (tokenized[lowerBound - 1] in self.operations or tokenized[lowerBound - 1] == "(" or tokenized[lowerBound - 1] == "-(" or lowerBound == 0):
@@ -32,7 +42,17 @@ class ShuntingYard:
                 tokenized.pop(lowerBound + 1)
                 upperBound -=1
             lowerBound += 1
-        
+        lowerBound = 0    
+        upperBound = len(tokenized) - 1
+        while lowerBound < upperBound:
+            if self.isNegFunction(tokenized[lowerBound]) == True:
+                temp = tokenized[lowerBound][1:]
+                tokenized[lowerBound] = "-("
+                tokenized.insert(lowerBound + 1 , temp)
+                end = self.findEnd(tokenized, lowerBound + 3)
+                tokenized.insert(end , ")")
+                upperBound -=1
+            lowerBound += 1
                 
         lowerBound = 0
         upperBound = len(tokenized) 
@@ -104,7 +124,9 @@ class ShuntingYard:
             return True
         except:
             return False
-    def isAlphanumeric(self, string):
+    def isFunction(self, string):
+        if len(string) < 2:
+            return False
         alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z"]
         for letter in string:
             if letter not in alphabet:
@@ -112,7 +134,14 @@ class ShuntingYard:
         return True
     def isValue(self, number):
         return self.isfloat(number) or number == 'x' or isinstance(number, str)
-
+    def isNegFunction(self, string):
+        if string[0] != "-":
+            return False
+        temp = string[1:]
+        if self.isFunction(temp) == False:
+            return False
+        return True
+        
     def precedence(self, operator):
         match operator:
             case "+":
@@ -145,8 +174,12 @@ class ShuntingYard:
                     outputQueue.append(operatorStack.pop())
                 assert (operatorStack[-1] == "(")
                 operatorStack.pop()
-                if self.isAlphanumeric(operatorStack[-1]) == True:
-                     outputQueue.append(operatorStack.pop())
+
+                if len(operatorStack) != 0:
+                    if self.isFunction(operatorStack[-1]) == True:
+                        outputQueue.append(operatorStack.pop())
+            elif self.isFunction(value) == True:
+                operatorStack.append(value)
             elif value in self.operations:
 
                 while (operatorStack and operatorStack[-1] != "("
@@ -165,7 +198,8 @@ class ShuntingYard:
 
 class ASTGraph:
     def __init__(self):
-        self.operations = ["+", "-", "/", "*", "^"]
+        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh"]
+        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh"]            
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
 
@@ -198,6 +232,34 @@ class ASTGraph:
                 return OpType.DIV
             case "^":
                 return OpType.POW
+            case "sin":
+                return OpType.SIN
+            case "cos":
+                return OpType.COS
+            case "tan":
+                return OpType.TAN
+            case "sinh":
+                return OpType.SINH
+            case "cosh":
+                return OpType.COSH
+            case "tanh":
+                return OpType.TANH
+            case "log":
+                return OpType.LOG
+            case "ln":
+                return OpType.LN
+            case "arcsin":
+                return OpType.ARCSIN
+            case "arccos":
+                return OpType.ARCCOS
+            case "arctan":
+                return OpType.ARCTAN
+            case "cot":
+                return OpType.COT
+            case "csc":
+                return OpType.CSC       
+            case "sec":
+                return OpType.SEC
         return "UNK"
 
     def getAST(self, shuntyardresult):
@@ -212,32 +274,57 @@ class ASTGraph:
                 counter += 1
             # print(f"Stopped @: {shuntyardresult[counter]}")
 
-            if (counter - 2 >= 0 and self.isValue(shuntyardresult[counter - 1]) and self.isValue(shuntyardresult[counter - 2])):
-                node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
-                    random.choices(string.ascii_uppercase +
-                                   string.digits, k=3))
-                graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
-                if str(shuntyardresult[counter - 2]) == 'x':
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
-                elif self.isfloat(shuntyardresult[counter - 2]):
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
-                #else:
-                #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
-                graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
-                if str(shuntyardresult[counter - 1]) == 'x':
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
-                elif self.isfloat(shuntyardresult[counter - 1]):
-                    nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
-                #else:
-                #    raise RuntimeError("Couldn't classify counter-1")
-                self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
-                self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
+            if shuntyardresult[counter] in self.unary:
+                if (counter - 1 >= 0 and self.isValue(shuntyardresult[counter - 1])):
+                    node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
+                        random.choices(string.ascii_uppercase +
+                                       string.digits, k=3))
+                    
+                    #else:
+                    #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
+                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
+                    if str(shuntyardresult[counter - 1]) == 'x':
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
+                    elif self.isfloat(shuntyardresult[counter - 1]):
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
+                    #else:
+                    #    raise RuntimeError("Couldn't classify counter-1")
+                    self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
+                    self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
-                nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
+                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
 
-                for _ in range(3):
-                    shuntyardresult.pop(counter - 2)
-                shuntyardresult.insert(counter - 2, node_name)
+                    for _ in range(2):
+                        shuntyardresult.pop(counter - 1)
+                    shuntyardresult.insert(counter - 1, node_name)
+
+            else:
+                if (counter - 2 >= 0 and self.isValue(shuntyardresult[counter - 1]) and self.isValue(shuntyardresult[counter - 2])):
+                    node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
+                        random.choices(string.ascii_uppercase +
+                                       string.digits, k=3))
+                    graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
+                    if str(shuntyardresult[counter - 2]) == 'x':
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
+                    elif self.isfloat(shuntyardresult[counter - 2]):
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
+                    #else:
+                    #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
+                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
+                    if str(shuntyardresult[counter - 1]) == 'x':
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
+                    elif self.isfloat(shuntyardresult[counter - 1]):
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
+                    #else:
+                    #    raise RuntimeError("Couldn't classify counter-1")
+                    self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
+                    self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
+
+                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
+
+                    for _ in range(3):
+                        shuntyardresult.pop(counter - 2)
+                    shuntyardresult.insert(counter - 2, node_name)
                 
 
         return graph

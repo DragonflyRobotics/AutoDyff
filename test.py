@@ -5,12 +5,14 @@ from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
-equation = "-(-x-1)-(-2-x)"
-shuntres = myshunt.tokenize(equation)
-print(shuntres)
-#exit(3)
-shuntres = myshunt.getPostfix(equation)
-print(shuntres)
+
+shuntres = myshunt.getPostfix("sinh(2x)")
+
+shuntres = myshunt.getPostfix("sec(x)")
+#shuntres = myshunt.getPostfix("2^x")
+#shuntres = myshunt.getPostfix("(x+1)^2")
+
+
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
@@ -24,5 +26,5 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 
 ne = Numerical_Engine(graph, myASTGraph)
 
-ne.solve(6)
-ne.differentiate(6)
+#ne.solve(0.2)
+print(ne.differentiate(2.3))
