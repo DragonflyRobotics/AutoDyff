@@ -10,6 +10,9 @@ from CalCoolUs.ops.pow import Pow
 from CalCoolUs.ops.sin import Sin
 from CalCoolUs.ops.cos import Cos
 from CalCoolUs.ops.tan import Tan
+from CalCoolUs.ops.cot import Cot
+from CalCoolUs.ops.csc import Csc
+from CalCoolUs.ops.sec import Sec
 from CalCoolUs.ops.log import Log
 from CalCoolUs.ops.ln import Ln
 from CalCoolUs.ops.arcsin import Arcsin
@@ -27,6 +30,9 @@ class OpType(Enum):
     SIN = Sin("Sis")
     COS = Cos("Cos")
     TAN = Tan("Tan")
+    COT = Cot("Cot")
+    CSC = Csc("Csc")
+    SEC = Sec("Sec")
     LOG = Log("Log")
     LN = Ln("Ln")
     ARCSIN = Arcsin("Arcsin")
