@@ -47,8 +47,8 @@ class Numerical_Engine:
         assert type(x) == int or type(x) == float
         if node == None:
             node = self.last_node
-        temp = self.graph.nodes(data=True)[node]["Op"].numerical_value
-        self.log.info(f"Working on: {node}={temp}")
+        # temp = self.graph.nodes(data=True)[node]["Op"].numerical_value
+        # self.log.info(f"Working on: {node}={temp}")
         if node == "x":
             self.log.info(f"x'={1}")
             return 1

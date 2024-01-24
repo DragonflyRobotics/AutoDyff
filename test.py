@@ -6,9 +6,9 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("sinh(2x)")
-
-shuntres = myshunt.getPostfix("sec(x)")
+shuntres = myshunt.getPostfix("ln(e^x)")
+print(shuntres)
+#shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
 

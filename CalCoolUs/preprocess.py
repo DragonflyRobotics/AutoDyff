@@ -7,7 +7,7 @@ from CalCoolUs.ops.op_types import OpType
 
 from CalCoolUs.ops.var import Var
 from CalCoolUs.ops.const import Const
-
+import math
 from CalCoolUs.log_init import MainLogger
 
 
@@ -23,6 +23,12 @@ class ShuntingYard:
         string = string.replace(" ", "")
         tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
         print(tokenized)    
+        for index in range(0, len(tokenized)):
+            if tokenized[index] == "e":
+                tokenized[index] = f"{math.e}"
+            if tokenized[index] == "π":
+                tokenized[index] = f"{math.pi}"
+        
         for index in range(0,len(tokenized)):
             value = tokenized[index]
             if value == "-" and index < (len(tokenized) - 1 ):
