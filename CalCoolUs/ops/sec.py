@@ -9,7 +9,6 @@ class Sec(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
-        print(f"Sin GOT: {a}, {b}")
         return 1/math.cos(b) * a * math.tan(b)
 
     def __call__(self, a):

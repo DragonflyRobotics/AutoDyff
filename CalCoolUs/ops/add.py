@@ -8,7 +8,6 @@ class Add(Generic_Op):
         self.value = self
 
     def getDerivative(self, a, b, a_val, b_val, *args, **kwargs):
-        print(f"ADD GOT: {a}, {b}")
         return a + b
 
     def __call__(self, a, b):

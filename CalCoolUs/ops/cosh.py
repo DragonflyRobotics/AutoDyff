@@ -9,7 +9,6 @@ class Cosh(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
-        print(f"Cos GOT: {a}, {b}")
         return math.sinh(b) * a
 
     def __call__(self, a):

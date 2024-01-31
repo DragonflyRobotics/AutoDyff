@@ -9,7 +9,6 @@ class Tanh(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
-        print(f"Tan GOT: {a}, {b}")
         return ((1.0/math.cosh(b))**2) * a
 
     def __call__(self, a):

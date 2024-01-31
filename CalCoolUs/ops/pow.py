@@ -9,7 +9,6 @@ class Pow(Generic_Op):
         self.value = self
 
     def getDerivative(self, a, b, a_val, b_val, *args, **kwargs):
-        print(f"POW GOT: {a}, {b}, {a_val}, {b_val}")
         #assert a_val > 0 
         if b == 0: # if it is x ^ constant
             return b_val * (a_val**(b_val-1)) * a

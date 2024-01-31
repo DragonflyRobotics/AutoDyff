@@ -9,7 +9,6 @@ class Ln(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
-        print(f"Sin GOT: {a}, {b}")
         return (1/b) * a
 
     def __call__(self, a):
