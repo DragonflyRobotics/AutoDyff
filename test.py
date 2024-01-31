@@ -5,14 +5,14 @@ from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
-
-shuntres = myshunt.getPostfix("ln(e^x)")
+#print(myshunt.isValue("*"))
+shuntres = myshunt.tokenize("-(x)")
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
 
-
+exit(3)
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
