@@ -28,6 +28,8 @@ from CalCoolUs.ops.arccsc import Arccsc
 from CalCoolUs.ops.arcsec import Arcsec
 from CalCoolUs.ops.arccot import Arccot
 
+from CalCoolUs.ops.sigmoid import Sigmoid
+
 class OpType(Enum):
     ADD = Add("ADD")
     SUB = Sub("SUB")
@@ -56,3 +58,5 @@ class OpType(Enum):
     ARCCSC = Arccsc("Arccsc")
     ARCSEC = Arcsec("Arcsec")
     ARCCOT = Arccot("Arccot")
+    
+    SIGMOID = Sigmoid("Sigmoid")

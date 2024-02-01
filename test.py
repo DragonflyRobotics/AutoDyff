@@ -6,7 +6,7 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("arccot(2*x)")
+shuntres = myshunt.getPostfix("sigmoid(2*x)")
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
@@ -26,5 +26,5 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 
 ne = Numerical_Engine(graph, myASTGraph)
 
-print(ne.solve(0))
-print(ne.differentiate(0))
+print(ne.solve(0.1))
+print(ne.differentiate(0.1))
