@@ -9,7 +9,6 @@ class Sinh(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
-        print(f"Sin GOT: {a}, {b}")
         return math.cosh(b) * a
 
     def __call__(self, a):

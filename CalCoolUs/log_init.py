@@ -4,8 +4,10 @@ MainLogger is the main class containing 1 main function that provides a unique l
 """
 
 import logging
-import json
 import os, pathlib
+from dotenv import load_dotenv
+load_dotenv()
+
 
 class CustomFormatter(logging.Formatter):
 
@@ -49,14 +51,14 @@ class MainLogger():
         #        self.log_dir = i["log_dir"]
         #    except KeyError:
         #        pass
-        #for j in config['basic_variables']:
+        #for j in config['basic_variables']i:
         #    try:
         #        self.verbose = j["verbose"]
         #    except KeyError:
         #        pass
 
-        self.log_dir = "logs"
-        self.verbose = True
+        self.log_dir = str(os.getenv("LOGDIR")) if os.getenv("LOGDIR") != None else "logs"
+        self.verbose = bool(int(os.getenv("VERBOSE"))) if os.getenv("VERBOSE") != None else True
         self.log_dir = pathlib.Path(self.log_dir)
         self.log_dir = self.log_dir.resolve()  # Find absolute path from a relative one.
         self.log_dir = str(self.log_dir)

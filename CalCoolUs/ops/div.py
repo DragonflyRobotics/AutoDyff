@@ -8,7 +8,6 @@ class Div(Generic_Op):
         self.value = self
 
     def getDerivative(self, a, b, a_val, b_val, *args, **kwargs):
-        print(f"DIV GOT: {a}, {b}, {a_val}, {b_val}")
         return (a*b_val - a_val*b) / (b_val*b_val)
 
     def __call__(self, a, b):
