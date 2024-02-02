@@ -6,7 +6,7 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("sigmoid(2*x)")
+shuntres = myshunt.getPostfix("2sin(x)")
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
