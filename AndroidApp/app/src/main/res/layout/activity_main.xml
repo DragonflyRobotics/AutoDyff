@@ -19,11 +19,11 @@
         />
 
     <TextView
-        android:id="@+id/inputLabel"
+        android:id="@+id/equationInputLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="start|center_vertical"
-        android:text="@string/input_label"
+        android:text="@string/equationLabelString"
         android:textColor="#FFFFFF"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleText"
@@ -31,15 +31,38 @@
         />
 
     <EditText
-        android:id="@+id/inputField"
+        android:id="@+id/userEquationInputField"
         android:inputType="text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
-        android:autofillHints="expression"
+        android:autofillHints="equation"
         android:gravity="start|center_vertical"
         app:layout_constraintTop_toBottomOf="@+id/titleText"
-        app:layout_constraintLeft_toRightOf="@+id/inputLabel"
+        app:layout_constraintLeft_toRightOf="@+id/equationInputLabel"
+        />
+
+    <TextView
+        android:id="@+id/user_x_valueInputLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:text="@string/x_valueLabelString"
+        android:textColor="#FFFFFF"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/equationInputLabel"
+        />
+
+    <EditText
+        android:id="@+id/user_x_valueInputField"
+        android:inputType="text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:autofillHints="x value"
+        android:gravity="start|center_vertical"
+        app:layout_constraintLeft_toRightOf="@id/equationInputLabel"
+        app:layout_constraintTop_toBottomOf="@id/userEquationInputField"
         />
 
     <Button
@@ -50,7 +73,7 @@
         android:background="#082A52"
         android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputLabel"
+        app:layout_constraintTop_toBottomOf="@id/user_x_valueInputField"
         />
 
     <TextView

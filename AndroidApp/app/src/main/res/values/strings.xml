@@ -3,7 +3,8 @@
     <string name="textBox_text">Automatic Differentiation</string>
     <string name="button_text">Is this hard fax &#x1F4E0;&#x2753;&#x2753;&#x2753;</string>
     <string name="toast_text">Hard fax! &#x1F5E3;&#xFE0F;&#x1F5E3;&#xFE0F;&#x1F5E3;&#xFE0F;</string>
-    <string name="input_label">Expression: </string>
+    <string name="equationLabelString">Expression: </string>
+    <string name="x_valueLabelString">X Value:</string>
     <string name="confirmInput_button">Enter</string>
     <string name="resultHeader_text">Results:</string>
     <string name="resultDefault_text">Results are shown here…</string>
