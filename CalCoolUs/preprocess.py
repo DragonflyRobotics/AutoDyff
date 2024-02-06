@@ -14,6 +14,7 @@ from CalCoolUs.log_init import MainLogger
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
+        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh"]
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
@@ -22,13 +23,21 @@ class ShuntingYard:
         self.log.info(f"Starting grand tokenizer...")
         string = string.replace(" ", "")
         tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
-        print(tokenized)    
+        lowerBound = 0
+        upperBound = len(tokenized)
+        while lowerBound < upperBound:
+            if self.isCoef(tokenized[lowerBound]) == True:
+                tokenized = self.splitCoef(tokenized, lowerBound)
+                lowerBound += 1
+                upperBound += 1
+            lowerBound += 1
+         
         for index in range(0, len(tokenized)):
             if tokenized[index] == "e":
                 tokenized[index] = f"{math.e}"
             if tokenized[index] == "π":
                 tokenized[index] = f"{math.pi}"
-        
+        '''
         for index in range(0,len(tokenized)):
             value = tokenized[index]
             if value == "-" and index < (len(tokenized) - 1 ):
@@ -38,7 +47,7 @@ class ShuntingYard:
                 assert tokenized[index + 1] != "(", "Coefficients not accepted, use multiplication signs"
                 assert self.isFunction(tokenized[index + 1]) != True, "Coefficients not accepted, use multiplication signs"
             assert(self.isfloat(value) == True or self.isFunction(value) == True or value == "(" or value == ")" or value == "x" or value in self.operations), "Coefficients not accepted, use multiplication signs"
-            
+        '''   
         lowerBound = 0
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
@@ -73,20 +82,63 @@ class ShuntingYard:
             lowerBound += 1 
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        
-        while lowerBound < upperBound:
-            
+        while lowerBound < upperBound:    
             if tokenized[lowerBound] == "-(":
-
                 original = len(tokenized)
                 tokenized = self.negParenth(tokenized, lowerBound)
                 change = len(tokenized) - original
                 lowerBound += 1
                 upperBound += change
-            
             lowerBound += 1
-    
+        lowerBound = 0
+        upperBound = len(tokenized) - 1
+        
+        while lowerBound < upperBound:
+            higher = tokenized[lowerBound + 1]
+            if self.isValue(tokenized[lowerBound]) and (higher == "(" or self.isFunction(higher) or higher == "x"):
+                
+                original = len(tokenized)
+                tokenized = self.evalCoef(tokenized, lowerBound)
+                lowerBound += 1
+                upperBound += len(tokenized)
+                upperBound -= original
+            lowerBound += 1
         return tokenized
+    def splitCoef(self, inputArray, inputIndex):
+        array = list(inputArray[inputIndex])
+        check = 0
+        number = array[0]
+        string = ""
+        for index in range(1, len(array)):
+            if self.isAlphanumeric(array[index]) == True and check == 0 and array[index] != "e":
+                check += 1
+                string += array[index]
+            elif check == 1:
+                string += array[index]
+            elif self.isValue(array[index]) == True or array[index] == ".": 
+                
+                number += array[index]
+        
+        inputArray[inputIndex] = number
+        inputArray.insert(inputIndex + 1, string)
+        return inputArray
+    def isCoef(self, string):
+        array = list(string)
+        check = 0
+        number = array[0]
+        string = ""
+        for index in range(1, len(array)):
+            if self.isAlphanumeric(array[index]) == True and check == 0 and array[index] != "e":
+                check += 1
+                string += array[index]
+            elif check == 1:
+                string += array[index]
+            elif self.isValue(array[index]) == True or array[index] == ".": 
+                
+                number += array[index]
+        
+        return (self.isValue(number) == True and number != "-")  and (self.isFunction(string) == True or string == "x")
+            
     def negParenth(self, array, startIndex):
         array[startIndex] = "("
         array.insert(startIndex + 1, "-1")
@@ -96,23 +148,35 @@ class ShuntingYard:
         array.insert(self.findEnd(array, endIndex), ")")
         #print(array)
         return array
-                   
+    def evalCoef(self, array, startIndex):
+        
+        first = array[startIndex]
+        #second = array[startIndex + 1] 
+        array[startIndex] = "("
+        array.insert(startIndex + 1, first)
+        array.insert(startIndex + 2, "*")
+        array.insert(startIndex + 3, "(")
+        endIndex = startIndex + 4
+        end = self.findEnd(array, endIndex)
+        array.insert(end, ")")
+        array.insert(end + 1, ")")
+        return array                
     def findEnd(self, array, startIndex):
         endIndex = startIndex
         flag = 1
-        while flag != 0:
-            #print(array[endIndex])
-            if endIndex - 1 == len(array):
-                print("e")
+        while flag != 0:    
+            if endIndex == len(array):
+                
                 return endIndex
+            #if endIndex == len(array):
             if array[endIndex] == "(" or array[endIndex] == "-(":
                 flag += 1
             if array[endIndex] == ")":
                 flag -= 1
-            """if array[endIndex] == "-(":"""
-                
+            
             endIndex += 1
         endIndex -= 1
+        
         if len(array) == endIndex + 1:
             return endIndex    
         if array[endIndex + 1] == "^":    
@@ -123,23 +187,28 @@ class ShuntingYard:
             else: 
                 return endIndex + 3        
         return endIndex
-		           	
+    
+            
     def isfloat(self, number):
         try:
             float(number)
             return True
         except:
+            
             return False
-    def isFunction(self, string):
-        if len(string) < 2:
-            return False
-        alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","y","z"]
-        for letter in string:
+    def isAlphanumeric(self, number):
+        alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+        for letter in number:
             if letter not in alphabet:
                 return False
         return True
+    def isFunction(self, string):
+        if string in self.funcitons:
+            return True
+        else:
+            return False
     def isValue(self, number):
-        return self.isfloat(number) or number == 'x' or isinstance(number, str)
+        return self.isfloat(number) or number == "x" or number == "π" or number == "e"
     def isNegFunction(self, string):
         if string[0] != "-":
             return False
@@ -192,7 +261,7 @@ class ShuntingYard:
                        and self.precedence(operatorStack[-1]) >= self.precedence(value)):
                     outputQueue.append(operatorStack.pop())
                 operatorStack.append(value)
-            elif self.isAlphanumeric(value) == True:
+            elif self.isFunction(value) == True:
                 operatorStack.append(value)
         while operatorStack:
             outputQueue.append(operatorStack.pop())
