@@ -4,7 +4,20 @@ myShunt = ShuntingYard()
 
 # Operations in use "+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh"
 def test_postfix():
-    # Rational Numbers
+    # assert myShunt.getPostfix("(2(4x+5))/3") == ["2", "4", "x", "5",  "+", "3", "/"]
+    # assert myShunt.getPostfix("2^(-1*x)") == ["2", "-1", "x", "*", "^"]
+    #assert myShunt.getPostfix("2(1+(1/x))") == ["2", "1", "1", "x", "/", "+"]
+    # assert myShunt.getPostfix("2^x-5*x") == ["2", "x", "^", "5", "x", "*", "-" ]
+    # assert myShunt.getPostfix("2^(1/x)") == ["2", "1", "x", "/", "^"]
+    # assert myShunt.getPostfix("x+2") == ["x", "2", "+"]
+    # assert myShunt.getPostfix("-x-2") == ["-1", "x", "*", "2", "-"]
+    # assert myShunt.getPostfix("2^-x") == ["2", "x", "-1", "*", "^"] or myShunt.getPostfix("2^-x") == ["2", "-1", "x", "*", "^"]
+    # assert myShunt.getPostfix("-(-x-1)-(-2-x)") == ["-1","-1", "x", "*", "1", "-", "*", "-2", "x", "-", "-"]
+    # assert myShunt.getPostfix("-(-x-1)^-(-2-x)") == ["-1","-1", "x", "*", "1", "-", "-1", "-2", "x", "-", "*", "^", "*"]
+    #Failed
+    # assert myShunt.getPostfix("(-(-x+1))^(-x+3)") == []
+    #assert myShunt.getPostfix("-((x-3/2)/(x+1/2))^(-3/2)") == []
+   
     assert myShunt.getPostfix("(2*(4*x+5))/3") == ["2", "4", "x", "*", "5",  "+", "*", "3", "/"]
     assert myShunt.getPostfix("2^(-1*x)") == ["2", "-1", "x", "*", "^"]
     assert myShunt.getPostfix("2*(1+(1/x))") == ["2", "1", "1", "x", "/", "+", "*"]
@@ -28,5 +41,9 @@ def test_postfix():
    # assert myShunt.getPostfix("-(-x-1)^-(-2-x)") == ["-1","-1", "x", "*", "1", "-", "-1", "-2", "x", "-", "*", "^", "*"]
     #Failed
   #  assert myShunt.getPostfix("(-(-x+1))^(-x+3)") == []
+    # assert myShunt.getPostfix("-(-x-1)-(-2-x)") == ["-1","-1", "x", "*", "1", "-", "*", "-2", "x", "-", "-"]
+    # assert myShunt.getPostfix("-(-x-1)^-(-2-x)") == ["-1","-1", "x", "*", "1", "-", "-1", "-2", "x", "-", "*", "^", "*"]
+    #Failed
+    #assert myShunt.getPostfix("(-(-x+1))^(-x+3)") == []
     assert myShunt.getPostfix("2((x-3/2)/(x+1/2))^2(-3/2)") == ["2", "x", "3", "2", "/", "-", "x", "1", "2", "/", "+", "/","2", "-3", "2", "/", "*", "^", "*"]
     

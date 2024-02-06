@@ -9,7 +9,6 @@ class Cos(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
-        print(f"Cos GOT: {a}, {b}")
         return math.sin(b) * a * -1
 
     def __call__(self, a):

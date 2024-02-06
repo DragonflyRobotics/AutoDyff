@@ -8,7 +8,6 @@ class Mul(Generic_Op):
         self.value = self
 
     def getDerivative(self, a, b, a_val, b_val, *args, **kwargs):
-        print(f"MUL GOT: {a}, {b}, {a_val}, {b_val}")
         return a*b_val + a_val*b 
 
     def __call__(self, a, b):

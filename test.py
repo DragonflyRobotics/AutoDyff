@@ -5,8 +5,9 @@ from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
-#print(myshunt.isValue("*"))
+
 shuntres = myshunt.tokenize("2sin(x)")
+
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
@@ -26,5 +27,5 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 
 ne = Numerical_Engine(graph, myASTGraph)
 
-#ne.solve(0.2)
-print(ne.differentiate(2.3))
+print(ne.solve(0.1))
+print(ne.differentiate(0.1))
