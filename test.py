@@ -6,7 +6,7 @@ from CalCoolUs.ops.const import Const
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.tokenize("2sin(x)")
+shuntres = myshunt.getPostfix("-2e^xcos(2ln(-xe*-3e^2x))")
 
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
