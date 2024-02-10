@@ -95,7 +95,7 @@ class ShuntingYard:
         
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
-            if self.isValue(tokenized[lowerBound]) and (higher == "(" or self.isFunction(higher) or higher == "x"):
+            if self.isValue(tokenized[lowerBound]) and (higher == "(" or self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
                 
                 original = len(tokenized)
                 tokenized = self.evalCoef(tokenized, lowerBound)
@@ -110,7 +110,7 @@ class ShuntingYard:
         number = array[0]
         string = ""
         for index in range(1, len(array)):
-            if self.isAlphanumeric(array[index]) == True and check == 0 and array[index] != "e":
+            if (self.isAlphanumeric(array[index]) == True or array[index] == "π") and check == 0:
                 check += 1
                 string += array[index]
             elif check == 1:
@@ -128,16 +128,16 @@ class ShuntingYard:
         number = array[0]
         string = ""
         for index in range(1, len(array)):
-            if self.isAlphanumeric(array[index]) == True and check == 0 and array[index] != "e":
+            if (self.isAlphanumeric(array[index]) == True or array[index] == "π") and check == 0:
                 check += 1
                 string += array[index]
             elif check == 1:
                 string += array[index]
             elif self.isValue(array[index]) == True or array[index] == ".": 
-                
                 number += array[index]
         
-        return (self.isValue(number) == True and number != "-")  and (self.isFunction(string) == True or string == "x")
+        
+        return (self.isValue(number) == True and number != "-")  and (self.isFunction(string) == True or string == "x" or string == "e" or string == "π")
             
     def negParenth(self, array, startIndex):
         array[startIndex] = "("
