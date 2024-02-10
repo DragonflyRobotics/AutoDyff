@@ -1,5 +1,6 @@
 Just tests: poetry run pytest
 Tests and coverage: poetry run coverage run -m pytest && poetry run coverage report -m
+Get test and coverage HTML: poetry run coverage run -m pytest && poetry run coverage html
 Run Linter: poetry run flake8
 IDK: poetry run black the_project/apps.py
 

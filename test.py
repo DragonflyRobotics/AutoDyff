@@ -3,17 +3,20 @@ from matplotlib import pyplot as plt
 
 from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
+import random
+print(random.random())
+exit(9)
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("-2e^xcos(2ln(-xe*-3e^2x))")
+shuntres = myshunt.getPostfix("πe")
 
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
 
-exit(3)
+#exit(3)
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)

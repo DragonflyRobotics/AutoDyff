@@ -34,7 +34,7 @@ def test_postfix():
     assert myShunt.getPostfix("-ln(cos(x)+sinh(arccos(x)*e^-sin(arctan(ln(x)))))") == ["-1", "x", "cos", "x", "arccos", "2.718281828459045", "-1", "x", "ln", "arctan", "sin", "*", "^", "*", "sinh", "+", "ln", "*"] 
     assert myShunt.getPostfix("2sin(x)") == ["2", "x", "sin", "*"]
     assert myShunt.getPostfix("2x") == ["2", "x", "*"]
-    assert myShunt.getPostfix("3sigmoid(x)") == ["x"]
+    assert myShunt.getPostfix("3sigmoid(x)") == ["3", "x", "sigmoid", "*"]
     assert myShunt.getPostfix("-(x+2)") == ["-1", "x", "2", "+", "*"]
     assert myShunt.getPostfix("2^-x") == ["2", "x", "-1", "*", "^"] or myShunt.getPostfix("2^-x") == ["2", "-1", "x", "*", "^"]
    # assert myShunt.getPostfix("-(-x-1)-(-2-x)") == ["-1","-1", "x", "*", "1", "-", "*", "-2", "x", "-", "-"]

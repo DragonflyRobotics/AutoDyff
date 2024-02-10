@@ -14,7 +14,7 @@ from CalCoolUs.log_init import MainLogger
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
-        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh"]
+        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid"]
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
