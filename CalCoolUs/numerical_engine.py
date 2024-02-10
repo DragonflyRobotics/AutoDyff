@@ -20,7 +20,7 @@ class Numerical_Engine:
         if node == None:
             node = self.last_node
         self.log.info(f"Working on: {node}")
-        if node == "x":
+        if "x" in node:
             self.graph.nodes(data=True)['x']['Op'].numerical_value = x
             #print(f"x={x}")
             return x
@@ -49,7 +49,7 @@ class Numerical_Engine:
             node = self.last_node
         # temp = self.graph.nodes(data=True)[node]["Op"].numerical_value
         # self.log.info(f"Working on: {node}={temp}")
-        if node == "x":
+        if 'x' in node:
             self.log.info(f"x'={1}")
             return 1
         elif type(self.graph.nodes(data=True)[node]["Op"]) == Const:

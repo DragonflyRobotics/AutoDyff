@@ -346,6 +346,7 @@ class ASTGraph:
         return "UNK"
 
     def getAST(self, shuntyardresult):
+        assert len(shuntyardresult) > 1
         self.log.info(f"Running AST compute from the Shunt Yard: {shuntyardresult}")
         graph = nx.MultiDiGraph()
 
@@ -386,15 +387,18 @@ class ASTGraph:
                     node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
                         random.choices(string.ascii_uppercase +
                                        string.digits, k=3))
+                    print(f"Nodes: {shuntyardresult[counter - 2]} --> {node_name} --> {shuntyardresult[counter - 1]}")
+                    if shuntyardresult[counter - 2] == shuntyardresult[counter - 1]:
+                        shuntyardresult[counter - 2] = shuntyardresult[counter - 2] + ''.join(random.choices(string.digits, k=3))
                     graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
-                    if str(shuntyardresult[counter - 2]) == 'x':
+                    if 'x' in str(shuntyardresult[counter - 2]):
                         nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
                     elif self.isfloat(shuntyardresult[counter - 2]):
                         nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
                     #else:
                     #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
                     graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
-                    if str(shuntyardresult[counter - 1]) == 'x':
+                    if 'x' in str(shuntyardresult[counter - 1]):
                         nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
                     elif self.isfloat(shuntyardresult[counter - 1]):
                         nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
