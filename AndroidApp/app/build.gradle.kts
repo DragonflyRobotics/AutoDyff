@@ -42,5 +42,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-cronet:18.0.1")
     implementation("com.google.guava:guava:33.0.0-android")
     implementation("org.json:json:20210307")
-
+    implementation("io.reactivex.rxjava3:rxjava:3.1.5")
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
 }

@@ -71,14 +71,16 @@ public class serverRequestTest {
 
             // Read the output of the process
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+            StringBuilder response = new StringBuilder();
+
+            while (reader.readLine() != null) {
+                response.append(reader.readLine());
             }
 
             // Wait for the process to complete
-            int exitCode = process.waitFor();
-            System.out.println("Process exited with code " + exitCode);
+            //int exitCode = process.waitFor();
+            //System.out.println("Process exited with code " + exitCode);
+            System.out.println(response);
         } catch (Exception e) {
             System.out.println("You suck");
         }

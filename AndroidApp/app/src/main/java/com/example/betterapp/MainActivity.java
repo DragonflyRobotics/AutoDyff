@@ -1,6 +1,5 @@
 package com.example.betterapp;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -14,6 +13,7 @@ import android.net.http.UrlResponseInfo;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.os.ext.SdkExtensions;
 import android.text.Layout;
 import android.util.DisplayMetrics;
@@ -50,8 +50,29 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.functions.Supplier;
+import io.reactivex.rxjava3.observers.DisposableObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener {
+    private static final String TAG = "MainActivity";
+
+    private final CompositeDisposable disposables = new CompositeDisposable();
+    /* Initialize this during runtime (When the user button is clicked)
+    String expression;
+    String x_value;
+
+     */
+
+    TextView resultText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,14 +127,14 @@ public class MainActivity extends AppCompatActivity
         inputConfirmButton.setLayoutParams(inputConfirmButtonParams);
         inputConfirmButton.setOnClickListener(this);
 
-
+        // Set the result title
         TextView resultHeader = findViewById(R.id.resultHeader);
         resultHeader.setTextSize(displayHeight * 0.01f);
         ConstraintLayout.LayoutParams resultHeaderParams = (ConstraintLayout.LayoutParams) resultHeader.getLayoutParams();
         resultHeaderParams.topMargin = (int) (displayHeight * 0.05f);
         resultHeader.setLayoutParams(resultHeaderParams);
 
-        TextView resultText = findViewById(R.id.resultText);
+        this.resultText = findViewById(R.id.resultText);
         resultText.setTextSize(displayHeight * 0.008f);
         resultText.setHeight((int) (displayHeight * 0.3));
 
@@ -141,27 +162,66 @@ public class MainActivity extends AppCompatActivity
 
          */
 
-    @SuppressLint("NonConstantResourceId")
+
+    @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.faxButton) {
             Toast.makeText(this, R.string.toast_text, Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.inputConfirmButton) {
-            EditText textField = findViewById(R.id.inputField);
-            EditText x_Field = findViewById(R.id.user_x_valueInputField);
-            String expression = textField.getText().toString();
-            String x_value = x_Field.toString();
-            TextView resultText = findViewById(R.id.resultText);
-
-            //resultText.setText(possibleInput(textField.getText().toString()));
+            disposables.add(
+                    apiRequestObservable()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(result -> resultText.setText(result))
+            );
         }
     }
 
-    /*  How the data should be sent to the server...
-    {
-        "equation": "x^2",
-        "x": "5"
-    }
-    */
+    static Observable<String> apiRequestObservable() {
+        return Observable.defer(new Supplier<ObservableSource<? extends String>>() {
+            @Override public ObservableSource<? extends String> get() throws Throwable {
+                // Do some long running operation
+                StringBuilder response = new StringBuilder();
 
+                try {
+                    // Create the command
+                    ProcessBuilder processBuilder = new ProcessBuilder(
+                            "curl",
+                            "--header", "Content-Type: application/json",
+                            "--request", "POST",
+                            "--data", "{\"equation\": \"x^2\", \"x\": \"5\"}",
+                            "https://codermerlin.academy/vapor/brennan-coil/numerical_engine/endpoint"
+                    );
+
+                    // Redirect error stream to output stream
+                    processBuilder.redirectErrorStream(true);
+
+                    // Start the process
+                    Process process = processBuilder.start();
+
+                    // Read the output of the process
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                    while (reader.readLine() != null) {
+                        response.append(reader.readLine());
+                    }
+
+                    // Wait for the process to complete
+                    int exitCode = process.waitFor();
+                    System.out.println("Process exited with code " + exitCode);
+                } catch (Exception e) {
+                    System.out.println("You suck");
+                }
+                return Observable.just(response.toString());
+            }
+        });
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposables.clear();
+    }
 }
