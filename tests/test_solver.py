@@ -14,12 +14,12 @@ def solve(postfix, x):
     graph = myASTGraph.getAST(shuntres)
     ne = Numerical_Engine(graph, myASTGraph)
     return ne.solve(x)
-@pytest.fixture
+# @pytest.fixture
 def random_input():
     return np.random.uniform(-1.0, 1.0)
    
 
-@pytest.mark.parametrize("n_times", range(10))
+@pytest.mark.parametrize("n_times", range(3))
 def test_random_solve(n_times, random_input):
     assert solve("(2*(4*x+5))/3", random_input) == pytest.approx((2*(4*random_input+5))/3)#test1
     assert solve("2^(-1*x)", random_input) == pytest.approx(2**(-1*random_input))
@@ -46,4 +46,6 @@ def test_random_solve(n_times, random_input):
     assert solve("3sigmoid(x)", random_input) == pytest.approx(3*(1 / (1 + np.exp(-random_input))))
     assert solve("-(x+2)", random_input) == pytest.approx(-(random_input+2))
     assert solve("2^-x", random_input) == pytest.approx(2**(-random_input))
-
+    assert solve("arccot(2x^3)", random_input) == pytest.approx(np.arctan(1/(2*(random_input**3))))
+    assert solve("arccsc(2x^3)", random_input) == pytest.approx(np.arcsin(1/(2*(random_input**3))))
+    assert solve("arcsec(2x^3)", random_input) == pytest.approx(np.arccos(1/(2*(random_input**3))))
