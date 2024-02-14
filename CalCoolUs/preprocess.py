@@ -103,6 +103,15 @@ class ShuntingYard:
                 upperBound += len(tokenized)
                 upperBound -= original
             lowerBound += 1
+        lowerBound = 0
+        upperBound = len(tokenized) - 1
+        while lowerBound < upperBound:
+            higher = lowerBound + 1
+            isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
+            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations are values"
+            isValid = (tokenized[higher] == "(" and (self.isValue(tokenized[lowerBound]) or tokenized[lowerBound] == ")"))
+            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations are values"
+            lowerBound += 1
         return tokenized
     def splitCoef(self, inputArray, inputIndex):
         array = list(inputArray[inputIndex])
@@ -123,6 +132,7 @@ class ShuntingYard:
         inputArray.insert(inputIndex + 1, string)
         return inputArray
     def isCoef(self, string):
+        
         array = list(string)
         check = 0
         number = array[0]

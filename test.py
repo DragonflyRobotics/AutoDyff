@@ -4,19 +4,19 @@ from matplotlib import pyplot as plt
 from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
 import random
-print(random.random())
-exit(9)
+#print(random.random())
+#exit(9)
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("πe")
+shuntres = myshunt.tokenize("x(x+2)")
 
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
 
-#exit(3)
+exit(3)
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
