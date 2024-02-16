@@ -9,7 +9,7 @@ import random
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.tokenize("x(x+2)")
+shuntres = myshunt.tokenize("(x+2)+3x")
 
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")

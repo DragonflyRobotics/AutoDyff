@@ -108,9 +108,9 @@ class ShuntingYard:
         while lowerBound < upperBound:
             higher = lowerBound + 1
             isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
-            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations are values"
+            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations or values"
             isValid = (tokenized[higher] == "(" and (self.isValue(tokenized[lowerBound]) or tokenized[lowerBound] == ")"))
-            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations are values"
+            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations or values"
             lowerBound += 1
         return tokenized
     def splitCoef(self, inputArray, inputIndex):
