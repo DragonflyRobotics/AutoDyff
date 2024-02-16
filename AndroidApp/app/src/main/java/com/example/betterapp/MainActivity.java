@@ -169,8 +169,10 @@ public class MainActivity extends AppCompatActivity
         if (v.getId() == R.id.faxButton) {
             Toast.makeText(this, R.string.toast_text, Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.inputConfirmButton) {
+            EditText equation = findViewById(R.id.userEquationInputField);
+            EditText x_value = findViewById(R.id.user_x_valueInputField);
             disposables.add(
-                    apiRequestObservable()
+                    apiRequestObservable(equation.getText().toString(), x_value.getText().toString())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(result -> resultText.setText(result))
@@ -178,44 +180,49 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    static Observable<String> apiRequestObservable() {
+    static Observable<String> apiRequestObservable(String equation, String x_value) {
         return Observable.defer(new Supplier<ObservableSource<? extends String>>() {
             @Override public ObservableSource<? extends String> get() throws Throwable {
                 // Do some long running operation
-                StringBuilder response = new StringBuilder();
-
-                try {
-                    // Create the command
-                    ProcessBuilder processBuilder = new ProcessBuilder(
-                            "curl",
-                            "--header", "Content-Type: application/json",
-                            "--request", "POST",
-                            "--data", "{\"equation\": \"x^2\", \"x\": \"5\"}",
-                            "https://codermerlin.academy/vapor/brennan-coil/numerical_engine/endpoint"
-                    );
-
-                    // Redirect error stream to output stream
-                    processBuilder.redirectErrorStream(true);
-
-                    // Start the process
-                    Process process = processBuilder.start();
-
-                    // Read the output of the process
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-                    while (reader.readLine() != null) {
-                        response.append(reader.readLine());
-                    }
-
-                    // Wait for the process to complete
-                    int exitCode = process.waitFor();
-                    System.out.println("Process exited with code " + exitCode);
-                } catch (Exception e) {
-                    System.out.println("You suck");
-                }
-                return Observable.just(response.toString());
+                String response = apiRequest(equation, x_value);
+                return Observable.just(response);
             }
         });
+    }
+
+    public static String apiRequest(String equation, String x_value) {
+        final String serverEndpoint = "https://www.codermerlin.academy/vapor/brennan-coil/numerical_engine/endpoint";
+
+        try {
+            JSONObject userJsonObject = new JSONObject();
+            userJsonObject.put("equation", equation);
+            userJsonObject.put("x", x_value);
+
+            URL serverEndpointURL = new URL(serverEndpoint);
+            HttpURLConnection httpConnection = (HttpURLConnection) serverEndpointURL.openConnection();
+            httpConnection.setRequestMethod("POST");
+            httpConnection.setRequestProperty("Content-Type", "application/json");
+            //httpConnection.setRequestProperty("Accept", "text/plain");
+            httpConnection.setDoInput(true);
+            httpConnection.setDoOutput(true);
+            httpConnection.getOutputStream().write(userJsonObject.toString().getBytes(StandardCharsets.UTF_8));
+            httpConnection.getOutputStream().close();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
+
+            /* Only one line of response outputted; no need to do a while loop
+            Furthermore, this loop is incorrectly implemented as it can potentially
+            skip past non-null values and pass in null values accidentally
+            (data loss potential).
+            while (reader.readLine() != null) {
+                response.append(reader.readLine());
+            }
+            */
+
+            return reader.readLine();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
     }
 
 
