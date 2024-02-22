@@ -9,7 +9,7 @@ from CalCoolUs.ops.var import Var
 from CalCoolUs.ops.const import Const
 import math
 from CalCoolUs.log_init import MainLogger
-
+from CalCoolUs.error_types import *
 
 class ShuntingYard:
     def __init__(self):
@@ -95,8 +95,7 @@ class ShuntingYard:
         
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
-            if self.isValue(tokenized[lowerBound]) and (higher == "(" or self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
-                
+            if self.isValue(tokenized[lowerBound]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
                 original = len(tokenized)
                 tokenized = self.evalCoef(tokenized, lowerBound)
                 lowerBound += 1
@@ -108,9 +107,11 @@ class ShuntingYard:
         while lowerBound < upperBound:
             higher = lowerBound + 1
             isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
-            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations or values"
+            if isValid == True:
+                raise ParenthesisMulError
             isValid = (tokenized[higher] == "(" and (self.isValue(tokenized[lowerBound]) or tokenized[lowerBound] == ")"))
-            assert isValid == False, "Multiplication signs needed in between parntehsis and other operations or values"
+            if isValid == True:
+                raise ParenthesisMulError
             lowerBound += 1
         return tokenized
     def splitCoef(self, inputArray, inputIndex):
@@ -166,10 +167,11 @@ class ShuntingYard:
         array.insert(startIndex + 1, first)
         array.insert(startIndex + 2, "*")
         array.insert(startIndex + 3, "(")
-        endIndex = startIndex + 4
+        array.insert(startIndex + 5, ")")
+        endIndex = startIndex + 6
         end = self.findEnd(array, endIndex)
         array.insert(end, ")")
-        array.insert(end + 1, ")")
+        
         return array                
     def findEnd(self, array, startIndex):
         endIndex = startIndex
@@ -189,11 +191,16 @@ class ShuntingYard:
         
         if len(array) == endIndex + 1:
             return endIndex    
+        
         if array[endIndex + 1] == "^":    
+            higher = array[endIndex + 3]
             if array[endIndex + 2] == "(":
                 return self.findEnd(array, endIndex + 3)
             if array[endIndex + 2] == "-(":
                 return self.findEnd(self.negParenth(array, endIndex + 2), endIndex + 3)
+            if self.isValue(array[endIndex + 2]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
+                print("e")
+                return self.findEnd(self.evalCoef(array, endIndex + 2), endIndex + 3)
             else: 
                 return endIndex + 3        
         return endIndex

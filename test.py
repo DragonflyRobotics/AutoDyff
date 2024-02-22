@@ -4,12 +4,14 @@ from matplotlib import pyplot as plt
 from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
 import random
+from CalCoolUs.error_types import *
 #print(random.random())
 #exit(9)
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.tokenize("(x+2)+3x")
+
+shuntres = myshunt.tokenize("e^2x^2+4")
 
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
