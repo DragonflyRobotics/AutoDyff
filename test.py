@@ -11,12 +11,15 @@ myshunt = ShuntingYard()
 
 shuntres = myshunt.getPostfix("πe")
 
+
+#shuntres = myshunt.tokenize("2*x")
+shuntres = myshunt.getPostfix("2e")
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
 
-#exit(3)
+
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
 graph = myASTGraph.getAST(shuntres)
@@ -30,5 +33,5 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 
 ne = Numerical_Engine(graph, myASTGraph)
 
-print(ne.solve(0.1))
+print(ne.solve(1))
 print(ne.differentiate(0.1))

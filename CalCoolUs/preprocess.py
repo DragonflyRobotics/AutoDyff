@@ -5,7 +5,6 @@ import re
 
 from CalCoolUs.ops.op_types import OpType
 
-from CalCoolUs.ops.var import Var
 from CalCoolUs.ops.const import Const
 import math
 from CalCoolUs.log_init import MainLogger
