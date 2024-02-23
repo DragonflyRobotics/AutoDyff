@@ -5,19 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
-import android.content.Context;
-import android.net.http.HttpException;
-import android.net.http.UrlRequest;
-import android.net.http.UrlResponseInfo;
-import android.nfc.Tag;
-import android.os.Build;
+
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.os.ext.SdkExtensions;
-import android.text.Layout;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,30 +15,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.io.CharStreams;
-
-import org.chromium.net.CronetEngine;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.DataOutputStream;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLPeerUnverifiedException;
 
 import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
-import java.security.cert.Certificate;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -65,14 +39,8 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
 
     private final CompositeDisposable disposables = new CompositeDisposable();
-    /* Initialize this during runtime (When the user button is clicked)
-    String expression;
-    String x_value;
-
-     */
 
     TextView resultText;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,7 +170,6 @@ public class MainActivity extends AppCompatActivity
             HttpURLConnection httpConnection = (HttpURLConnection) serverEndpointURL.openConnection();
             httpConnection.setRequestMethod("POST");
             httpConnection.setRequestProperty("Content-Type", "application/json");
-            //httpConnection.setRequestProperty("Accept", "text/plain");
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
             httpConnection.getOutputStream().write(userJsonObject.toString().getBytes(StandardCharsets.UTF_8));

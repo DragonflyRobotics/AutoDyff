@@ -23,8 +23,21 @@ public class serverRequestTest {
             userJsonObject.put("equation", expression);
             userJsonObject.put("x", x_value);
 
+            /* data sending format
+                {
+                    "equation": enter equation here
+                    "x": enter x value here
+                }
+
+             */
+
+            //establish URL server connection through HTTPS
+
             URL serverEndpointURL = new URL(serverEndpoint);
             HttpURLConnection httpConnection = (HttpURLConnection) serverEndpointURL.openConnection();
+
+            // make a POST request and set the tyhpe of data sent to json
+
             httpConnection.setRequestMethod("POST");
             httpConnection.setRequestProperty("Content-Type", "application/json");
             //httpConnection.setRequestProperty("Accept", "text/plain");
