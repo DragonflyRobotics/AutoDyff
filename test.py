@@ -11,7 +11,7 @@ from CalCoolUs.error_types import *
 myshunt = ShuntingYard()
 
 
-shuntres = myshunt.tokenize("e^2x^2+4")
+shuntres = myshunt.tokenize("2e^2x^2")
 
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")

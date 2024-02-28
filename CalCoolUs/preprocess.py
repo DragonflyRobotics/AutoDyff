@@ -92,6 +92,7 @@ class ShuntingYard:
             lowerBound += 1
         lowerBound = 0
         upperBound = len(tokenized) - 1
+        #print(tokenized)
         
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
@@ -104,6 +105,7 @@ class ShuntingYard:
             lowerBound += 1
         lowerBound = 0
         upperBound = len(tokenized) - 1
+        
         while lowerBound < upperBound:
             higher = lowerBound + 1
             isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
@@ -167,12 +169,53 @@ class ShuntingYard:
         array.insert(startIndex + 1, first)
         array.insert(startIndex + 2, "*")
         array.insert(startIndex + 3, "(")
-        array.insert(startIndex + 5, ")")
-        endIndex = startIndex + 6
-        end = self.findEnd(array, endIndex)
+        
+        endIndex = startIndex + 4
+        
+        end = self.findCoefEnd(array, endIndex)
+        
+        array.insert(end, ")")
+        #print(endIndex)
+        #print(end)
+        #print(array)
+        endIndex = end
+        end = self.findCoefEnd(array, endIndex)
+        
         array.insert(end, ")")
         
         return array                
+    def findCoefEnd(self,array, startIndex):
+        endIndex = startIndex + 1
+        flag = 1
+        #print(endIndex)
+        #print(len(array))
+        #print(array)
+        while flag != 0:            
+            if endIndex >= (len(array) - 1):
+                #print("hi") 
+                return (len(array))
+            higher = array[endIndex + 1]
+            if higher == ")":
+                return endIndex + 2
+            if array[endIndex] == "^":
+                if higher == "(":
+                    return self.findEnd(array, endIndex + 2)
+                return self.findCoefEnd(array, endIndex + 2)
+
+            if array[endIndex] == "(":
+                flag += 1
+            
+            if self.isValue(array[endIndex]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)): 
+                flag += 1
+            else:
+                flag -= 1
+            endIndex += 1
+        endIndex -= 1
+        
+        if len(array) == endIndex + 1:
+            return endIndex        
+        
+        return endIndex
     def findEnd(self, array, startIndex):
         endIndex = startIndex
         flag = 1
@@ -188,11 +231,12 @@ class ShuntingYard:
             
             endIndex += 1
         endIndex -= 1
-        
         if len(array) == endIndex + 1:
             return endIndex    
         
-        if array[endIndex + 1] == "^":    
+        if array[endIndex + 1] == "^":
+            if len(array) > endIndex + 2:
+                return endIndex + 3
             higher = array[endIndex + 3]
             if array[endIndex + 2] == "(":
                 return self.findEnd(array, endIndex + 3)
@@ -261,6 +305,7 @@ class ShuntingYard:
                 operatorStack.append(value)
 
             elif value == ")":
+                
                 while operatorStack[-1] != "(":
                     assert (len(operatorStack) != 0)
                     outputQueue.append(operatorStack.pop())
@@ -273,7 +318,7 @@ class ShuntingYard:
             elif self.isFunction(value) == True:
                 operatorStack.append(value)
             elif value in self.operations:
-
+                
                 while (operatorStack and operatorStack[-1] != "("
                        and self.precedence(operatorStack[-1]) >= self.precedence(value)):
                     outputQueue.append(operatorStack.pop())
