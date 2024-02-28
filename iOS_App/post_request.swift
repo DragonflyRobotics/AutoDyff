@@ -56,5 +56,5 @@ let task = URLSession.shared.dataTask(with: request) { data, response, error in
 
 
 task.resume()
-
+sleep(60)
 
