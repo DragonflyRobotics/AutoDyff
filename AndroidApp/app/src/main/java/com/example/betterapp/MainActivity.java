@@ -186,7 +186,10 @@ public class MainActivity extends AppCompatActivity
             }
             */
 
-            return reader.readLine();
+            JSONObject resultJSON = new JSONObject(reader.readLine());
+
+            return "The value of the normal function is: " + resultJSON.get("f")
+                    + "\nThe value of the derivative is: " + resultJSON.get("f_prime");
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
