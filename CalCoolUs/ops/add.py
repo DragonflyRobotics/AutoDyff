@@ -1,15 +1,12 @@
 from CalCoolUs.ops.op import Generic_Op
-from CalCoolUs.ops.const import Const
-
 
 class Add(Generic_Op):
-    def __init__(self, name):
-        super().__init__(name)
-        self.value = self
+	def __init__(self, name):
+		super().__init__(name)
 
-    def getDerivative(self, a, b, a_val, b_val, *args, **kwargs):
-        return a + b
+	def getDerivative(self, *args, **kwargs):
+		return 1
 
-    def __call__(self, a, b):
-        return a+b
+	def __call__(self, a, b):
+		return a+b
 
