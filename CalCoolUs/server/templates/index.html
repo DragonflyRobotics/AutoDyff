@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Diffy - Automatic Differentiation</title>
+  </head>
+  <body>
+    <form id="my-form">
+      <input type="text" name="equation" placeholder="Equation" />
+      <input type="text" name="x" placeholder="At x=" />
+      <button type="submit">Submit</button>
+    </form>
+
+    <p id="output">Nothing Computed Yet</p>
+
+	<script src="{{url_for('static', filename='script.js')}}"></script>
+  </body>
+</html>
