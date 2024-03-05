@@ -1,4 +1,5 @@
-import Foundation 
+import Foundation
+import FoundationNetworking 
 // can use UIKit instead 
 
 // define the URL endpoint of the web service
@@ -31,6 +32,9 @@ let message = Message(
     equation: "x^2",
     x: "5"
 )
+
+// user input 
+
 let data = try! JSONEncoder().encode(message)
 
 // try! operator to avoid dealing with optionals 
@@ -47,10 +51,22 @@ request.setValue(
 	
 let task = URLSession.shared.dataTask(with: request) { data, response, error in
     let statusCode = (response as! HTTPURLResponse).statusCode
+    print(statusCode)
     if statusCode == 200 {
         print("SUCCESS")
     } else {
         print("FAILURE")
+    }
+    // unwrap data safely 
+
+    if let data = data {
+    if let responseString = String(data: data, encoding: .utf8) {
+        print("Response: \(responseString)")
+    } else {
+        print("Could not convert data to string")
+    }
+    } else {
+        print("No data recieved")
     }
 }
 
