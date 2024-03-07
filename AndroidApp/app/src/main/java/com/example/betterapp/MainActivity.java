@@ -3,6 +3,8 @@ package com.example.betterapp;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import android.annotation.SuppressLint;
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     TextView resultText;
+    MutableLiveData<String> resultLiveData = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         int displayWidth = displayMetrics.widthPixels;
 
         TextView titleText = findViewById(R.id.titleText);
-        titleText.setTextSize(displayHeight * 0.02f);
+        titleText.setTextSize(displayHeight * 0.015f);
 
         TextView equationLabelText = findViewById(R.id.equationInputLabel);
         equationLabelText.setTextSize((int) (displayHeight * 0.01));
@@ -143,7 +146,10 @@ public class MainActivity extends AppCompatActivity
                     apiRequestObservable(equation.getText().toString(), x_value.getText().toString())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(result -> resultText.setText(result))
+                            .subscribe(result -> {
+                                resultLiveData.setValue(result);
+                                resultText.setText(resultLiveData.getValue());
+                            })
             );
         }
     }
