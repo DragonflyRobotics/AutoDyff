@@ -11,7 +11,9 @@ from CalCoolUs.error_types import *
 myshunt = ShuntingYard()
 
 
-shuntres = myshunt.tokenize("2e^2x^2")
+shuntres = myshunt.getPostfix("sin(9^(2e^(arctan(2arccos(2e^(2cos(2x^2tan(e)+4))+4)-2))))-cos(9^e)")
+#shuntres = myshunt.tokenize("arccos(2x^sin(cos(x^2-2)))")
+
 
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")

@@ -92,7 +92,7 @@ class ShuntingYard:
             lowerBound += 1
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        #print(tokenized)
+        
         
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
@@ -105,7 +105,7 @@ class ShuntingYard:
             lowerBound += 1
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        
+        #print(tokenized)
         while lowerBound < upperBound:
             higher = lowerBound + 1
             isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
@@ -162,7 +162,6 @@ class ShuntingYard:
         #print(array)
         return array
     def evalCoef(self, array, startIndex):
-        
         first = array[startIndex]
         #second = array[startIndex + 1] 
         array[startIndex] = "("
@@ -170,44 +169,65 @@ class ShuntingYard:
         array.insert(startIndex + 2, "*")
         array.insert(startIndex + 3, "(")
         
-        endIndex = startIndex + 4
+        endIndex = startIndex + 3
         
         end = self.findCoefEnd(array, endIndex)
+        
         
         array.insert(end, ")")
-        #print(endIndex)
-        #print(end)
-        #print(array)
+        
         endIndex = end
-        end = self.findCoefEnd(array, endIndex)
+        
+        end = self.findCoefEnd(array, endIndex) - 1
         
         array.insert(end, ")")
         
         return array                
     def findCoefEnd(self,array, startIndex):
+        
         endIndex = startIndex + 1
         flag = 1
-        #print(endIndex)
-        #print(len(array))
-        #print(array)
+        #print(array[endIndex])
         while flag != 0:            
+            
+            #print(endIndex)
             if endIndex >= (len(array) - 1):
-                #print("hi") 
                 return (len(array))
             higher = array[endIndex + 1]
-            if higher == ")":
-                return endIndex + 2
-            if array[endIndex] == "^":
-                if higher == "(":
-                    return self.findEnd(array, endIndex + 2)
-                return self.findCoefEnd(array, endIndex + 2)
-
-            if array[endIndex] == "(":
-                flag += 1
             
-            if self.isValue(array[endIndex]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)): 
+            if self.isFunction(array[endIndex]):
+                return self.findEnd(array, endIndex + 2)
+            elif higher == ")":
+                
+                return endIndex + 2
+            elif array[endIndex] == "^":
+                
+                parenthStart = endIndex
+                flag = 1
+                
+                while flag != 0:
+                    if parenthStart < len(array):
+                        flag -= 1
+                    elif array[parenthStart] != "(":
+                        flag -= 1
+                        parenthStart += 1    
+                parenthStart += 1
+                #print(array)
+                #print(parenthStart)
+                if len(array) < parenthStart:
+                    return -1
+                end = self.findEnd(array, parenthStart + 1)
+                
+                #print(end)
+                return self.findCoefEnd(array, end)
+                
+            elif array[endIndex] == "(":
+                flag += 1
+
+            elif self.isValue(array[endIndex]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)): 
                 flag += 1
             else:
+                endIndex += 1
                 flag -= 1
             endIndex += 1
         endIndex -= 1
