@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         resultText.setHeight((int) (displayHeight * 0.3));
 
         Button faxButton = findViewById(R.id.faxButton);
-        faxButton.setTextSize(displayHeight * 0.01f);
+	faxButton.setTextSize(displayHeight * 0.01f);
         faxButton.setOnClickListener(this);
     }
 
