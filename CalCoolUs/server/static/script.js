@@ -1,4 +1,4 @@
-const form = document.getElementById("my-form");
+const form = document.getElementById("input");
 form.addEventListener("submit", onFormSubmit);
 
 
@@ -13,10 +13,12 @@ function calc(stringify) {
   const xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("output").innerHTML = this.responseText; // This console logs the output, just change it to whatever.
+        console.log(JSON.parse(this.responseText))
+        document.getElementById("f_x").innerHTML = JSON.parse(this.responseText)['f']; // This console logs the output, just change it to whatever.
+        document.getElementById("f_prime_x").innerHTML = JSON.parse(this.responseText)['f_prime']; // This console logs the output, just change it to whatever.
     }
   };
-  xhttp.open("POST", "/numerical_engine/endpoint");
+  xhttp.open("POST", "https://codermerlin.academy/vapor/brennan-coil/numerical_engine/endpoint");
   
   xhttp.send(stringify); 
 }

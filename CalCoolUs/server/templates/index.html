@@ -1,20 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Diffy - Automatic Differentiation</title>
-  </head>
-  <body>
-    <form id="my-form">
-      <input type="text" name="equation" placeholder="Equation" />
-      <input type="text" name="x" placeholder="At x=" />
-      <button type="submit">Submit</button>
-    </form>
+   <head>
+      <title>AutoDyff - Automatic Differentiation</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+      <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+      <!--   <link rel="icon" href="./favicon.ico" type="image/x-icon"> -->
+   </head>
+   <body class="example">
+      <video autoplay muted loop id="myVideo">
+         <source src="{{url_for('static', filename='video.mp4')}}" type="video/mp4">
+      </video>
 
-    <p id="output">Nothing Computed Yet</p>
+      <div class="content">
+          <div class="navbar">
+             <a href="/" class="left">AutoDyff</a>
+             <a href="#contact" class="right">Contact</a>
+             <a href="#about" class="right">About</a>
+             <a href="#calculator" class="right">Calculator</a>
+          </div>
 
-	<script src="{{url_for('static', filename='script.js')}}"></script>
-  </body>
+
+          <div class="header">
+             <h1>Automatic Differentiation</h1>
+             <p>Differentiate <b>your</b> equations</p>
+          </div>
+      <!--<div class="row">   <div class="side">     <h2>side thingy</h2>     <h5>Photo:</h5>     <div class="fakeimg" style="height:200px;">Image</div>     <p>text yap tap</p>   </div>-->
+          <div class="calculator" id="calculator">
+             <h2>Calculator</h2>
+             <p> <br>Description of calculator coming soon!</p>
+             <br><br><br>
+             <form id="input">
+                <input type="text" name="equation" placeholder="Equation">
+                <input type="text" name="x" placeholder="At x=">
+                <br>
+                <button type="submit" class="btn btn-border-1">Danger</button>
+             </form>
+             <br>
+             <div style="display: flex; vertical-align: middle; justify-content: center;">
+                 <h1>f(x): </h1><p id="f_x" style="font-size: 32px; padding-left: 10px; border:3px solid white;">Not Computed</p>
+             </div>
+             <div style="display: flex; vertical-align: middle; justify-content: center;">
+                 <h1>f'(x): </h1><p id="f_prime_x" style="font-size: 32px; padding-left: 10px; border:3px solid white;">Not Computed</p>
+             </div>
+             <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+          </div>
+
+          <div class="about" id="about">
+             <h2>About</h2>
+             <div class="fakeimg" style="height:200px;">Image of how calculation works (Abstract Syntax Tree)</div>
+             <p>Description of how the calculator works coming soon!</p>
+             <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+          </div>
+          <div class="contact" id="contact">
+             <h2>Contact Us</h2>
+             <div class="fakeimg" style="height:50px;">Placeholder image</div>
+             <p>Description of who we are coming soon!</p>
+             <br><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+          </div>
+          <div class="footer">
+             <p><b>Disclaimer:</b> by using this project, you agree that we can store and use the data you input</p>
+             <p><i>© AutoDyff 2024</i></p>
+          </div>
+      </div>
+      <script src="{{url_for('static', filename='script.js')}}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   </body>
 </html>
