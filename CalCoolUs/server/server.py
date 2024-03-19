@@ -4,6 +4,7 @@ load_dotenv()
 
 from flask import Flask, render_template, jsonify, request
 
+
 from CalCoolUs.preprocess import ShuntingYard
 from CalCoolUs.preprocess import ASTGraph
 from CalCoolUs.numerical_engine import Numerical_Engine
@@ -11,6 +12,7 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 myASTGraph = ASTGraph()
 myshunt = ShuntingYard()
 app = Flask(__name__)
+
 
 @app.route('/numerical_engine/endpoint', methods=['POST'])
 def numerical_engine_endpoint():
