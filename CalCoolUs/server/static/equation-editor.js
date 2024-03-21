@@ -841,14 +841,12 @@ var createEquationEditor=function(container){
   }
   var variables=['a','b','c','d','e','f','g','h','i','j','k',
   'l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-  'A','B','C','E','F','G','H','I','L','M','N','P','R','S','T','V','X','Y',
-  '∞','Δ','α','β','γ','θ','λ','µ','π','σ','ϕ'];
+  'π'];
   for(i in variables){
     addVariableIcon(variables[i])
   }
-  var operators=['∑','∫','lim','log','sin','cos','tan',
-  '=','≠','≥','≤','∈','→','∀','∃','±','+','-','×',
-  '÷','/','!','.',',','…','(',')','[',']','{','}','|'];
+  var operators=['log','sin','cos','tan',
+  '+','-','×','÷','/','(',')'];
   for(i in operators){
     addOperatorIcon(operators[i])
   }
@@ -886,6 +884,7 @@ var createEquationEditor=function(container){
   COMMANDS.set("\\theta","θ");
   COMMANDS.set("\\times","×");
   COMMANDS.set("\\infty","∞");
+
   var fireCommand=function(name){
     var action=COMMANDS.get(name);
     if(typeof(action)=='string'){
