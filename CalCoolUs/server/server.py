@@ -9,6 +9,8 @@ from CalCoolUs.preprocess import ShuntingYard
 from CalCoolUs.preprocess import ASTGraph
 from CalCoolUs.numerical_engine import Numerical_Engine
 
+from pylatexenc.latex2text import LatexNodes2Text
+
 myASTGraph = ASTGraph()
 myshunt = ShuntingYard()
 app = Flask(__name__)
@@ -25,6 +27,26 @@ def numerical_engine_endpoint():
     print('Equation:', input_json['equation'])
     print("At x=", x, type(x))
     print("----")
+    shuntres = myshunt.getPostfix(equation)
+    graph = myASTGraph.getAST(shuntres)
+    ne = Numerical_Engine(graph, myASTGraph)
+    ans = ne.solve(x)
+    ans_prime = ne.differentiate(x)
+    dictToReturn = {'f': str(ans), 'f_prime':str(ans_prime)}
+    return jsonify(dictToReturn)
+
+@app.route('/numerical_engine/endpoint_latex', methods=['POST'])
+def numerical_engine_endpoint_latex():
+    input_json = request.get_json(force=True) 
+    # force=True, above, is necessary if another developer 
+    # forgot to set the MIME type to 'application/json'
+    x=float(eval(input_json['x']))
+    equation=input_json['equation']
+    print("----\nGot Request:")
+    print('Equation:', input_json['equation'])
+    print("At x=", x, type(x))
+    print("----")
+    equation = LatexNodes2Text().latex_to_text(equation)
     shuntres = myshunt.getPostfix(equation)
     graph = myASTGraph.getAST(shuntres)
     ne = Numerical_Engine(graph, myASTGraph)

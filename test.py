@@ -1,37 +1,11 @@
-import networkx as nx
-from matplotlib import pyplot as plt
-
-from CalCoolUs.preprocess import ShuntingYard, OpType
-from CalCoolUs.ops.const import Const
-import random
-print(random.random())
-exit(9)
+from pylatexenc.latex2text import LatexNodes2Text
+from TexSoup import TexSoup
+print(LatexNodes2Text().latex_to_text(r"""$x^{2x^{2}+1}-2x+1$"""))
+#same equation converted by texsoup
+soup = TexSoup(r"""$x^{2x^{2}+1}-2x+1$""")
+print(soup)
+exit()
+from CalCoolUs.preprocess import ShuntingYard
 
 myshunt = ShuntingYard()
-
-shuntres = myshunt.getPostfix("πe")
-
-
-#shuntres = myshunt.tokenize("2*x")
-shuntres = myshunt.getPostfix("2e")
-print(shuntres)
-#shuntres = myshunt.getPostfix("sec(x)")
-#shuntres = myshunt.getPostfix("2^x")
-#shuntres = myshunt.getPostfix("(x+1)^2")
-
-
-from CalCoolUs.preprocess import ASTGraph
-myASTGraph = ASTGraph()
-graph = myASTGraph.getAST(shuntres)
-#pos = nx.planar_layout(graph, scale=10)
-nx.draw_networkx(graph, with_labels=True)
-plt.savefig("fig.png")
-
-
-
-from CalCoolUs.numerical_engine import Numerical_Engine
-
-ne = Numerical_Engine(graph, myASTGraph)
-
-print(ne.solve(1))
-print(ne.differentiate(0.1))
+print(myshunt.getPostfix("x^2x^2+1-2x+1"))

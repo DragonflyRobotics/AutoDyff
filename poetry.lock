@@ -946,6 +946,16 @@ files = [
 plugins = ["importlib-metadata"]
 
 [[package]]
+name = "pylatexenc"
+version = "2.10"
+description = "Simple LaTeX parser providing latex-to-unicode and unicode-to-latex conversion"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pylatexenc-2.10.tar.gz", hash = "sha256:3dd8fd84eb46dc30bee1e23eaab8d8fb5a7f507347b23e5f38ad9675c84f40d3"},
+]
+
+[[package]]
 name = "pyparsing"
 version = "3.1.1"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
@@ -1125,4 +1135,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "cda94caed2bd658fdbdebe72c57cb1645274770f417b7c963d78e3dcce7fea05"
+content-hash = "4bb990db6ea5146fa3d80d631d29258ebad723f3fdaff060a80fb88450f0b8f1"

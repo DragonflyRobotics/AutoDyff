@@ -6,6 +6,7 @@ function onFormSubmit(event) {
 	event.preventDefault();
 	const data = new FormData(event.target);
 	const dataObject = Object.fromEntries(data.entries());
+    dataObject['equation'] = document.getElementById("LatexOutput").innerText;
 	calc(JSON.stringify(dataObject));
 }
 
@@ -18,7 +19,7 @@ xhttp.onreadystatechange = function() {
         document.getElementById("f_prime_x").innerHTML = JSON.parse(this.responseText)['f_prime']; // This console logs the output, just change it to whatever.
     }
   };
-  xhttp.open("POST", "https://codermerlin.academy/vapor/brennan-coil/numerical_engine/endpoint");
+  xhttp.open("POST", "/numerical_engine/endpoint_latex");
   
   xhttp.send(stringify); 
 }
