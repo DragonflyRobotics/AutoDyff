@@ -13,7 +13,7 @@ from CalCoolUs.error_types import *
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
-        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid"]
+        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
@@ -354,8 +354,8 @@ class ShuntingYard:
 
 class ASTGraph:
     def __init__(self):
-        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid"]
-        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid"]            
+        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
+        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
 
@@ -424,6 +424,8 @@ class ASTGraph:
                 return OpType.ARCCOT
             case "sigmoid":
                 return OpType.SIGMOID
+            case "sqrt":
+                return OpType.SQRT
         return "UNK"
 
     def getAST(self, shuntyardresult):
@@ -517,6 +519,4 @@ class ASTGraph:
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.show(bbox_inches='tight')
 #class AutoDiff:
-    
-    
 
