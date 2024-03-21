@@ -10,11 +10,15 @@ from CalCoolUs.preprocess import ASTGraph
 from CalCoolUs.numerical_engine import Numerical_Engine
 
 from pylatexenc.latex2text import LatexNodes2Text
+from latex2sympy2 import latex2sympy
+
 
 myASTGraph = ASTGraph()
 myshunt = ShuntingYard()
 app = Flask(__name__)
 
+def process_latex(equation):
+    return str(equation).replace("**", "^")
 
 @app.route('/numerical_engine/endpoint', methods=['POST'])
 def numerical_engine_endpoint():
@@ -46,7 +50,8 @@ def numerical_engine_endpoint_latex():
     print('Equation:', input_json['equation'])
     print("At x=", x, type(x))
     print("----")
-    equation = LatexNodes2Text().latex_to_text(equation)
+    equation = process_latex(latex2sympy(equation)) #LatexNodes2Text().latex_to_text(equation)
+    print(f"Processed Equation: {equation}")
     shuntres = myshunt.getPostfix(equation)
     graph = myASTGraph.getAST(shuntres)
     ne = Numerical_Engine(graph, myASTGraph)

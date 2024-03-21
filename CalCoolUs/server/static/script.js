@@ -19,7 +19,7 @@ xhttp.onreadystatechange = function() {
         document.getElementById("f_prime_x").innerHTML = JSON.parse(this.responseText)['f_prime']; // This console logs the output, just change it to whatever.
     }
   };
-  xhttp.open("POST", "/numerical_engine/endpoint_latex");
+  xhttp.open("POST", "https://codermerlin.academy/vapor/krishna-shah/numerical_engine/endpoint_latex");
   
   xhttp.send(stringify); 
 }
