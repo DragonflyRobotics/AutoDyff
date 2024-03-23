@@ -1,4 +1,5 @@
-import networkx as nx
+print("hi")
+#import networkx as nx
 from matplotlib import pyplot as plt
 
 from CalCoolUs.preprocess import ShuntingYard, OpType
@@ -11,13 +12,14 @@ from CalCoolUs.error_types import *
 myshunt = ShuntingYard()
 
 
-shuntres = myshunt.getPostfix("sin(9^(2e^(arctan(2arccos(2e^(2cos(2x^2tan(e)+4))+4)-2))))-cos(9^e)")
+#shuntres = myshunt.getPostfix("sin(9^(2e^(arctan(2arccos(2e^(2cos(2x^2tan(e)+4))+4)-2))))-cos(9^e)")
+shuntres = myshunt.getPostfix("arccos(x)")
 #shuntres = myshunt.tokenize("arccos(2x^sin(cos(x^2-2)))")
 
 
 
 #shuntres = myshunt.tokenize("2*x")
-shuntres = myshunt.getPostfix("2e")
+#shuntres = myshunt.getPostfix("2e")
 print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
@@ -36,5 +38,5 @@ from CalCoolUs.numerical_engine import Numerical_Engine
 
 ne = Numerical_Engine(graph, myASTGraph)
 
-print(ne.solve(1))
-print(ne.differentiate(0.1))
+print(ne.solve(2))
+print(ne.differentiate(2))
