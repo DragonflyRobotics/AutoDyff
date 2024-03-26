@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    TextView resultText;
+    TextView resultText; // Global variable so it can be accessed by multiple methods
+
     MutableLiveData<String> resultLiveData = new MutableLiveData<>();
 
     @Override
@@ -50,14 +51,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // get android device dimensions
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         float displayHeight = displayMetrics.heightPixels;
         int displayWidth = displayMetrics.widthPixels;
 
+        // set title text display
         TextView titleText = findViewById(R.id.titleText);
         titleText.setTextSize(displayHeight * 0.015f);
 
+        // set equation input label display size and its location
         TextView equationLabelText = findViewById(R.id.equationInputLabel);
         equationLabelText.setTextSize((int) (displayHeight * 0.01));
         equationLabelText.setHeight((int) (displayHeight * 0.05));
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         labelTextParams.topMargin = (int) (displayHeight * 0.03);
         equationLabelText.setLayoutParams(labelTextParams);
 
-
+        //set equation input field display size and its location
         EditText equationInputField = findViewById(R.id.userEquationInputField);
         equationInputField.setWidth(displayWidth/2);
         equationInputField.setHeight((int) (displayHeight * 0.05));
@@ -74,6 +78,7 @@ public class MainActivity extends AppCompatActivity
         textFieldParams.topMargin = (int) (displayHeight * 0.03);
         equationInputField.setLayoutParams(textFieldParams);
 
+        // set x_value input label display size and its location
         TextView x_valueLabelText = findViewById(R.id.user_x_valueInputLabel);
         x_valueLabelText.setTextSize((int) (displayHeight * 0.01));
         x_valueLabelText.setHeight((int) (displayHeight * 0.05));
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         x_valueLabelParams.topMargin = (int) (displayHeight * 0.03);
         x_valueLabelText.setLayoutParams(x_valueLabelParams);
 
+        // set x_value input field display size and its location
         EditText x_valueInputField = findViewById(R.id.user_x_valueInputField);
         x_valueInputField.setWidth(displayWidth/2);
         x_valueInputField.setHeight((int) (displayHeight * 0.05));
@@ -89,6 +95,8 @@ public class MainActivity extends AppCompatActivity
         x_valueInputParams.topMargin = (int) (displayHeight * 0.03);
         x_valueInputField.setLayoutParams(x_valueInputParams);
 
+
+        // set confirmation button display size and its location
         Button inputConfirmButton = findViewById(R.id.inputConfirmButton);
         inputConfirmButton.setWidth(displayWidth/3);
         inputConfirmButton.setHeight((int) (displayHeight/15));
@@ -105,12 +113,14 @@ public class MainActivity extends AppCompatActivity
         resultHeaderParams.topMargin = (int) (displayHeight * 0.05f);
         resultHeader.setLayoutParams(resultHeaderParams);
 
+        // set result display size and location
         this.resultText = findViewById(R.id.resultText);
         resultText.setTextSize(displayHeight * 0.008f);
         resultText.setHeight((int) (displayHeight * 0.3));
 
+        // this is unnecessary, will be removed later
         Button faxButton = findViewById(R.id.faxButton);
-	faxButton.setTextSize(displayHeight * 0.01f);
+        faxButton.setTextSize(displayHeight * 0.01f);
         faxButton.setOnClickListener(this);
     }
 
@@ -142,6 +152,8 @@ public class MainActivity extends AppCompatActivity
         } else if (v.getId() == R.id.inputConfirmButton) {
             EditText equation = findViewById(R.id.userEquationInputField);
             EditText x_value = findViewById(R.id.user_x_valueInputField);
+            // make an asynchronous request on Schedulers.io for server request
+            // and then subscribe on the main android thread to display the result within the result text view
             disposables.add(
                     apiRequestObservable(equation.getText().toString(), x_value.getText().toString())
                             .subscribeOn(Schedulers.io())
@@ -154,6 +166,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    // sets the result of the apiRequest method to this observable
     static Observable<String> apiRequestObservable(String equation, String x_value) {
         return Observable.defer(new Supplier<ObservableSource<? extends String>>() {
             @Override public ObservableSource<? extends String> get() throws Throwable {
@@ -164,6 +178,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    // sends a server request to the server that processes the JSON formatted data
     public static String apiRequest(String equation, String x_value) {
         final String serverEndpoint = "https://www.codermerlin.academy/vapor/brennan-coil/numerical_engine/endpoint";
 
@@ -205,6 +220,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disposables.clear();
+        disposables.clear(); // avoids memory leaks
     }
 }
