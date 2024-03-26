@@ -29,6 +29,7 @@ from CalCoolUs.ops.arcsec import Arcsec
 from CalCoolUs.ops.arccot import Arccot
 
 from CalCoolUs.ops.sigmoid import Sigmoid
+from CalCoolUs.ops.sqrt import Sqrt
 
 class OpType(Enum):
     ADD = Add("ADD")
@@ -60,3 +61,4 @@ class OpType(Enum):
     ARCCOT = Arccot("Arccot")
     
     SIGMOID = Sigmoid("Sigmoid")
+    SQRT = Sqrt("Sqrt")

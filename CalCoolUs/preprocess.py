@@ -8,12 +8,12 @@ from CalCoolUs.ops.op_types import OpType
 from CalCoolUs.ops.const import Const
 import math
 from CalCoolUs.log_init import MainLogger
-
+from CalCoolUs.error_types import *
 
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"]
-        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid"]
+        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
@@ -92,15 +92,27 @@ class ShuntingYard:
         lowerBound = 0
         upperBound = len(tokenized) - 1
         
+        
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
-            if self.isValue(tokenized[lowerBound]) and (higher == "(" or self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
-                
+            if self.isValue(tokenized[lowerBound]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
                 original = len(tokenized)
                 tokenized = self.evalCoef(tokenized, lowerBound)
                 lowerBound += 1
                 upperBound += len(tokenized)
                 upperBound -= original
+            lowerBound += 1
+        lowerBound = 0
+        upperBound = len(tokenized) - 1
+        #print(tokenized)
+        while lowerBound < upperBound:
+            higher = lowerBound + 1
+            isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
+            if isValid == True:
+                raise ParenthesisMulError
+            isValid = (tokenized[higher] == "(" and (self.isValue(tokenized[lowerBound]) or tokenized[lowerBound] == ")"))
+            if isValid == True:
+                raise ParenthesisMulError
             lowerBound += 1
         return tokenized
     def splitCoef(self, inputArray, inputIndex):
@@ -122,6 +134,7 @@ class ShuntingYard:
         inputArray.insert(inputIndex + 1, string)
         return inputArray
     def isCoef(self, string):
+        
         array = list(string)
         check = 0
         number = array[0]
@@ -148,18 +161,80 @@ class ShuntingYard:
         #print(array)
         return array
     def evalCoef(self, array, startIndex):
-        
         first = array[startIndex]
         #second = array[startIndex + 1] 
         array[startIndex] = "("
         array.insert(startIndex + 1, first)
         array.insert(startIndex + 2, "*")
         array.insert(startIndex + 3, "(")
-        endIndex = startIndex + 4
-        end = self.findEnd(array, endIndex)
+        
+        endIndex = startIndex + 3
+        
+        end = self.findCoefEnd(array, endIndex)
+        
+        
         array.insert(end, ")")
-        array.insert(end + 1, ")")
+        
+        endIndex = end
+        
+        end = self.findCoefEnd(array, endIndex) - 1
+        
+        array.insert(end, ")")
+        
         return array                
+    def findCoefEnd(self,array, startIndex):
+        
+        endIndex = startIndex + 1
+        flag = 1
+        #print(array[endIndex])
+        while flag != 0:            
+            
+            #print(endIndex)
+            if endIndex >= (len(array) - 1):
+                return (len(array))
+            higher = array[endIndex + 1]
+            
+            if self.isFunction(array[endIndex]):
+                return self.findEnd(array, endIndex + 2)
+            elif higher == ")":
+                
+                return endIndex + 2
+            elif array[endIndex] == "^":
+                
+                parenthStart = endIndex
+                flag = 1
+                
+                while flag != 0:
+                    if parenthStart < len(array):
+                        flag -= 1
+                    elif array[parenthStart] != "(":
+                        flag -= 1
+                        parenthStart += 1    
+                parenthStart += 1
+                #print(array)
+                #print(parenthStart)
+                if len(array) < parenthStart:
+                    return -1
+                end = self.findEnd(array, parenthStart + 1)
+                
+                #print(end)
+                return self.findCoefEnd(array, end)
+                
+            elif array[endIndex] == "(":
+                flag += 1
+
+            elif self.isValue(array[endIndex]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)): 
+                flag += 1
+            else:
+                endIndex += 1
+                flag -= 1
+            endIndex += 1
+        endIndex -= 1
+        
+        if len(array) == endIndex + 1:
+            return endIndex        
+        
+        return endIndex
     def findEnd(self, array, startIndex):
         endIndex = startIndex
         flag = 1
@@ -175,14 +250,20 @@ class ShuntingYard:
             
             endIndex += 1
         endIndex -= 1
-        
         if len(array) == endIndex + 1:
             return endIndex    
-        if array[endIndex + 1] == "^":    
+        
+        if array[endIndex + 1] == "^":
+            if len(array) > endIndex + 2:
+                return endIndex + 3
+            higher = array[endIndex + 3]
             if array[endIndex + 2] == "(":
                 return self.findEnd(array, endIndex + 3)
             if array[endIndex + 2] == "-(":
                 return self.findEnd(self.negParenth(array, endIndex + 2), endIndex + 3)
+            if self.isValue(array[endIndex + 2]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
+                print("e")
+                return self.findEnd(self.evalCoef(array, endIndex + 2), endIndex + 3)
             else: 
                 return endIndex + 3        
         return endIndex
@@ -243,6 +324,7 @@ class ShuntingYard:
                 operatorStack.append(value)
 
             elif value == ")":
+                
                 while operatorStack[-1] != "(":
                     assert (len(operatorStack) != 0)
                     outputQueue.append(operatorStack.pop())
@@ -255,7 +337,7 @@ class ShuntingYard:
             elif self.isFunction(value) == True:
                 operatorStack.append(value)
             elif value in self.operations:
-
+                
                 while (operatorStack and operatorStack[-1] != "("
                        and self.precedence(operatorStack[-1]) >= self.precedence(value)):
                     outputQueue.append(operatorStack.pop())
@@ -272,8 +354,8 @@ class ShuntingYard:
 
 class ASTGraph:
     def __init__(self):
-        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid"]
-        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid"]            
+        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
+        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
         root_log = MainLogger()
         self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
 
@@ -342,6 +424,8 @@ class ASTGraph:
                 return OpType.ARCCOT
             case "sigmoid":
                 return OpType.SIGMOID
+            case "sqrt":
+                return OpType.SQRT
         return "UNK"
 
     def getAST(self, shuntyardresult):
@@ -435,6 +519,4 @@ class ASTGraph:
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.show(bbox_inches='tight')
 #class AutoDiff:
-    
-    
 

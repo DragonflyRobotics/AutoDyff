@@ -4,12 +4,16 @@ from matplotlib import pyplot as plt
 from CalCoolUs.preprocess import ShuntingYard, OpType
 from CalCoolUs.ops.const import Const
 import random
-print(random.random())
-exit(9)
+from CalCoolUs.error_types import *
+#print(random.random())
+#exit(9)
 
 myshunt = ShuntingYard()
 
-shuntres = myshunt.getPostfix("πe")
+
+shuntres = myshunt.getPostfix("sin(9^(2e^(arctan(2arccos(2e^(2cos(2x^2tan(e)+4))+4)-2))))-cos(9^e)")
+#shuntres = myshunt.tokenize("arccos(2x^sin(cos(x^2-2)))")
+
 
 
 #shuntres = myshunt.tokenize("2*x")
@@ -18,7 +22,6 @@ print(shuntres)
 #shuntres = myshunt.getPostfix("sec(x)")
 #shuntres = myshunt.getPostfix("2^x")
 #shuntres = myshunt.getPostfix("(x+1)^2")
-
 
 from CalCoolUs.preprocess import ASTGraph
 myASTGraph = ASTGraph()
