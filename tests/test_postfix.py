@@ -5,7 +5,6 @@ myShunt = ShuntingYard()
 
 # Operations in use "+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh"
 def test_postfix():
-<<<<<<< HEAD
     #Exponentials and Polynomial
     assert myShunt.getPostfix("2^(-1*x)") == ["2", "-1", "x", "*", "^"]#Passed
     assert myShunt.getPostfix("2(1+(1/x))") == ["2", "1", "1", "x", "/", "+", "*"]#Passed
@@ -21,7 +20,7 @@ def test_postfix():
     assert myShunt.getPostfix("2^x-5*x") == ["2", "x", "^", "5", "x", "*", "-" ]#Passed
     assert myShunt.getPostfix("2^(1/x)") == ["2", "1", "x", "/", "^"]#Passed
     assert myShunt.getPostfix("x+2") == ["x", "2", "+"]#Passed
-=======
+
     #assert myShunt.getPostfix("(2(4x+5))/3") == ["2", "4", "x", "*", "5","+", "3", "/", "*"]
     assert myShunt.getPostfix("2^(-1*x)") == ["2", "-1", "x", "*", "^"]
     assert myShunt.getPostfix("2(1+(1/x))") == ["2", "1", "1", "x", "/", "+", "*"]
@@ -53,7 +52,6 @@ def test_postfix():
     #assert myShunt.getPostfix("2^x-5*x") == ["2", "x", "^", "5", "x", "*", "-" ]
     #assert myShunt.getPostfix("2^(1/x)") == ["2", "1", "x", "/", "^"]
     #assert myShunt.getPostfix("x+2") == ["x", "2", "+"]
->>>>>>> e04d9e64f33417c031897e078b3ba996cddb9c87
     #Trig
     assert myShunt.getPostfix("sin(sin(ex))") == ["2.718281828459045", "x", "*", "sin", "sin"]#Passed
     assert myShunt.getPostfix("arcsin(tanh(πx))^csc(1/(2e^(-1/2)))") == ["3.141592653589793", "x", "*", "tanh", "arcsin", "1", "2", "2.718281828459045", "-1", "2", "/", "^", "*", "/", "csc", "^"]#Passed
