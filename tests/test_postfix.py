@@ -56,5 +56,5 @@ def test_postfix():
     assert myShunt.getPostfix("xarccot(2x)")  == ['x', '2', 'x', '*', 'arccot', '*']
     assert myShunt.getPostfix("5*(arcsec(3x^2))^2") == ['5', '3', 'x', '2', '^', '*', 'arcsec', '2', '^', '*']
     assert myShunt.getPostfix("2e") == ['2', '2.718281828459045', '*']
-    assert myShunt.getPostfix("arccsc(arcsec(arccot(2x^3)))") == ["2", "x", "3", "^", "*", "arccot", "arcsec", "arccsc"] 
-
+    assert myShunt.getPostfix("arccsc(arcsec(arccot(2x^3)))") == ["2", "x", "3", "^", "*", "arccot", "arcsec", "arccsc"]
+    #assert myShunt.getPostfix("sin(9^(2e^(arctan(2arccos(2e^(2cos(2x^2tan(e)+4))+4)-2))))-cos(9^e)") passed

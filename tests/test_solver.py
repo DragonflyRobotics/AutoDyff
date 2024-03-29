@@ -87,4 +87,4 @@ def test_random_solve(n_times, random_input):
     #assert solve("arccot(2x^3)", random_input) == pytest.approx(np.arctan(1/(2*(random_input**3))))
     # assert solve("arccsc(2x^3)", random_input) == pytest.approx((np.arcsin(1/(2*(random_input**3)))))
     # assert solve("arcsec(2x^3)", random_input) == pytest.approx((np.arccos(1/(2*(random_input**3)))))
-assert solve("arctan(arcsin(x))", random_input) == pytest.approx(np.arctan(np.arcsin(random_input)))
+    assert solve("arctan(arcsin(x))", random_input) == pytest.approx(np.arctan(np.arcsin(random_input)))

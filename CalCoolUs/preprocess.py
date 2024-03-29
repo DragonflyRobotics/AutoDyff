@@ -104,7 +104,7 @@ class ShuntingYard:
             lowerBound += 1
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        #print(tokenized)
+        
         while lowerBound < upperBound:
             higher = lowerBound + 1
             isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
@@ -172,11 +172,10 @@ class ShuntingYard:
         
         end = self.findCoefEnd(array, endIndex)
         
-        
         array.insert(end, ")")
         
         endIndex = end
-        
+
         end = self.findCoefEnd(array, endIndex) - 1
         
         array.insert(end, ")")
@@ -186,39 +185,21 @@ class ShuntingYard:
         
         endIndex = startIndex + 1
         flag = 1
-        #print(array[endIndex])
+        #print(array)
+        #print(endIndex)
         while flag != 0:            
-            
-            #print(endIndex)
             if endIndex >= (len(array) - 1):
-                return (len(array))
-            higher = array[endIndex + 1]
+                return (len(array)) + 1
             
+            higher = array[endIndex + 1]
             if self.isFunction(array[endIndex]):
-                return self.findEnd(array, endIndex + 2)
-            elif higher == ")":
                 
+
+                return self.findEnd(array, endIndex + 2) + 1
+            elif higher == ")":
                 return endIndex + 2
             elif array[endIndex] == "^":
-                
-                parenthStart = endIndex
-                flag = 1
-                
-                while flag != 0:
-                    if parenthStart < len(array):
-                        flag -= 1
-                    elif array[parenthStart] != "(":
-                        flag -= 1
-                        parenthStart += 1    
-                parenthStart += 1
-                #print(array)
-                #print(parenthStart)
-                if len(array) < parenthStart:
-                    return -1
-                end = self.findEnd(array, parenthStart + 1)
-                
-                #print(end)
-                return self.findCoefEnd(array, end)
+                return self.findCoefEnd(array, endIndex + 1)
                 
             elif array[endIndex] == "(":
                 flag += 1
