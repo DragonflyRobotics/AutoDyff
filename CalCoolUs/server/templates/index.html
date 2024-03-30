@@ -187,21 +187,35 @@ input[type=submit]:hover {
       <div class="about">
 	<br><br><h2>About</h2>
 	<!--<div class="fakeimg" style="height:200px;">Image of how calculation works (Abstract Syntax Tree)</div>-->
+
+	<br><br><br>
+	<p><b>How to use this calculator:</b></p>
 	<br>
-        <b><p>How the algorithm works:</p></b>
+	<p>Input an equation and a x value to find out what the derivative is. This calculator has an extensive list of functions, including <b>basic functions</b> like addition, subtraction, multiplication, division, powers/exponents, square roots (sqrt), <b>trigonometric functions</b> like sin, cos, tan, <b>hyperbolic</b> trig functions, <b>inverse</b> and <b>reciprocal</b> trig functions, <b>logs</b> and <b>natural logs</b>, and <b>sigmoids</b>. This calculator cannot do implicit differentiation. This calculator will catch basic mathmatical errors such as diving by 0.</p>
+	<p>To prevent abiguous cases, make sure to <b>use parenthesis</b> in your equation. For example, sin(5^x+5) could be interpreted as sin(5^(x+5) or sin((5^x)+5).</p>
+	<br></br>
+
+	<br><br><br>
+        <p><b>How the algorithm works:</b></p>
         <br>
         <p> The algorithm starts by sending a <b>JSON POST</b> request of a mathematical function in text along with a point on that function to a Python server. The server then begins by tokenizing the function from text into an array. Then, the array is converted from infix notation to postfix notation. The function is then converted into an <b>Abstract Syntax Tree (AST)</b>. By doing this, the algorithm can easily iterate through the layers of the functions and easily identify operations and values. <br><br>Then the differentiation algorithm begins; the differentiation starts at the topmost node of the graph (the final operation of the function). The algorithm goes down a layer and then <b>differentiates for each node respectively</b>. For example in an example like x^2, the algorithm will convert the function into an AST; then, it will look at the top node, which is power. Then, the function checks the 2 nodes below the power node. The function then uses the property of the operation (in this case power) to differentiate the node with respect to the 2 variables.
         </p>
 	<br>
 	<img class="astimg" src="/vapor/krishna-shah/{{url_for('static', filename='diff.png')}}" alt="AST graph" width="auto" height="auto" >
 	<p><i>Image of how calculation is processed (Abstract Syntax Tree)</i></p><br>
-	<p>
+	<br><p>
 	  In more complex examples like <b>cos(x^2)*e^x</b>, the function will iterate through each function layer. In this case, <b>MUL_XLE</b> (we’ll call it M) is the final node, so it will differentiate with respect to x using the nodes under it, <b>COS_J62</b> (call it C) and <b>OW_Q5W</b> (call it P). This is equal to <b>dM/dx=P*dC/dx+C*dP/dx</b> by the product rule.
 
 	  How do we find dC/dx and dP/dx? By using <b>recursion</b> to repeat the process. This will continue until the algorithm either reaches x, whose derivative is defined as 1, or a constant, whose derivative is 0. By using <b>Object Oriented Programming</b>, we can easily integrate operations into our code to solve or differentiate the operations in functions.
-	  
-
 	</p>
+	<br><br><br>
+	<p><b>What are some applications of Automatic Differentiation?</b></p><br>
+	<p>Automatic Differentiation is commonly used in <b>machine learning</b>, specifically in training neural networks through backpropagation. The optimization algorithm uses backpropagation to minimize the loss in a neural network. This tunes the neural network to maximize its effectiveness in predicting output based on its parameters. Automatic differentiation is useful in backpropagation as it can be used to find <b>minimums in error by differentiating</b> with respect to the parameters to determine which direction to tune the layers of the network. </p>
+
+	<br><br><br>
+	<p><b>Why use Automatic Differentiation specifically?</b></p>
+	<br>
+	<p>As opposed to manually-computed derivatives, auto differentiation is more effective in numerous ways. In terms of time, auto differentiation is better as it <b>avoids redundant calculations</b> that have to repeatedly check functions, while automatic differentiation only goes down the function graph once. In terms of space, automatic differentiation is better as <b>it ensures only values that are needed are used</b> due to the structure of the calculations and the single pass down the graph. In terms of accuracy, automatic differentiation is better as it <b>prevents errors</b> that manual differentiation introduces such as numerical approximation.</p>
         </div>
 
       <div class="contact"><a id="contact"></a>
