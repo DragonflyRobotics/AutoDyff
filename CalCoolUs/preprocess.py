@@ -1,33 +1,33 @@
-import random, string
-import networkx as nx
-from matplotlib import pyplot as plt
-import re
+import random, string # For random string generation
+import networkx as nx # Importing networkx for graph operations
+from matplotlib import pyplot as plt # Importing pyplot for plotting
+import re   # Importing regular expression
 
-from CalCoolUs.ops.op_types import OpType
+from CalCoolUs.ops.op_types import OpType # Importing the OpType class from the op_types.py file
 
-from CalCoolUs.ops.const import Const
-import math
-from CalCoolUs.log_init import MainLogger
-from CalCoolUs.error_types import *
+from CalCoolUs.ops.const import Const # Importing the Const class from the const.py file
+import math # Importing math for mathematical operations
+from CalCoolUs.log_init import MainLogger # Importing the MainLogger class from the log_init.py file
+from CalCoolUs.error_types import * # Importing all error types from the error_types.py file
 
 class ShuntingYard:
     def __init__(self):
-        self.operations = ["+", "-", "/", "*", "^"]
-        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
-        root_log = MainLogger()
+        self.operations = ["+", "-", "/", "*", "^"] # List of operations
+        self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"] # List of functions
+        root_log = MainLogger() # Creating a MainLogger instance
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
     
 
-    def tokenize(self, string):
+    def tokenize(self, string): # Function to tokenize the input string
         # Logging
         self.log.info(f"Starting grand tokenizer...")
         
         # Remove spaces in function
-        string = string.replace(" ", "")
+        string = string.replace(" ", "") # Removing spaces from the string
         
         # Tokenize using regular expression, spliting operations, functions, constants, and variables
-        tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
+        tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string) # Tokenizing the string
         
         # Convert special constants like 'e' and 'π' to their mathematical values
         for index in range(0, len(tokenized)):
@@ -411,29 +411,29 @@ class ShuntingYard:
 
 class ASTGraph:
     def __init__(self):
-        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
-        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"]
-        root_log = MainLogger()
+        self.operations = ["+", "-", "/", "*", "^", "sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"] # List of operations
+        self.unary = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"] # List of unary operations
+        root_log = MainLogger() # Creating a MainLogger instance
         self.log = root_log.StandardLogger("ASTGraph")  # Create a script specific logging instance
 
 
-    def isValue(self, number):
+    def isValue(self, number): # Function to check if a number is a float or 'x'
         return self.isfloat(number) or number == 'x' or isinstance(number, str)
 
-    def isfloat(self, number):
+    def isfloat(self, number): # Function to check if a number is a float
         try:
             float(number)
             return True
         except:
             return False
 
-    def checkForOperators(self, queue):
+    def checkForOperators(self, queue): # Function to check if there are any operators in the queue
         for q in queue:
             if q in self.operations:
                 return True
         return False
 
-    def returnOperatorName(self, operator, name=""):
+    def returnOperatorName(self, operator, name=""): # Function to return the operator name
         match operator:
             case "+":
                 return OpType.ADD
@@ -485,83 +485,83 @@ class ASTGraph:
                 return OpType.SQRT
         return "UNK"
 
-    def getAST(self, shuntyardresult):
+    def getAST(self, shuntyardresult): # Function to get the AST from the Shunt Yard result
         assert len(shuntyardresult) > 1
         self.log.info(f"Running AST compute from the Shunt Yard: {shuntyardresult}")
-        graph = nx.MultiDiGraph()
+        graph = nx.MultiDiGraph() # Creating a MultiDiGraph
 
-        opDict = {}
+        opDict = {} # Dictionary to store the operator nodes
 
-        while self.checkForOperators(shuntyardresult):
-            counter = 0
-            while shuntyardresult[counter] not in self.operations:
-                counter += 1
+        while self.checkForOperators(shuntyardresult): # While there are operators in the queue
+            counter = 0 # Counter to keep track of the position in the queue
+            while shuntyardresult[counter] not in self.operations: # While the current element is not an operator
+                counter += 1 # Increment the counter
             # print(f"Stopped @: {shuntyardresult[counter]}")
 
-            if shuntyardresult[counter] in self.unary:
-                if (counter - 1 >= 0 and self.isValue(shuntyardresult[counter - 1])):
+            if shuntyardresult[counter] in self.unary: # If the operator is unary
+                if (counter - 1 >= 0 and self.isValue(shuntyardresult[counter - 1])): # If the previous element is a value
                     node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
                         random.choices(string.ascii_uppercase +
-                                       string.digits, k=3))
+                                       string.digits, k=3)) # Generate a random node name
                     
                     #else:
                     #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
-                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
-                    if str(shuntyardresult[counter - 1]) == 'x':
-                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
-                    elif self.isfloat(shuntyardresult[counter - 1]):
-                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
+                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name) # Add an edge from the previous element to the current node
+                    if str(shuntyardresult[counter - 1]) == 'x': # If the previous element is 'x'
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}}) # Set the node attribute to 'x'
+                    elif self.isfloat(shuntyardresult[counter - 1]): # If the previous element is a float
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}}) # Set the node attribute to the float
                     #else:
                     #    raise RuntimeError("Couldn't classify counter-1")
                     self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
                     self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
-                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
+                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}}) # Set the node attribute to the operator
 
-                    for _ in range(2):
-                        shuntyardresult.pop(counter - 1)
-                    shuntyardresult.insert(counter - 1, node_name)
+                    for _ in range(2): # Pop the previous element
+                        shuntyardresult.pop(counter - 1) # Pop the previous element
+                    shuntyardresult.insert(counter - 1, node_name) # Insert the current node
 
-            else:
-                if (counter - 2 >= 0 and self.isValue(shuntyardresult[counter - 1]) and self.isValue(shuntyardresult[counter - 2])):
+            else: # If the operator is binary
+                if (counter - 2 >= 0 and self.isValue(shuntyardresult[counter - 1]) and self.isValue(shuntyardresult[counter - 2])): # If the previous two elements are values
                     node_name = self.returnOperatorName(shuntyardresult[counter]).name + "_" + ''.join(
                         random.choices(string.ascii_uppercase +
-                                       string.digits, k=3))
-                    print(f"Nodes: {shuntyardresult[counter - 2]} --> {node_name} --> {shuntyardresult[counter - 1]}")
-                    if shuntyardresult[counter - 2] == shuntyardresult[counter - 1]:
-                        shuntyardresult[counter - 2] = shuntyardresult[counter - 2] + ''.join(random.choices(string.digits, k=3))
-                    graph.add_edge(str(shuntyardresult[counter - 2]), node_name)
-                    if 'x' in str(shuntyardresult[counter - 2]):
-                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}})
-                    elif self.isfloat(shuntyardresult[counter - 2]):
-                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}})
+                                       string.digits, k=3)) # Generate a random node name
+                    print(f"Nodes: {shuntyardresult[counter - 2]} --> {node_name} --> {shuntyardresult[counter - 1]}") 
+                    if shuntyardresult[counter - 2] == shuntyardresult[counter - 1]: # If the previous two elements are the same
+                        shuntyardresult[counter - 2] = shuntyardresult[counter - 2] + ''.join(random.choices(string.digits, k=3)) # Add a random number to the previous element
+                    graph.add_edge(str(shuntyardresult[counter - 2]), node_name) # Add an edge from the previous two elements to the current node
+                    if 'x' in str(shuntyardresult[counter - 2]): # If the previous element is 'x'
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": OpType.VAR.value}}) # Set the node attribute to 'x'
+                    elif self.isfloat(shuntyardresult[counter - 2]): # If the previous element is a float
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 2]): {"Op": Const("CONST", float(shuntyardresult[counter - 2]))}}) # Set the node attribute to the float
                     #else:
                     #    raise RuntimeError(f"Couldn't classify counter-2: {shuntyardresult[counter-2]}")
-                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name)
-                    if 'x' in str(shuntyardresult[counter - 1]):
-                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})
-                    elif self.isfloat(shuntyardresult[counter - 1]):
-                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}})
+                    graph.add_edge(str(shuntyardresult[counter - 1]), node_name) # Add an edge from the previous element to the current node
+                    if 'x' in str(shuntyardresult[counter - 1]): # If the previous element is 'x'
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": OpType.VAR.value}})    # Set the node attribute to 'x'
+                    elif self.isfloat(shuntyardresult[counter - 1]): # If the previous element is a float
+                        nx.set_node_attributes(graph, {str(shuntyardresult[counter - 1]): {"Op": Const("CONST", float(shuntyardresult[counter - 1]))}}) # Set the node attribute to the float
                     #else:
                     #    raise RuntimeError("Couldn't classify counter-1")
                     self.log.info(f"{str(shuntyardresult[counter - 2])} --> {node_name}")
                     self.log.info(f"{str(shuntyardresult[counter - 1])} --> {node_name}")
 
-                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}})
+                    nx.set_node_attributes(graph, {node_name: {"Op": self.returnOperatorName(shuntyardresult[counter]).value}}) # Set the node attribute to the operator
 
-                    for _ in range(3):
-                        shuntyardresult.pop(counter - 2)
+                    for _ in range(3): # Pop the previous two elements
+                        shuntyardresult.pop(counter - 2) 
                     shuntyardresult.insert(counter - 2, node_name)
                 
 
         return graph
 
-    def saveGraph(self, graph, filename):
+    def saveGraph(self, graph, filename):   # Function to save the graph
         self.log.info(f"Saving graph to {filename}")
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.savefig(filename)
-    def getFinalNode(self, graph):
+    def getFinalNode(self, graph): # Function to get the final node
         for n in graph.nodes:
             #print(graph.degree[n])
             if graph.out_degree[n] <= 0:
@@ -569,9 +569,9 @@ class ASTGraph:
                 return n
             else:
                 pass
-    def getNodes(self, graph):
-        return (list(nx.all_simple_paths(graph, source='x', target=self.getFinalNode(graph))))
-    def displayGraph(self, graph):
+    def getNodes(self, graph): # Function to get the nodes
+        return (list(nx.all_simple_paths(graph, source='x', target=self.getFinalNode(graph)))) # Return the nodes
+    def displayGraph(self, graph): # Function to display the graph
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.show(bbox_inches='tight')
