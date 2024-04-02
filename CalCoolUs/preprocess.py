@@ -18,10 +18,25 @@ class ShuntingYard:
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
 
     
+
     def tokenize(self, string):
+        # Logging
         self.log.info(f"Starting grand tokenizer...")
+        
+        # Remove spaces in function
         string = string.replace(" ", "")
+        
+        # Tokenize using regular expression, spliting operations, functions, constants, and variables
         tokenized = re.findall(r"(\b\w*[\.]?\w+\b|[\(\)\+\*\^\-\/])", string)
+        
+        # Convert special constants like 'e' and 'π' to their mathematical values
+        for index in range(0, len(tokenized)):
+            if tokenized[index] == "e":
+                tokenized[index] = f"{math.e}"
+            if tokenized[index] == "π":
+                tokenized[index] = f"{math.pi}"
+        
+        # Split coefficients if they are attached to functions, parentheses, or x 
         lowerBound = 0
         upperBound = len(tokenized)
         while lowerBound < upperBound:
@@ -30,23 +45,8 @@ class ShuntingYard:
                 lowerBound += 1
                 upperBound += 1
             lowerBound += 1
-         
-        for index in range(0, len(tokenized)):
-            if tokenized[index] == "e":
-                tokenized[index] = f"{math.e}"
-            if tokenized[index] == "π":
-                tokenized[index] = f"{math.pi}"
-        '''
-        for index in range(0,len(tokenized)):
-            value = tokenized[index]
-            if value == "-" and index < (len(tokenized) - 1 ):
-                assert tokenized[index + 1] != "-", "Can't have two negatives in a row"
-            if (self.isfloat(value) == True or value == "x") and index < (len(tokenized) - 1 ):
-                assert tokenized[index + 1] != "x", "Coefficients not accepted, use multiplication signs"
-                assert tokenized[index + 1] != "(", "Coefficients not accepted, use multiplication signs"
-                assert self.isFunction(tokenized[index + 1]) != True, "Coefficients not accepted, use multiplication signs"
-            assert(self.isfloat(value) == True or self.isFunction(value) == True or value == "(" or value == ")" or value == "x" or value in self.operations), "Coefficients not accepted, use multiplication signs"
-        '''   
+        
+        # Handles negative signs for negative constants and adds them to other negative expressions such as -cos(x), -x, -(x+1)^2
         lowerBound = 0
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
@@ -56,6 +56,8 @@ class ShuntingYard:
                 tokenized.pop(lowerBound + 1)
                 upperBound -=1
             lowerBound += 1
+        
+        # Handle negative functions like -cos(x)
         lowerBound = 0    
         upperBound = len(tokenized) - 1
         while lowerBound < upperBound:
@@ -67,10 +69,10 @@ class ShuntingYard:
                 tokenized.insert(end , ")")
                 upperBound -=1
             lowerBound += 1
-                
+                    
+        # Handle '-x' notation
         lowerBound = 0
-        upperBound = len(tokenized) 
-                
+        upperBound = len(tokenized)
         while lowerBound < upperBound:
             if tokenized[lowerBound] == "-x":
                 tokenized[lowerBound] = "-("
@@ -79,9 +81,11 @@ class ShuntingYard:
                 lowerBound += 2
                 upperBound += 2
             lowerBound += 1 
+        
+        # Handle '-(' notation
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        while lowerBound < upperBound:    
+        while lowerBound < upperBound:
             if tokenized[lowerBound] == "-(":
                 original = len(tokenized)
                 tokenized = self.negParenth(tokenized, lowerBound)
@@ -89,10 +93,10 @@ class ShuntingYard:
                 lowerBound += 1
                 upperBound += change
             lowerBound += 1
+        
+        # Handle coefficients multiplication
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        
-        
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
             if self.isValue(tokenized[lowerBound]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
@@ -102,9 +106,10 @@ class ShuntingYard:
                 upperBound += len(tokenized)
                 upperBound -= original
             lowerBound += 1
+        
+        # Check for invalid combinations of parentheses and values
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        #print(tokenized)
         while lowerBound < upperBound:
             higher = lowerBound + 1
             isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
@@ -114,12 +119,14 @@ class ShuntingYard:
             if isValid == True:
                 raise ParenthesisMulError
             lowerBound += 1
+        
         return tokenized
     def splitCoef(self, inputArray, inputIndex):
         array = list(inputArray[inputIndex])
         check = 0
         number = array[0]
         string = ""
+        #splits a coeffecient into its 2 parts by checking when the first part ends and the second part begins
         for index in range(1, len(array)):
             if (self.isAlphanumeric(array[index]) == True or array[index] == "π") and check == 0:
                 check += 1
@@ -139,6 +146,7 @@ class ShuntingYard:
         check = 0
         number = array[0]
         string = ""
+        #splits a string into 2 through the use of coeffecient proprties
         for index in range(1, len(array)):
             if (self.isAlphanumeric(array[index]) == True or array[index] == "π") and check == 0:
                 check += 1
@@ -147,20 +155,22 @@ class ShuntingYard:
                 string += array[index]
             elif self.isValue(array[index]) == True or array[index] == ".": 
                 number += array[index]
-        
-        
+        #determines whether the 2 parts are valid expressions
         return (self.isValue(number) == True and number != "-")  and (self.isFunction(string) == True or string == "x" or string == "e" or string == "π")
-            
+        
     def negParenth(self, array, startIndex):
+        #replaces a negative expression from the form "-expression" to the form (-1*expression)
         array[startIndex] = "("
         array.insert(startIndex + 1, "-1")
         array.insert(startIndex + 2, "*")
         array.insert(startIndex + 3, "(")
         endIndex = startIndex + 4
+        #finds the place where the first parenthesis should stop by checking for coeffecients, other parnethesis, functions
         array.insert(self.findEnd(array, endIndex), ")")
         #print(array)
         return array
     def evalCoef(self, array, startIndex):
+        #replaces a coeffecient expression from the form ab to a*b without changing prorpeties of the whole expression
         first = array[startIndex]
         #second = array[startIndex + 1] 
         array[startIndex] = "("
@@ -169,107 +179,133 @@ class ShuntingYard:
         array.insert(startIndex + 3, "(")
         
         endIndex = startIndex + 3
-        
+        #determines where to end the first parnethesis based on exponenets, other coeffeceints, other parenthesis, functions
         end = self.findCoefEnd(array, endIndex)
         
         
         array.insert(end, ")")
         
         endIndex = end
-        
+        #determines where to end the scoend parenthesis based on exponenets, other coeffeceints, other parenthesis, functions
         end = self.findCoefEnd(array, endIndex) - 1
         
         array.insert(end, ")")
         
         return array                
-    def findCoefEnd(self,array, startIndex):
-        
+    def findCoefEnd(self, array, startIndex):
+        # Initialize endIndex and flag
         endIndex = startIndex + 1
         flag = 1
-        #print(array[endIndex])
-        while flag != 0:            
-            
-            #print(endIndex)
+        
+        # Loop until flag becomes 0
+        while flag != 0:
+            # Check if endIndex has reached the end of the array
             if endIndex >= (len(array) - 1):
-                return (len(array))
+                return len(array)
+            
+            # Get the next element in the array
             higher = array[endIndex + 1]
             
+            # If the current element is a function, find its end
             if self.isFunction(array[endIndex]):
                 return self.findEnd(array, endIndex + 2)
+            # If the next element is a closing parenthesis, return the index after it
             elif higher == ")":
-                
                 return endIndex + 2
+            # If the current element is '^', find the end of the exponent expression
             elif array[endIndex] == "^":
-                
+                # Initialize the start index of the exponent expression
                 parenthStart = endIndex
                 flag = 1
                 
+                # Find the opening parenthesis of the exponent expression
                 while flag != 0:
                     if parenthStart < len(array):
                         flag -= 1
                     elif array[parenthStart] != "(":
                         flag -= 1
-                        parenthStart += 1    
+                        parenthStart += 1
                 parenthStart += 1
-                #print(array)
-                #print(parenthStart)
-                if len(array) < parenthStart:
-                    return -1
+                
+                # Find the end of the exponent expression
                 end = self.findEnd(array, parenthStart + 1)
                 
-                #print(end)
+                # Recursively find the end of the coefficient expression
                 return self.findCoefEnd(array, end)
-                
+            # If the current element is '(', increment the flag
             elif array[endIndex] == "(":
                 flag += 1
-
-            elif self.isValue(array[endIndex]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)): 
+            # If the current element is a value and the next element is a function, 'x', or a float, increment the flag
+            elif self.isValue(array[endIndex]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
                 flag += 1
             else:
+                # Increment endIndex and decrement flag
                 endIndex += 1
                 flag -= 1
+            
+            # Move to the next element in the array
             endIndex += 1
-        endIndex -= 1
         
+            # Decrement endIndex
+            endIndex -= 1
+            
+        # If the end of the array is reached, return endIndex
         if len(array) == endIndex + 1:
-            return endIndex        
+            return endIndex
         
         return endIndex
     def findEnd(self, array, startIndex):
+        # Initialize endIndex and flag
         endIndex = startIndex
         flag = 1
-        while flag != 0:    
+        
+        # Loop until flag becomes 0
+        while flag != 0:
+            # Check if endIndex has reached the end of the array
             if endIndex == len(array):
-                
                 return endIndex
-            #if endIndex == len(array):
+            
+            # Increment or decrement flag based on the current element
             if array[endIndex] == "(" or array[endIndex] == "-(":
                 flag += 1
-            if array[endIndex] == ")":
+            elif array[endIndex] == ")":
                 flag -= 1
             
+            # Move to the next element in the array
             endIndex += 1
-        endIndex -= 1
-        if len(array) == endIndex + 1:
-            return endIndex    
         
-        if array[endIndex + 1] == "^":
-            if len(array) > endIndex + 2:
-                return endIndex + 3
-            higher = array[endIndex + 3]
-            if array[endIndex + 2] == "(":
-                return self.findEnd(array, endIndex + 3)
-            if array[endIndex + 2] == "-(":
-                return self.findEnd(self.negParenth(array, endIndex + 2), endIndex + 3)
-            if self.isValue(array[endIndex + 2]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
-                print("e")
-                return self.findEnd(self.evalCoef(array, endIndex + 2), endIndex + 3)
-            else: 
-                return endIndex + 3        
-        return endIndex
-    
+            # Decrement endIndex
+            endIndex -= 1
             
+            # If the end of the array is reached, return endIndex
+            if len(array) == endIndex + 1:
+                return endIndex
+            
+            # If the next element after endIndex is '^', handle exponent expressions
+            if array[endIndex + 1] == "^":
+                if len(array) > endIndex + 2:
+                    return endIndex + 3
+                higher = array[endIndex + 3]
+                
+                # If the exponent expression starts with '(', find its end
+                if array[endIndex + 2] == "(":
+                    return self.findEnd(array, endIndex + 3)
+                
+                # If the exponent expression starts with '-(', handle negative parentheses
+                if array[endIndex + 2] == "-(":
+                    return self.findEnd(self.negParenth(array, endIndex + 2), endIndex + 3)
+                
+                # If the exponent expression starts with a value and is followed by a function, 'x', or float, evaluate the coefficient
+                if self.isValue(array[endIndex + 2]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
+                    return self.findEnd(self.evalCoef(array, endIndex + 2), endIndex + 3)
+                else: 
+                    # Otherwise, return the index after the exponent expression
+                    return endIndex + 3
+            
+        return endIndex
+                
     def isfloat(self, number):
+        #return if the function is a float or not
         try:
             float(number)
             return True
@@ -277,19 +313,23 @@ class ShuntingYard:
             
             return False
     def isAlphanumeric(self, number):
+        #return if the funciton is made of alphabet letters or not
         alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
         for letter in number:
             if letter not in alphabet:
                 return False
         return True
     def isFunction(self, string):
+        #return if the function is in our valid list of functions
         if string in self.funcitons:
             return True
         else:
             return False
     def isValue(self, number):
+        #return if the function can have a value or not
         return self.isfloat(number) or number == "x" or number == "π" or number == "e"
     def isNegFunction(self, string):
+        #determine if the string is in the form -function()
         if string[0] != "-":
             return False
         temp = string[1:]
@@ -298,6 +338,7 @@ class ShuntingYard:
         return True
         
     def precedence(self, operator):
+        #return the precedence of the operation based on PEMDAS
         match operator:
             case "+":
                 return 1
@@ -312,43 +353,59 @@ class ShuntingYard:
         return 0
 
     def getPostfix(self, diffEquation):
+        # Logging
         self.log.info(f"Computing postfix of {diffEquation}")
+        
+        # Remove spaces and tokenize the differential equation
         diffEquation = diffEquation.replace(" ", "")
         diffEquation = self.tokenize(diffEquation)
+        
+        # Initialize output queue and operator stack
         outputQueue = []
         operatorStack = []
+        
+        # Iterate through each token in the differential equation
         for value in diffEquation:
+            # If the token is a float or 'x', add it to the output queue
             if self.isfloat(value) or value == "x":
                 outputQueue.append(value)
+            # If the token is '(', push it onto the operator stack
             elif value == "(":
                 operatorStack.append(value)
-
+            # If the token is ')', pop operators from the stack onto the output queue until '(' is encountered
             elif value == ")":
-                
                 while operatorStack[-1] != "(":
                     assert (len(operatorStack) != 0)
                     outputQueue.append(operatorStack.pop())
                 assert (operatorStack[-1] == "(")
                 operatorStack.pop()
-
+                
+                # If the next token on the stack is a function, pop it onto the output queue
                 if len(operatorStack) != 0:
                     if self.isFunction(operatorStack[-1]) == True:
                         outputQueue.append(operatorStack.pop())
+            # If the token is a function, push it onto the operator stack
             elif self.isFunction(value) == True:
                 operatorStack.append(value)
+            # If the token is an operator, pop operators from the stack onto the output queue
+            # until the stack is empty, '(' is encountered, or the precedence of the operator
+            # at the top of the stack is lower than the current operator
             elif value in self.operations:
-                
                 while (operatorStack and operatorStack[-1] != "("
                        and self.precedence(operatorStack[-1]) >= self.precedence(value)):
                     outputQueue.append(operatorStack.pop())
                 operatorStack.append(value)
+            # If the token is a function, push it onto the operator stack
             elif self.isFunction(value) == True:
                 operatorStack.append(value)
+        
+        # Pop any remaining operators from the stack onto the output queue
         while operatorStack:
             outputQueue.append(operatorStack.pop())
-
+    
+        # Logging
         self.log.info(f"Computed Output Queue: {outputQueue}")
-
+    
         return outputQueue
 
 
