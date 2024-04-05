@@ -16,10 +16,56 @@ class ShuntingYard:
         self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"] # List of functions
         root_log = MainLogger() # Creating a MainLogger instance
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
-
-    
+        regexold = r"(sin)|(cos)|(tan)|(ln)|(log)|(arcsin)|(arccos)|(arctan)|(cot)|(csc)|(sec)|(sinh)|(cosh)|(tanh)|(arccsc)|(arcsec)|(arccot)|(sigmoid)|(sqrt)|((?<=\))-(?=.*))|(\()|(\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(π)|(\^)|(\*)|(\/)|(\+)|(-)" 
+        regex = r"(sin)|(cos)|(tan)|(ln)|(log)|(arcsin)|(arccos)|(arctan)|(cot)|(csc)|(sec)|(sinh)|(cosh)|(tanh)|(arccsc)|(arcsec)|(arccot)|(sigmoid)|(sqrt)|((?<=\))-(?=.*))|(\()|(\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(π)|(\^)|(\*)|(\/)|(\+)|(-\()|(-)"
+        self.pattern = re.compile(regex)
 
     def tokenize(self, string): # Function to tokenize the input string
+        # Logging
+        self.log.info(f"Starting grand tokenizer...")
+
+        # Remove spaces in function
+        string = string.replace(" ", "") # Removing spaces from the string
+        
+        tokenized = [] 
+        for m in self.pattern.finditer(string):
+            if m.group() == "e":
+                tokenized.append(f"{math.e}")
+            elif m.group() == "π":
+                tokenized.append(f"{math.pi}")
+            else:
+                tokenized.append(m.group())
+                print(m.group())
+        #if tokenized.count("(") != tokenized.count(")"):
+        #    raise ParenthesisError
+        for index in range(0, len(tokenized)-1):
+            if tokenized[index] == ")" and (tokenized[index + 1] == "x" or self.isfloat(tokenized[index + 1])):
+                tokenized.insert(index + 1, "*") # Experimental
+                raise ParenthesisMulError
+        # check for coefficients of x and manually add *
+        for index in range(0, len(tokenized)-1):
+            if tokenized[index + 1] == "x":
+                if self.isfloat(tokenized[index]):
+                    tokenized.insert(index + 1, "*")
+        for index in range(0, len(tokenized)-1):
+            if self.isfloat(tokenized[index]):
+                if tokenized[index+1] == "(":
+                    tokenized.insert(index + 1, "*")
+        # replace -x with -1*x
+        for index in range(0, len(tokenized)):
+            if tokenized[index] == "-x":
+                tokenized[index] = "("
+                tokenized.insert(index + 1, "-1")
+                tokenized.insert(index + 2, "*")
+                tokenized.insert(index + 3, "x")
+                tokenized.insert(index + 4, ")")
+            if tokenized[index] == "-(":
+                tokenized[index] = "-1"
+                tokenized.insert(index + 1, "*")
+                tokenized.insert(index + 2, "(")
+        return tokenized
+
+    def tokenize_aryan_edition(self, string): # Function to tokenize the input string
         # Logging
         self.log.info(f"Starting grand tokenizer...")
         
