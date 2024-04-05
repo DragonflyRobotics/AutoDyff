@@ -104,7 +104,7 @@ class ShuntingYard:
             lowerBound += 1
         lowerBound = 0
         upperBound = len(tokenized) - 1
-        
+        print(tokenized)
         while lowerBound < upperBound:
             higher = lowerBound + 1
             isValid = (tokenized[lowerBound] == ")" and (tokenized[higher] == "(" or self.isValue(tokenized[higher]) or self.isFunction(tokenized[higher])))
@@ -208,7 +208,7 @@ class ShuntingYard:
                 flag += 1
             else:
                 endIndex += 1
-                flag -= 1
+                #flag -= 1
             endIndex += 1
         endIndex -= 1
         
