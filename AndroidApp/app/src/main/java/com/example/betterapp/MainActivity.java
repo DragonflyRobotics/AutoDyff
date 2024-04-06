@@ -119,9 +119,11 @@ public class MainActivity extends AppCompatActivity
         resultText.setHeight((int) (displayHeight * 0.3));
 
         // this is unnecessary, will be removed later
+        /*
         Button faxButton = findViewById(R.id.faxButton);
         faxButton.setTextSize(displayHeight * 0.01f);
         faxButton.setOnClickListener(this);
+        */
     }
 
 
@@ -147,9 +149,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.faxButton) {
-            Toast.makeText(this, R.string.toast_text, Toast.LENGTH_SHORT).show();
-        } else if (v.getId() == R.id.inputConfirmButton) {
+        if (v.getId() == R.id.inputConfirmButton) {
             EditText equation = findViewById(R.id.userEquationInputField);
             EditText x_value = findViewById(R.id.user_x_valueInputField);
             // make an asynchronous request on Schedulers.io for server request
