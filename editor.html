@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #editor {
+            height: 200px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        #output {
+            height: 200px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="editor" contenteditable="true"></div>
+    <button onclick="convertToEquation()">Convert</button>
+    <div id="output"></div>
+
+    <script>
+        function convertToEquation() {
+            var editorContent = document.getElementById('editor').innerText;
+            var output = document.getElementById('output');
+
+            // This is a simple conversion, you may need to expand this to handle more complex equations
+            var equation = editorContent.replace(/\^(.)/g, '^($1)');
+
+            output.innerText = equation;
+        }
+    </script>
+</body>
+</html>

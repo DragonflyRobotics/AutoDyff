@@ -21,22 +21,8 @@ exit(3)
 #shuntres = myshunt.tokenize("2*x")
 #shuntres = myshunt.getPostfix("2e")
 print(shuntres)
-#shuntres = myshunt.getPostfix("sec(x)")
-#shuntres = myshunt.getPostfix("2^x")
-#shuntres = myshunt.getPostfix("(x+1)^2")
-
-from CalCoolUs.preprocess import ASTGraph
-myASTGraph = ASTGraph()
-graph = myASTGraph.getAST(shuntres)
-#pos = nx.planar_layout(graph, scale=10)
-nx.draw_networkx(graph, with_labels=True)
-plt.savefig("fig.png")
 
 
-
-from CalCoolUs.numerical_engine import Numerical_Engine
-
-ne = Numerical_Engine(graph, myASTGraph)
 
 print(ne.solve(0))
 print(ne.differentiate(0))

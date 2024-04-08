@@ -6,3 +6,7 @@ class DNE(Exception):
     pass
 class DomainError(Exception):
     "The value is outside the domain of the function"
+    pass
+class ParenthesisError(Exception):
+    "Parenthesis are not balanced"
+    pass
