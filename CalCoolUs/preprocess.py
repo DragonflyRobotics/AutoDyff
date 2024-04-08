@@ -228,7 +228,6 @@ class ShuntingYard:
         #determines where to end the first parnethesis based on exponenets, other coeffeceints, other parenthesis, functions
         end = self.findCoefEnd(array, endIndex)
         
-        
         array.insert(end, ")")
         
         endIndex = end
@@ -242,43 +241,24 @@ class ShuntingYard:
         # Initialize endIndex and flag
         endIndex = startIndex + 1
         flag = 1
-        
-        # Loop until flag becomes 0
-        while flag != 0:
-            # Check if endIndex has reached the end of the array
+        #print(array)
+        #print(endIndex)
+        while flag != 0:            
+            # If the loop is at the end of the array, return 2 after the end
             if endIndex >= (len(array) - 1):
-                return len(array)
+                return (len(array)) + 1
             
-            # Get the next element in the array
             higher = array[endIndex + 1]
-            
-            # If the current element is a function, find its end
+            # If the current element is a function, look within the function for the new inner parnthesis set and add 1  
             if self.isFunction(array[endIndex]):
-                return self.findEnd(array, endIndex + 2)
-            # If the next element is a closing parenthesis, return the index after it
+                return self.findEnd(array, endIndex + 2) + 1
+            # If the currenet element is ')', the coef parnthesis group ends 2 after the current index 
             elif higher == ")":
                 return endIndex + 2
             # If the current element is '^', find the end of the exponent expression
             elif array[endIndex] == "^":
-                # Initialize the start index of the exponent expression
-                parenthStart = endIndex
-                flag = 1
-                
-                # Find the opening parenthesis of the exponent expression
-                while flag != 0:
-                    if parenthStart < len(array):
-                        flag -= 1
-                    elif array[parenthStart] != "(":
-                        flag -= 1
-                        parenthStart += 1
-                parenthStart += 1
-                
-                # Find the end of the exponent expression
-                end = self.findEnd(array, parenthStart + 1)
-                
-                # Recursively find the end of the coefficient expression
-                return self.findCoefEnd(array, end)
-            # If the current element is '(', increment the flag
+                return self.findCoefEnd(array, endIndex + 1)
+            # If the currene element is '(', add 1 to the flag as a new set of parenthesis has started
             elif array[endIndex] == "(":
                 flag += 1
             # If the current element is a value and the next element is a function, 'x', or a float, increment the flag
@@ -287,13 +267,11 @@ class ShuntingYard:
             else:
                 # Increment endIndex and decrement flag
                 endIndex += 1
-                flag -= 1
-            
-            # Move to the next element in the array
+                
             endIndex += 1
         
-            # Decrement endIndex
-            endIndex -= 1
+        # Decrement endIndex
+        endIndex -= 1
             
         # If the end of the array is reached, return endIndex
         if len(array) == endIndex + 1:
