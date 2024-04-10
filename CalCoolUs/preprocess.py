@@ -16,9 +16,10 @@ class ShuntingYard:
         self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"] # List of functions
         root_log = MainLogger() # Creating a MainLogger instance
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
-        regexold = r"(sin)|(cos)|(tan)|(ln)|(log)|(arcsin)|(arccos)|(arctan)|(cot)|(csc)|(sec)|(sinh)|(cosh)|(tanh)|(arccsc)|(arcsec)|(arccot)|(sigmoid)|(sqrt)|((?<=\))-(?=.*))|(\()|(\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(π)|(\^)|(\*)|(\/)|(\+)|(-)" 
+        regex_latex = r"(\\sin)|(\\cos)|(\\tan)|(\\ln)|(\\log)|(\\arcsin)|(\\arccos)|(\\arctan)|(\\cot)|(\\csc)|(\\sec)|(\\sinh)|(\\cosh)|(\\tanh)|(\\arccsc)|(\\arcsec)|(\\arccot)|(\\sigmoid)|(\\sqrt)|((?<=\))-(?=.*))|({)|(})|(\\left\()|(\\right\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(\\pi)|(\^)|(\*)|(\\frac)|(\+)|(-\()|(-)" 
         regex = r"(sin)|(cos)|(tan)|(ln)|(log)|(arcsin)|(arccos)|(arctan)|(cot)|(csc)|(sec)|(sinh)|(cosh)|(tanh)|(arccsc)|(arcsec)|(arccot)|(sigmoid)|(sqrt)|((?<=\))-(?=.*))|(\()|(\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(π)|(\^)|(\*)|(\/)|(\+)|(-\()|(-)"
         self.pattern = re.compile(regex)
+        self.pattern_latex = re.compile(regex_latex)
 
     def tokenize(self, string): # Function to tokenize the input string
         # Logging

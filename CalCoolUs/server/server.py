@@ -62,7 +62,7 @@ def numerical_engine_endpoint_latex():
 
 @app.route('/')
 def home():
-   return render_template('index.html')
+    return render_template('index.html')
 
 if os.getenv("FLASK_ENV") == "PROD":
     try:

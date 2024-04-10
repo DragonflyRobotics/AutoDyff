@@ -1,0 +1,21 @@
+<script>
+var MQ = MathQuill.getInterface(2);
+
+function checkAnswer(value) {
+  console.log(value);
+  $('#result').html(value);
+}
+
+var answerSpan = document.getElementById('answer');
+var answerMathField = MQ.MathField(answerSpan, {
+  handlers: {
+    edit: function() {
+      var enteredMath = answerMathField.latex(); // Get entered math in LaTeX format
+      checkAnswer(enteredMath)
+    }
+  }
+});
+</script>
+
+<p><span id="answer">x=</span></p>
+<p id='result'></p>
