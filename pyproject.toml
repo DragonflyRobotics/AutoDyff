@@ -19,6 +19,7 @@ tk = "^0.1.0"
 python-dotenv = "^1.0.1"
 pylatexenc = "^2.10"
 latex2sympy2 = "^1.9.1"
+opencv-python-headless = "^4.9.0.80"
 
 
 [tool.poetry.group.dev.dependencies]

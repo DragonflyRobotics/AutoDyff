@@ -10,6 +10,10 @@ import math # Importing math for mathematical operations
 from CalCoolUs.log_init import MainLogger # Importing the MainLogger class from the log_init.py file
 from CalCoolUs.error_types import * # Importing all error types from the error_types.py file
 
+import io
+from PIL import Image
+import numpy as np
+
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"] # List of operations
@@ -600,5 +604,27 @@ class ASTGraph:
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.show(bbox_inches='tight')
+
+    def get_image_array(self, graph):
+        # Create a buffer to store the plot image data in
+        buf = io.BytesIO()
+
+        # Create the plot in the buffer
+        pos = nx.planar_layout(graph, scale=40)
+        nx.draw_networkx(graph, pos=pos, with_labels=True)
+        plt.savefig(buf, format='png')
+
+        # Use PIL to load the image data
+        buf.seek(0)
+        img = Image.open(buf)
+
+        # Convert the image data to a numpy array
+        img_array = np.array(img)
+
+        # Close the buffer
+        buf.close()
+
+        return img_array
+
 #class AutoDiff:
 
