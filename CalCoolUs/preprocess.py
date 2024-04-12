@@ -20,10 +20,11 @@ class ShuntingYard:
         self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"] # List of functions
         root_log = MainLogger() # Creating a MainLogger instance
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
-        regex_latex = r"(\\sin)|(\\cos)|(\\tan)|(\\ln)|(\\log)|(\\arcsin)|(\\arccos)|(\\arctan)|(\\cot)|(\\csc)|(\\sec)|(\\sinh)|(\\cosh)|(\\tanh)|(\\arccsc)|(\\arcsec)|(\\arccot)|(\\sigmoid)|(\\sqrt)|((?<=\))-(?=.*))|({)|(})|(\\left\()|(\\right\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(\\pi)|(\^)|(\*)|(\\frac)|(\+)|(-\()|(-)" 
+        self.regex_latex = r"(\\sin)|(\\cos)|(\\tan)|(\\ln)|(\\log)|(\\arcsin)|(\\arccos)|(\\arctan)|(\\cot)|(\\csc)|(\\sec)|(\\sinh)|(\\cosh)|(\\tanh)|(\\arccsc)|(\\arcsec)|(\\arccot)|(\\sigmoid)|(\\sqrt)|((?<=\))-(?=.*))|({)|(})|(\\left\()|(\\right\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(\\pi)|(\^)|(\*)|(\\frac)|(\+)|(-\()|(-)" 
+
         regex = r"(sin)|(cos)|(tan)|(ln)|(log)|(arcsin)|(arccos)|(arctan)|(cot)|(csc)|(sec)|(sinh)|(cosh)|(tanh)|(arccsc)|(arcsec)|(arccot)|(sigmoid)|(sqrt)|((?<=\))-(?=.*))|(\()|(\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(π)|(\^)|(\*)|(\/)|(\+)|(-\()|(-)"
         self.pattern = re.compile(regex)
-        self.pattern_latex = re.compile(regex_latex)
+        self.pattern_latex = re.compile(self.regex_latex)
 
     def tokenize(self, string): # Function to tokenize the input string
         # Logging
@@ -69,7 +70,54 @@ class ShuntingYard:
                 tokenized.insert(index + 1, "*")
                 tokenized.insert(index + 2, "(")
         return tokenized
-
+    def findParenthEnd(self,array,startIndex):
+        flag = 1
+        endIndex = startIndex + 2 
+        while flag != 0:
+            
+            if array[endIndex] == ")":
+                flag -= 1
+            if array[endIndex] == "(":
+                flag += 1
+            endIndex += 1
+        return endIndex
+    def tokenize_latex(self,string):
+        
+        pattern = self.pattern_latex
+        tokenized = []
+        for m in pattern.finditer(string):
+            
+            print(m)
+            token = token.replace("\\","")
+            
+            if token == "{":
+                token = "("
+            if token == "}":
+                token = ")"
+            if token == "left(":
+                token = "("
+            if token == "right)":
+                token = ")"    
+            tokenized.append(token)
+            # print(token)
+            
+        for index in range(len(tokenized)):
+            if tokenized[index] == "frac":
+                tokenized.insert(self.findParenthEnd(tokenized,index),"/")
+                tokenized.pop(index)
+        lowerBound = 0 
+        upperBound = len(tokenized) - 1
+        while lowerBound < upperBound:
+            higher = tokenized[lowerBound + 1]
+            if self.isValue(tokenized[lowerBound]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
+                original = len(tokenized)
+                tokenized.insert(lowerBound + 1, "*")
+                lowerBound += 1
+                upperBound += len(tokenized)
+                upperBound -= original
+            lowerBound += 1
+        return tokenized
+            
     def tokenize_aryan_edition(self, string): # Function to tokenize the input string
         # Logging
         self.log.info(f"Starting grand tokenizer...")
