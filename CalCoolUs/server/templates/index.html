@@ -133,6 +133,14 @@
         box-sizing: border-box;
         }
 
+	.background {
+	padding: 20px 40px;
+	margin: 8px;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	}
+
         input[type=submit] {
         width: 100%;
         background-color: #0091ff;
@@ -192,7 +200,7 @@
                 <a id="calculator"><br><br><br><br></a><h2>Calculator</h2>
                 <!--<p> <br>Description of calculator coming soon!</p>--><br><br><br>
                 <form id="input">
-                    <span id="equation"></span>
+                    <div class"equation background"><span id="equation"></span></div>
                     <input type="text" name="x" placeholder="At x=" />
                     <br><br><br>
                     <input type="submit" value="Submit">
