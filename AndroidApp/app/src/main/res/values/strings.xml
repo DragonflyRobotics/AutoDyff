@@ -8,4 +8,5 @@
     <string name="confirmInput_button">Enter</string>
     <string name="resultHeader_text">Results:</string>
     <string name="resultDefault_text">Results are shown here…</string>
+    <string name="demoFrag_text">This is an another fragment!</string>
 </resources>

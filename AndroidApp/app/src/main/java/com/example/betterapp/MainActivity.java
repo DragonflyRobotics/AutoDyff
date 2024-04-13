@@ -17,6 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -36,20 +39,24 @@ import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+
+
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-
     private final CompositeDisposable disposables = new CompositeDisposable();
-
     TextView resultText; // Global variable so it can be accessed by multiple methods
-
     MutableLiveData<String> resultLiveData = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        NavController navController = Navigation.findNavController(this, R.id.nav_view);
 
         // get android device dimensions
         DisplayMetrics displayMetrics = new DisplayMetrics();
