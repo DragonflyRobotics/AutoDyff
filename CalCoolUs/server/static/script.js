@@ -54,7 +54,7 @@ function calc(stringify) {
         }
     };
 
-    xhttp.open("POST", "/vapor/brennan-coil");
+    xhttp.open("POST", "/numerical_engine/endpoint_latex");
 
     xhttp.send(stringify); 
 }

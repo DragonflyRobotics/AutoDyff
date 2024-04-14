@@ -11,14 +11,10 @@ from CalCoolUs.preprocess import ShuntingYard
 from CalCoolUs.preprocess import ASTGraph
 from CalCoolUs.numerical_engine import Numerical_Engine
 
-from pylatexenc.latex2text import LatexNodes2Text
-from latex2sympy2 import latex2sympy
-
 
 myASTGraph = ASTGraph()
 myshunt = ShuntingYard()
 app = Flask(__name__)
-
 image = np.zeros((300, 300, 3), dtype="uint8")
 
 def process_latex(equation):
@@ -80,6 +76,7 @@ def numerical_engine_endpoint_latex():
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 if os.getenv("FLASK_ENV") == "PROD":
     try:
