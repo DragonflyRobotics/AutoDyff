@@ -10,6 +10,10 @@ import math # Importing math for mathematical operations
 from CalCoolUs.log_init import MainLogger # Importing the MainLogger class from the log_init.py file
 from CalCoolUs.error_types import * # Importing all error types from the error_types.py file
 
+import io
+from PIL import Image
+import numpy as np
+
 class ShuntingYard:
     def __init__(self):
         self.operations = ["+", "-", "/", "*", "^"] # List of operations
@@ -83,8 +87,8 @@ class ShuntingYard:
         tokenized = []
         #Converts the LaTeX into readable mathametical tokens
         for m in pattern.finditer(string):
-            token = m.group()
             
+            token = m.group()
             token = token.replace("\\","")
             
             if token == "{":
@@ -427,6 +431,63 @@ class ShuntingYard:
                 return 3
         return 0
 
+    def getPostfixLatex(self, tokens):
+        # Logging
+#        self.log.info(f"Computing postfix of {diffEquation}")
+        
+        # Remove spaces and tokenize the differential equation
+        #diffEquation = diffEquation.replace(" ", "")
+        diffEquation = tokens#self.tokenize(diffEquation)
+        
+        # Initialize output queue and operator stack
+        outputQueue = []
+        operatorStack = []
+        
+        # Iterate through each token in the differential equation
+        for value in diffEquation:
+            # If the token is a float or 'x', add it to the output queue
+            if self.isfloat(value) or value == "x":
+                outputQueue.append(value)
+            # If the token is '(', push it onto the operator stack
+            elif value == "(":
+                operatorStack.append(value)
+            # If the token is ')', pop operators from the stack onto the output queue until '(' is encountered
+            elif value == ")":
+                while operatorStack[-1] != "(":
+                    assert (len(operatorStack) != 0)
+                    outputQueue.append(operatorStack.pop())
+                assert (operatorStack[-1] == "(")
+                operatorStack.pop()
+                
+                # If the next token on the stack is a function, pop it onto the output queue
+                if len(operatorStack) != 0:
+                    if self.isFunction(operatorStack[-1]) == True:
+                        outputQueue.append(operatorStack.pop())
+            # If the token is a function, push it onto the operator stack
+            elif self.isFunction(value) == True:
+                operatorStack.append(value)
+            # If the token is an operator, pop operators from the stack onto the output queue
+            # until the stack is empty, '(' is encountered, or the precedence of the operator
+            # at the top of the stack is lower than the current operator
+            elif value in self.operations:
+                while (operatorStack and operatorStack[-1] != "("
+                       and self.precedence(operatorStack[-1]) >= self.precedence(value)):
+                    outputQueue.append(operatorStack.pop())
+                operatorStack.append(value)
+            # If the token is a function, push it onto the operator stack
+            elif self.isFunction(value) == True:
+                operatorStack.append(value)
+        
+        # Pop any remaining operators from the stack onto the output queue
+        while operatorStack:
+            outputQueue.append(operatorStack.pop())
+    
+        # Logging
+        self.log.info(f"Computed Output Queue: {outputQueue}")
+    
+        return outputQueue
+
+
     def getPostfix(self, diffEquation):
         # Logging
         self.log.info(f"Computing postfix of {diffEquation}")
@@ -650,5 +711,27 @@ class ASTGraph:
         pos = nx.planar_layout(graph, scale=40)
         nx.draw_networkx(graph, pos=pos, with_labels=True)
         plt.show(bbox_inches='tight')
+
+    def get_image_array(self, graph):
+        # Create a buffer to store the plot image data in
+        buf = io.BytesIO()
+
+        # Create the plot in the buffer
+        pos = nx.planar_layout(graph, scale=40)
+        nx.draw_networkx(graph, pos=pos, with_labels=True)
+        plt.savefig(buf, format='png')
+
+        # Use PIL to load the image data
+        buf.seek(0)
+        img = Image.open(buf)
+
+        # Convert the image data to a numpy array
+        img_array = np.array(img)
+
+        # Close the buffer
+        buf.close()
+
+        return img_array
+
 #class AutoDiff:
 
