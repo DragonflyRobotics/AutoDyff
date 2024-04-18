@@ -81,9 +81,10 @@ class ShuntingYard:
         
         pattern = self.pattern_latex
         tokenized = []
+        #Converts the LaTeX into readable mathametical tokens
         for m in pattern.finditer(string):
+            token = m.group()
             
-            print(m)
             token = token.replace("\\","")
             
             if token == "{":
@@ -93,19 +94,20 @@ class ShuntingYard:
             if token == "left(":
                 token = "("
             if token == "right)":
-                token = ")"    
+                token = ")"
             tokenized.append(token)
-            # print(token)
-            
+        #Turns all fraction symbols into division
         for index in range(len(tokenized)):
             if tokenized[index] == "frac":
                 tokenized.insert(self.findParenthEnd(tokenized,index),"/")
                 tokenized.pop(index)
         lowerBound = 0 
         upperBound = len(tokenized) - 1
+        #Converts coeffecients statements by putting mulptiplcation signs between statements without multiplication signs
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
-            if self.isValue(tokenized[lowerBound]) and (self.isFunction(higher) or higher == "x" or self.isfloat(higher)):
+            
+            if (self.isValue(tokenized[lowerBound]) or tokenized[lowerBound] == ")") and (higher == "(" or self.isFunction(higher) or higher == "x" or self.isValue(higher)):
                 original = len(tokenized)
                 tokenized.insert(lowerBound + 1, "*")
                 lowerBound += 1

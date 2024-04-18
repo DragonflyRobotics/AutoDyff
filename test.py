@@ -8,7 +8,6 @@ from CalCoolUs.error_types import *
 
 regex_latex = r"(\\sin)|(\\cos)|(\\tan)|(\\ln)|(\\log)|(\\arcsin)|(\\arccos)|(\\arctan)|(\\cot)|(\\csc)|(\\sec)|(\\sinh)|(\\cosh)|(\\tanh)|(\\arccsc)|(\\arcsec)|(\\arccot)|(\\sigmoid)|(\\sqrt)|((?<=\))-(?=.*))|({)|(})|(\\left\()|(\\right\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(\\pi)|(\^)|(\*)|(\\frac)|(\+)|(-\()|(-)" 
 
-string = r"2^{\left(x^2+5\right)}+\frac{4+x}{2\cdot\cos\left(x\right)}"
-
+string = r"e\cdot x\left(x+1\right)^2"
 myshunt = ShuntingYard()
-print(myshunt.tokenize_latex(r"2\cos\left(x\right)"))
+print(myshunt.tokenize_latex(string))
