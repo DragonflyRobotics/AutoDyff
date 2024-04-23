@@ -13,7 +13,7 @@ class Sec(Generic_Op):
         return 1/math.cos(b) * a * math.tan(b)
 
     def __call__(self, a):
-        if cos(a) == 0:
+        if math.cos(a) == 0:
             raise DNE
         return 1/math.cos(a)
 

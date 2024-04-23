@@ -13,7 +13,7 @@ class Tan(Generic_Op):
         return ((1.0/math.cos(b))**2) * a
 
     def __call__(self, a):
-        if cos(a) == 0:
+        if math.cos(a) == 0:
             raise DNE
         return math.tan(a)
 
