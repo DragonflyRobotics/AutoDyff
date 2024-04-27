@@ -25,3 +25,12 @@ class ImaginaryNumberError(Exception):
     def __init__(self, message="ImaginaryNumberError: Imaginary number"):
         self.message = message
         super().__init__(self.message)
+class EmptyExpression(Exception):
+    def __init__(self, message="EmptyExpression: Expressions like parenthesis sets and exponents can't be empty"):
+        self.message = message
+        super().__init__(self.message)
+
+class UndefinedArguments(Exception):
+    def __init__(self, message="UndefinedArguments: Arguments not provided for operation"):
+        self.message = message
+        super().__init__(self.message)

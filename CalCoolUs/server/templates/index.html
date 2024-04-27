@@ -5,9 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!-- <link rel="stylesheet" href="./style.css">
-<link rel="icon" href="./favicon.ico" type="image/x-icon"> -->
-
+        <!-- <link rel="stylesheet" href="./style.css"> -->
+        <link rel="icon" href="/vapor/brennan-coil/{{url_for('static', filename='favicon.ico')}}" type="image/x-icon"> 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css"/> 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.js"></script>
@@ -24,6 +23,8 @@
 
         body {   font-family: Arial, Helvetica, sans-serif;   margin: 0; }
 
+	h2 { text-align: center;}
+	
         .header { padding: 10%; padding-left: 15%; text-align: left; color: black;}
 
         .header {   padding: 10%;  padding-left: 15%; text-align: left;  /* background: #FFFFFF;*/   color: black; }
@@ -133,12 +134,18 @@
         box-sizing: border-box;
         }
 
-	.background {
-	padding: 20px 40px;
-	margin: 8px;
+	.mathquillBackground {
+	padding: 15px 40px;
+	background-color: #FFFFFF;
+	margin: 8px 0x;
 	border: 2px solid #ccc;
 	border-radius: 4px;
 	box-sizing: border-box;
+	}
+
+	.mqlLabel {
+	font-size: 10pt;
+	color: #6b6b6b;
 	}
 
         input[type=submit] {
@@ -172,12 +179,12 @@
     <body>
 
         <video autoplay muted loop id="backgroundVideo">
-            <source src="{{url_for('static', filename='video.mp4')}}" type="video/mp4">Your browser does not support HTML5 video.</video>
+            <source src="/vapor/brennan-coil/{{url_for('static', filename='video.mp4')}}" type="video/mp4">Your browser does not support HTML5 video.</video>
 
         <div class="content">
 
             <div class="navbar">
-                <a href="#" class="left"><img src="{{url_for('static', filename='FixedLogo.svg')}}" alt="AutoDyff" width="300" height="50"></a>
+                <a href="#" class="left"><img src="/vapor/brennan-coil/{{url_for('static', filename='FixedLogo.svg')}}" alt="AutoDyff" width="300" height="50"></a>
 
 
                 <!--<div class="navbar">-->
@@ -197,10 +204,11 @@
             <!--<div class="row">   <div class="side">     <h2>side thingy</h2>     <h5>Photo:</h5>     <div class="fakeimg" style="height:200px;">Image</div>     <p>text yap tap</p>   </div>-->
 
             <div class="calculator">
-                <a id="calculator"><br><br><br><br></a><h2>Calculator</h2>
+              <a id="calculator"><br><br><br><br></a> <h2>Calculator</h2>
+	      <!--<h2>_______________&emsp;&emsp;&emsp;Calculator&emsp;&emsp;&emsp;_______________</h2>-->
                 <!--<p> <br>Description of calculator coming soon!</p>--><br><br><br>
                 <form id="input">
-                    <div class"equation background"><span id="equation"></span></div>
+                    <div class="mathquillBackground"> <span class="mqlLabel">Equation:</span> <span id="equation"></span></div>
                     <input type="text" name="x" placeholder="At x=" />
                     <br><br><br>
                     <input type="submit" value="Submit">
@@ -211,7 +219,7 @@
 
                 <p><b>f'(x): </b></p><p id="f_prime_x">Nothing Computed Yet</p>     <br> <br> <br> <br> <br> <br>
 
-                <img id="myImage" src="" alt="Image">
+                <img id="myImage" src="" alt="Abstract Syntax Tree Image">
                 <a id="about"></a> <br> <br>
             </div>
 
@@ -232,7 +240,7 @@
                 <p> The algorithm starts by sending a <b>JSON POST</b> request of a mathematical function in text along with a point on that function to a Python server. The server then begins by tokenizing the function from text into an array. Then, the array is converted from infix notation to postfix notation. The function is then converted into an <b>Abstract Syntax Tree (AST)</b>. By doing this, the algorithm can easily iterate through the layers of the functions and easily identify operations and values. <br><br>Then the differentiation algorithm begins; the differentiation starts at the topmost node of the graph (the final operation of the function). The algorithm goes down a layer and then <b>differentiates for each node respectively</b>. For example in an example like x^2, the algorithm will convert the function into an AST; then, it will look at the top node, which is power. Then, the function checks the 2 nodes below the power node. The function then uses the property of the operation (in this case power) to differentiate the node with respect to the 2 variables.
                 </p>
                 <br>
-                <img class="astimg" src="{{url_for('static', filename='diff.png')}}" alt="AST graph" width="auto" height="auto" >
+                <img class="astimg" src="/vapor/brennan-coil/{{url_for('static', filename='diff.png')}}" alt="AST graph" width="auto" height="auto" >
                 <p><i>Image of how calculation is processed (Abstract Syntax Tree)</i></p><br>
                 <br><p>
                     In more complex examples like <b>cos(x^2)*e^x</b>, the function will iterate through each function layer. In this case, <b>MUL_XLE</b> (we’ll call it M) is the final node, so it will differentiate with respect to x using the nodes under it, <b>COS_J62</b> (call it C) and <b>OW_Q5W</b> (call it P). This is equal to <b>dM/dx=P*dC/dx+C*dP/dx</b> by the product rule.
@@ -250,13 +258,13 @@
             </div>
 
             <div class="contact"><a id="contact"></a>
-                <br><br><br> <br> <br> <br> <br> <br> <br> <br> <br><h2>Contact Us</h2>
+                <br><br><br> <br> <br> <br> <br> <br> <br> <br> <br><h2>Contact Us</h2><br><br>
                 <!--<div class="fakeimg" style="height:50px;">Placeholder image</div>-->
                 <p>Make sure to check out our <a href="https://github.com/Allen-ISD-Computer-Science/REPO_AutomaticDifferentiation_2024">GitHub repository!</a></p><br><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> </div>
             <div class="footer">   <p><b>Disclaimer:</b> by using this website, you agree that we can store and use the data you input.</p><p><i>© AutoDyff 2024</i></p> </div> 
         </div>
         
 
-        <script src="{{url_for('static', filename='script.js')}}"></script>
+        <script src="/vapor/brennan-coil/{{url_for('static', filename='script.js')}}"></script>
     </body>
 </html>
