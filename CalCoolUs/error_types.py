@@ -10,3 +10,8 @@ class DomainError(Exception):
 class ParenthesisError(Exception):
     "Parenthesis are not balanced"
     pass
+class EmptyExpression(Exception):
+    "Expressions like parnthesis sets and exponents can't empty"
+    pass
+class UndefinedArguments(Exception):
+    "Arguments not provided for operation ?"

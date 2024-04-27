@@ -86,6 +86,7 @@ class ShuntingYard:
         pattern = self.pattern_latex
         tokenized = []
         #Converts the LaTeX into readable mathametical tokens
+        
         for m in pattern.finditer(string):
             
             token = m.group()
@@ -100,6 +101,7 @@ class ShuntingYard:
             if token == "right)":
                 token = ")"
             tokenized.append(token)
+        
         #Turns all fraction symbols into division
         for index in range(len(tokenized)):
             if tokenized[index] == "frac":
@@ -123,7 +125,18 @@ class ShuntingYard:
                 tokenized[index] = f"{math.e}"
             if tokenized[index] == "π":
                 tokenized[index] = f"{math.pi}"
-
+        for index in range(len(tokenized)):
+            currentElement = tokenized[index]
+            if currentElement == "(":
+                if tokenized[index + 1] == ")":
+                    raise EmptyExpression
+            if currentElement == "*" or currentElement == "+" or currentElement == "-":
+                if index == 0 or index == len(tokenized) - 1:
+                    raise UndefinedArguments
+                previousElement = tokenized[index - 1]
+                nextElement = tokenized[index + 1]
+                if previousElement == "(" or self.isFunction(previousElement) == True or previousElement in self.operations or nextElement == ")" or nextElement in self.operations:
+                    raise UndefinedArguments
         return tokenized
             
     def tokenize_aryan_edition(self, string): # Function to tokenize the input string
