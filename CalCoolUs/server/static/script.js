@@ -10,9 +10,25 @@ function onFormSubmit(event) {
     calc(JSON.stringify(dataObject));
 }
 
+function isValidMath(mathString) {
+    // Use MathQuill's internal methods to check if the math string is valid
+    try {
+        MQ.MathField().latex(mathString);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 function checkAnswer(value) {
     equationsubmitted = value;
     console.log(value);
+    if (!isValidMath(value)) {
+        console.log('Error: Invalid equation');
+    } else {
+        console.log('');
+    } 
 }
 
 var answerSpan = document.getElementById('equation');
@@ -47,7 +63,8 @@ function calc(stringify) {
             document.getElementById("f_x").innerHTML = JSON.parse(this.responseText)['f']; // This console logs the output, just change it to whatever.
             document.getElementById("f_prime_x").innerHTML = JSON.parse(this.responseText)['f_prime']; // This console logs the output, just change it to whatever.
         fetch('/get_image')
-            .then(response => response.json())
+            .then(response => response.json()
+                )
             .then(data => {
                 document.getElementById('myImage').src = 'data:image/jpeg;base64,' + data.image;
             });

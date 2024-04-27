@@ -10,6 +10,14 @@ class Arccsc(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
+        if math.sin(self.__call__(b)) == 0:
+            raise ZeroDivisionError
+        if math.cos(self.__call__(b)) == 0:
+            raise DomainError
+        if math.tan(self.__call__(b)) == 0:
+            raise ZeroDivisionError
+        if (-1.0*(1/math.sin(self.__call__(b)))*(1/math.tan(self.__call__(b)))) == 0:
+            raise ZeroDivisionError
         return (1.0/(-1.0*(1/math.sin(self.__call__(b)))*(1/math.tan(self.__call__(b))))) * a
 
     def __call__(self, a):

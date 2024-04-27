@@ -68,8 +68,17 @@ def numerical_engine_endpoint_latex():
     graph = myASTGraph.getAST(shuntres)
     image = myASTGraph.get_image_array(graph)
     ne = Numerical_Engine(graph, myASTGraph)
-    ans = ne.solve(x)
-    ans_prime = ne.differentiate(x)
+    try:
+        ans = ne.solve(x)
+    except Exception as e:
+        print(f"!!!!!!!{e}")
+        print(f"Exception type: {type(e).__name__}, message: {e}")
+        ans = str(e)
+    try:
+        ans_prime = ne.differentiate(x)
+    except Exception as e:
+        print(f"!!!!!!!{e}")
+        ans_prime = str(e)
     dictToReturn = {'f': str(ans), 'f_prime':str(ans_prime)}
     return jsonify(dictToReturn)
 

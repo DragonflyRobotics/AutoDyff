@@ -10,6 +10,10 @@ class Arccos(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
+        if (1-(b**2)) == 0:
+            raise ZeroDivisionError
+        if (1-(b**2)) < 0:
+            raise ImaginaryNumberError
         return (-1.0/math.sqrt(1-(b**2))) * a
 
     def __call__(self, a):

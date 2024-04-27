@@ -10,6 +10,8 @@ class Ln(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
+        if b == 0:
+            raise ZeroDivisionError
         return (1/b) * a
 
     def __call__(self, a):
