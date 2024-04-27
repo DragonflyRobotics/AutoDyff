@@ -9,4 +9,6 @@
     <string name="resultHeader_text">Results:</string>
     <string name="resultDefault_text">Results are shown here…</string>
     <string name="demoFrag_text">This is an another fragment!</string>
+    <string name="navigation_about_title">About Us</string>
+    <string name="navigation_home_title">Home</string>
 </resources>
