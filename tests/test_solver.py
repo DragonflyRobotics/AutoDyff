@@ -32,7 +32,7 @@ def random_input():
 def test_random_solve(n_times, random_input):
     #Solve with Manual Input
     assert solve("(2*(4*x+5))/3", random_input) == pytest.approx((2*(4*random_input+5))/3)#Passed
-    """
+    
     assert solve("2^(-1*x)", random_input) == pytest.approx(2**(-1*random_input))#Passed
     assert solve("2*(1+(1/x))", random_input) == pytest.approx(2*(1+(1/random_input)))#Passed
     assert solve("2^x-5*x", random_input) == pytest.approx(2**random_input-5*random_input)#Passed
