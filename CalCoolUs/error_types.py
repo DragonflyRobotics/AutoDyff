@@ -34,3 +34,8 @@ class UndefinedArguments(Exception):
     def __init__(self, message="UndefinedArguments: Arguments not provided for operation"):
         self.message = message
         super().__init__(self.message)
+
+class EquationTooShort(Exception):
+    def __init__(self, message="EquationTooShort: Equation is too short"):
+        self.message = message
+        super().__init__(self.message)

@@ -641,7 +641,8 @@ class ASTGraph:
         return "UNK"
 
     def getAST(self, shuntyardresult): # Function to get the AST from the Shunt Yard result
-        assert len(shuntyardresult) > 1
+        if len(shuntyardresult) <= 1:
+            raise EquationTooShort
         self.log.info(f"Running AST compute from the Shunt Yard: {shuntyardresult}")
         graph = nx.MultiDiGraph() # Creating a MultiDiGraph
 

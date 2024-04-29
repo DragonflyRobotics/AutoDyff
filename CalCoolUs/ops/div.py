@@ -9,6 +9,8 @@ class Div(Generic_Op):
         self.value = self
 
     def getDerivative(self, a, b, a_val, b_val, *args, **kwargs):
+        if (b_val == 0):
+            raise ZeroDivisionError
         return (a*b_val - a_val*b) / (b_val*b_val)
 
     def __call__(self, a, b):
