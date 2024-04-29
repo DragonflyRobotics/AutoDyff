@@ -9,6 +9,8 @@ class Arccot(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
+        if math.sin(self.__call__(b)) == 0:
+            raise ZeroDivisionError
         return (1.0/(-1*(1/math.pow(math.sin(self.__call__(b)), 2)))) * a
 
     def __call__(self, a):

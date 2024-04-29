@@ -1,6 +1,7 @@
 from CalCoolUs.ops.op import Generic_Op
 from CalCoolUs.ops.const import Const
 import math
+from CalCoolUs.error_types import *
 
 class Ln(Generic_Op):
     def __init__(self, name):
@@ -9,8 +10,12 @@ class Ln(Generic_Op):
         self.unary = True
 
     def getDerivative(self, a, b, *args, **kwargs):
+        if b == 0:
+            raise ZeroDivisionError
         return (1/b) * a
 
     def __call__(self, a):
+        if a <= 0:
+            raise DNE
         return math.log(a)
 

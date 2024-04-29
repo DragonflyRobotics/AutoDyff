@@ -1,35 +1,36 @@
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html, body {
-  overflow-y: scroll;
-  scrollbar-width: none;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 body::-webkit-scrollbar {
-  -ms-overflow-style: none;
-  display: none;
+    -ms-overflow-style: none;
+    display: none;
 }
 
 body {
-	font-family: Arial, Helvetica, sans-serif;
-	margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
     scrollbar-width: none; /* for Firefox */
     overflow-y: scroll;
 }
 
 body::-webkit-scrollbar {
-  display: none; /* for Chrome, Safari, and Opera */
+    display: none; /* for Chrome, Safari, and Opera */
 }
 
 input[type=text] {
-  //width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
+    //width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
 }
+
 
 .btn {
     position: relative;
@@ -96,68 +97,68 @@ input[type=text] {
 }
 
 #myVideo {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
 }
 
 .content {
-  position: relative;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.0);
-  color: #ffffff;
-  width: 100%;
-  padding: 20px;
+    position: relative;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.0);
+    color: #ffffff;
+    width: 100%;
+    padding: 20px;
 }
 
 .header {
-	padding: 20%;
-	text-align: left;
-	//background: #fff;
-	color: black;
+    padding: 20%;
+    text-align: left;
+    //background: #fff;
+    color: black;
 }
 
 /* font size of the heading */
 .header h1 {
-	font-size: 80px;
+    font-size: 80px;
 }
 
 /* Sticky navbar - toggles between relative and fixed, depending on the scroll position. It is positioned relative until a given offset position is met in the viewport - then it "sticks" in place (like position:fixed). The sticky value is not supported in IE or Edge 15 and earlier versions. However, for these versions the navbar will inherit default position */
 .navbar {
-	overflow: hidden;
-	background-color: rgba(0, 0, 0, 0.5);
-	position: sticky;
-	position: -webkit-sticky;
-	top: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
 }
 
 /* Style the navigation bar links */
 .navbar a {
-	float: left;
-	display: block;
-	color: white;
-	text-align: center;
-	font-weight: bold;
-	padding: 20px 30px;
-	text-decoration: none;
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 20px 30px;
+    text-decoration: none;
 }
 
 /* Right-aligned link */
 .navbar a.right {
-	float: right;
+    float: right;
 }
 
 /* Change color on hover */
 .navbar a:hover {
-	background-color: #EEEEEE;
-	color: black;
+    background-color: #EEEEEE;
+    color: black;
 }
 
 /* Active/current link */
 .navbar a.active {
-	/*background-color: #666;   color: white;*/
+    /*background-color: #666;   color: white;*/
 }
 
 /* Column container */
@@ -170,50 +171,50 @@ input[type=text] {
 /* Main column */
 
 .calculator {
-	/*previously named as main */
-	/*-ms-flex: 70%; /* IE10 */
-	/*flex: 70%;*/
+    /*previously named as main */
+    /*-ms-flex: 70%; /* IE10 */
+    /*flex: 70%;*/
     text-align: center;
-	background-color: rgba(0, 0, 0, 0.5);
-	padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
 }
 
 .about {
     text-align: center;
-	background-color: rgba(0, 0, 0, 0.5);
-	padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
 }
 
 .contact {
     text-align: center;
-	background-color: rgba(0, 0, 0, 0.5);
-	padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
 }
 
 /* put real img here  */
 .fakeimg {
-	background-color: #aaa;
-	width: 100%;
-	padding: 20px;
+    background-color: #aaa;
+    width: 100%;
+    padding: 20px;
 }
 
 /* Footer */
 .footer {
-	padding: 20px;
-	text-align: center;
-	background: #222;
-	color: white;
+    padding: 20px;
+    text-align: center;
+    background: #222;
+    color: white;
 }
 
 /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
 /*@media screen and (max-width: 700px) {   .row {        flex-direction: column;   } }
 
- /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
 @media screen and (max-width: 400px) {
 
-	.navbar a {
-		float: none;
-		width: 100%;
-		padding: 7px 20px;
-	}
+    .navbar a {
+        float: none;
+        width: 100%;
+        padding: 7px 20px;
+    }
 }

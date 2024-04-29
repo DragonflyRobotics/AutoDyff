@@ -1,4 +1,6 @@
 import os
+import numpy as np
+import cv2, io, base64
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,16 +11,22 @@ from CalCoolUs.preprocess import ShuntingYard
 from CalCoolUs.preprocess import ASTGraph
 from CalCoolUs.numerical_engine import Numerical_Engine
 
-from pylatexenc.latex2text import LatexNodes2Text
-from latex2sympy2 import latex2sympy
-
 
 myASTGraph = ASTGraph()
 myshunt = ShuntingYard()
 app = Flask(__name__)
+image = np.zeros((300, 300, 3), dtype="uint8")
 
 def process_latex(equation):
     return str(equation).replace("**", "^")
+
+@app.route('/get_image', methods=['GET'])
+def get_image():
+    _, img_encoded = cv2.imencode('.jpg', image)
+    img_bytes = io.BytesIO(img_encoded).getvalue()
+    img_str = base64.b64encode(img_bytes).decode('utf-8')
+    return jsonify({'image': img_str})
+
 
 @app.route('/numerical_engine/endpoint', methods=['POST'])
 def numerical_engine_endpoint():
@@ -41,6 +49,9 @@ def numerical_engine_endpoint():
 
 @app.route('/numerical_engine/endpoint_latex', methods=['POST'])
 def numerical_engine_endpoint_latex():
+    #make image blue
+    global image
+    image = np.zeros((30, 30, 3), dtype="uint8")
     input_json = request.get_json(force=True) 
     # force=True, above, is necessary if another developer 
     # forgot to set the MIME type to 'application/json'
@@ -50,19 +61,31 @@ def numerical_engine_endpoint_latex():
     print('Equation:', input_json['equation'])
     print("At x=", x, type(x))
     print("----")
-    equation = process_latex(latex2sympy(equation)) #LatexNodes2Text().latex_to_text(equation)
+    equation = myshunt.tokenize_latex(equation)
+    #equation = process_latex(latex2sympy(equation)) #LatexNodes2Text().latex_to_text(equation)
     print(f"Processed Equation: {equation}")
-    shuntres = myshunt.getPostfix(equation)
+    shuntres = myshunt.getPostfixLatex(equation)
     graph = myASTGraph.getAST(shuntres)
+    image = myASTGraph.get_image_array(graph)
     ne = Numerical_Engine(graph, myASTGraph)
-    ans = ne.solve(x)
-    ans_prime = ne.differentiate(x)
+    try:
+        ans = ne.solve(x)
+    except Exception as e:
+        print(f"!!!!!!!{e}")
+        print(f"Exception type: {type(e).__name__}, message: {e}")
+        ans = str(e)
+    try:
+        ans_prime = ne.differentiate(x)
+    except Exception as e:
+        print(f"!!!!!!!{e}")
+        ans_prime = str(e)
     dictToReturn = {'f': str(ans), 'f_prime':str(ans_prime)}
     return jsonify(dictToReturn)
 
 @app.route('/')
 def home():
-   return render_template('index.html')
+    return render_template('index.html')
+
 
 if os.getenv("FLASK_ENV") == "PROD":
     try:
