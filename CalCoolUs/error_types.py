@@ -36,6 +36,10 @@ class UndefinedArguments(Exception):
         super().__init__(self.message)
 
 class EquationTooShort(Exception):
-    def __init__(self, message="EquationTooShort: Equation is too short"):
+    def __init__(self, message="EquationTooShort: Equation must have at least one operation"):
+        self.message = message
+        super().__init__(self.message)
+class InvalidFunctionFormat(Exception):
+    def __init__(self, message="InvalidFunctionFormat: Functions must have parenthesis around argument"):
         self.message = message
         super().__init__(self.message)

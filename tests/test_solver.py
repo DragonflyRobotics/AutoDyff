@@ -32,7 +32,7 @@ def random_input():
 def test_random_solve(n_times, random_input):
     #Solve with Manual Input
     assert solve("(2*(4*x+5))/3", random_input) == pytest.approx((2*(4*random_input+5))/3)#Passed
-    """
+    
     assert solve("2^(-1*x)", random_input) == pytest.approx(2**(-1*random_input))#Passed
     assert solve("2*(1+(1/x))", random_input) == pytest.approx(2*(1+(1/random_input)))#Passed
     assert solve("2^x-5*x", random_input) == pytest.approx(2**random_input-5*random_input)#Passed
@@ -98,16 +98,11 @@ def test_random_solve(n_times, random_input):
     assert differentiate("e^(-x/2)", random_input) == pytest.approx(-.5*np.exp(-random_input/2))
     assert differentiate("sec(x)*sec(x)", random_input) == pytest.approx(2*(np.cos(random_input)**-1)*(np.cos(random_input)**-1)*np.tan(random_input))
    # assert differentiate("sin(e^(5x-2)/(cos(x)))", random_input) == pytest.approx(((np.exp(5*random_input-2))*(np.sin(random_input)+5*np.cos(random_input))*np.cos(np.exp(5*random_input-2)/np.cos(random_input)))/(np.cos(random_input))**2)
-    assert differentiate("e^sin(x)", random_input) == pytest.approx(np.cos(random_input)*np.exp(np.sin(random_input)))
-   # assert differentiate("ln(ln(tan(2^x)))", random_input) == pytest.approx((np.log(2)*(2**random_input)*(1/(np.cos(2**random_input))*(np.cos(2**random_input))))/(np.tan(2**random_input)*np.log(np.tan(2**random_input))))
-    assert differentiate("sin(e^2x)", random_input) == pytest.approx(np.cos(np.exp(2*random_input))*np.exp(2*random_input)*2)
+   assert differentiate("e^sin(x)", random_input) == pytest.approx(np.cos(random_input)*np.exp(np.sin(random_input)))
+   #assert differentiate("ln(ln(tan(2^x)))", random_input) == pytest.approx((np.log(2)*(2**random_input)*(1/(np.cos(2**random_input))*(np.cos(2**random_input))))/(np.tan(2**random_input)*np.log(np.tan(2**random_input))))
+   assert differentiate("sin(e^2x)", random_input) == pytest.approx(np.cos(np.exp(2*random_input))*np.exp(2*random_input)*2)
 
 
-    #assert solve("arccot(2x^3)", random_input) == pytest.approx(np.arctan(1/(2*(random_input**3))))
-    # assert solve("arccsc(2x^3)", random_input) == pytest.approx((np.arcsin(1/(2*(random_input**3)))))
-    # assert solve("arcsec(2x^3)", random_input) == pytest.approx((np.arccos(1/(2*(random_input**3)))))
-    assert solve("arctan(arcsin(x))", random_input) == pytest.approx(np.arctan(np.arcsin(random_input)))
-   """
 
-
+   
 
