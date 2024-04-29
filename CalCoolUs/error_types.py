@@ -34,3 +34,7 @@ class UndefinedArguments(Exception):
     def __init__(self, message="UndefinedArguments: Arguments not provided for operation"):
         self.message = message
         super().__init__(self.message)
+class InvalidFunctionFormat(Exception):
+    def __init__(self, message="InvalidFunctionFormat: Functions must have parenthesis around argument"):
+        self.message = message
+        super().__init__(self.message)

@@ -7,7 +7,7 @@ from CalCoolUs.ops.const import Const
 from CalCoolUs.error_types import *
 
 
-string = "\left(x+4\right)"
+string = r"2+x"
 myshunt = ShuntingYard()
 tokens = myshunt.tokenize_latex(string)
 print(tokens)

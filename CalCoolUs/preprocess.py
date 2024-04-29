@@ -101,7 +101,7 @@ class ShuntingYard:
             if token == "right)":
                 token = ")"
             tokenized.append(token)
-        
+        print(tokenized)
         #Turns all fraction symbols into division
         for index in range(len(tokenized)):
             if tokenized[index] == "frac":
@@ -127,6 +127,11 @@ class ShuntingYard:
                 tokenized[index] = f"{math.pi}"
         for index in range(len(tokenized)):
             currentElement = tokenized[index]
+            if self.isFunction(currentElement):
+                if index == len(tokenized) - 1:
+                    raise InvalidFunctionFormat
+                if tokenized[index + 1] != "(":
+                    raise InvalidFunctionFormat
             if currentElement == "(":
                 if tokenized[index + 1] == ")":
                     raise EmptyExpression
