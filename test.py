@@ -7,7 +7,7 @@ from CalCoolUs.ops.const import Const
 from CalCoolUs.error_types import *
 
 
-string = r"2+x"
+string = r"\frac{e^{x\left(x+1\right)\left(x+2\right)\cos\left(x\right)}}{e^{\cos\left(e\cdot x\right)}}"
 myshunt = ShuntingYard()
 tokens = myshunt.tokenize_latex(string)
 print(tokens)
