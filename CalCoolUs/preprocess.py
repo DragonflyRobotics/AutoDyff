@@ -109,6 +109,14 @@ class ShuntingYard:
                 tokenized.pop(index)
         lowerBound = 0 
         upperBound = len(tokenized) - 1
+        
+        for index in range(0, len(tokenized)):
+            if tokenized[index] == "e":
+                tokenized[index] = f"{math.e}"
+            if tokenized[index] == "π" or tokenized[index] == "pi":
+                tokenized[index] = f"{math.pi}"
+
+
         #Converts coeffecients statements by putting mulptiplcation signs between statements without multiplication signs
         while lowerBound < upperBound:
             higher = tokenized[lowerBound + 1]
@@ -120,11 +128,6 @@ class ShuntingYard:
                 upperBound += len(tokenized)
                 upperBound -= original
             lowerBound += 1
-        for index in range(0, len(tokenized)):
-            if tokenized[index] == "e":
-                tokenized[index] = f"{math.e}"
-            if tokenized[index] == "π":
-                tokenized[index] = f"{math.pi}"
         for index in range(len(tokenized)):
             currentElement = tokenized[index]
             if self.isFunction(currentElement):
@@ -743,8 +746,9 @@ class ASTGraph:
 
         # Create the plot in the buffer
         plt.clf()
-        pos = nx.planar_layout(graph, scale=40)
-        nx.draw_networkx(graph, pos=pos, with_labels=True)
+        pos = nx.spring_layout(graph)#nx.planar_layout(graph, scale=40)
+        # nx.draw_networkx(graph, pos=pos, with_labels=True)
+        nx.draw(graph, pos=pos, with_labels=True)
         plt.savefig(buf, format='png')
 
         # Use PIL to load the image data

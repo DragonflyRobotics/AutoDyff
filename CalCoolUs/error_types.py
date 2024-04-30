@@ -17,14 +17,17 @@ class ParenthesisError(Exception):
     def __init__(self, message="BalanceParenthesis: Parenthesis are not balanced"):
         self.message = message
         super().__init__(self.message)
+
 class ZeroDivisionError(Exception):
     def __init__(self, message="ZeroDivisionError: Division by zero"):
         self.message = message
         super().__init__(self.message)
+
 class ImaginaryNumberError(Exception):
     def __init__(self, message="ImaginaryNumberError: Imaginary number"):
         self.message = message
         super().__init__(self.message)
+
 class EmptyExpression(Exception):
     def __init__(self, message="EmptyExpression: Expressions like parenthesis sets and exponents can't be empty"):
         self.message = message
@@ -39,6 +42,7 @@ class EquationTooShort(Exception):
     def __init__(self, message="EquationTooShort: Equation must have at least one operation"):
         self.message = message
         super().__init__(self.message)
+
 class InvalidFunctionFormat(Exception):
     def __init__(self, message="InvalidFunctionFormat: Functions must have parenthesis around argument"):
         self.message = message
