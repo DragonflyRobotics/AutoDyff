@@ -62,6 +62,8 @@ def numerical_engine_endpoint_latex():
     print('Equation:', input_json['equation'])
     print("At x=", x, type(x))
     print("----")
+    ans = None
+    ans_prime = None
     try: 
         equation = myshunt.tokenize_latex(equation)
         #equation = process_latex(latex2sympy(equation)) #LatexNodes2Text().latex_to_text(equation)
@@ -75,7 +77,7 @@ def numerical_engine_endpoint_latex():
         return jsonify({'f': str(ans), 'f_prime':str(ans_prime), 'error': 'U r so smart'})
     except Exception as e:
         image = error_image
-        return jsonify({'f': "Womp Womp", 'f_prime': "Womp Womp", "error": str(e)})
+        return jsonify({'f': ans, 'f_prime': ans_prime, "error": str(e)})
 
 @app.route('/')
 def home():
