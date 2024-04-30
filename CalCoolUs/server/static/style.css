@@ -71,6 +71,14 @@ background-image: linear-gradient(90deg, #0091ff 0%, #FFFFFF 99%);
     text-align: center;
 }
 
+.myImage {
+    margin-right: 20%;
+}
+
+.calcResults {
+    margin-left: 20%;
+}
+
 .fakeimg {   background-color: #aaa;   width: 100%;   padding: 20px; }  /* Footer */ .footer {   padding: 20px;   text-align: center;   background: #222;   color: white; }
 
 
