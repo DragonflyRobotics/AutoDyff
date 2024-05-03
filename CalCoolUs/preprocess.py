@@ -20,7 +20,7 @@ class ShuntingYard:
         self.funcitons = ["sin", "cos", "tan", "ln", "log", "arcsin", "arccos", "arctan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "arccsc", "arcsec", "arccot", "sigmoid", "sqrt"] # List of functions
         root_log = MainLogger() # Creating a MainLogger instance
         self.log = root_log.StandardLogger("ShuntingYard")  # Create a script specific logging instance
-        self.regex_latex = r"(\\sin)|(\\cos)|(\\tan)|(\\ln)|(\\log)|(\\arcsin)|(\\arccos)|(\\arctan)|(\\cot)|(\\csc)|(\\sec)|(\\sinh)|(\\cosh)|(\\tanh)|(\\arccsc)|(\\arcsec)|(\\arccot)|(\\sigmoid)|(\\sqrt)|((?<=\))-(?=.*))|({)|(})|(\\left\()|(\\right\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(\\pi)|(\^)|(\*)|(\\frac)|(\+)|(-\()|(-)" 
+        self.regex_latex = r"(\\sin)|(\\cos)|(\\tan)|(\\ln)|(\\log)|(\\arcsin)|(\\arccos)|(\\arctan)|(\\cot)|(\\csc)|(\\sec)|(\\sinh)|(\\cosh)|(\\tanh)|(\\arccsc)|(\\arcsec)|(\\arccot)|(\\sigmoid)|(\\sqrt)|((?<=\))-(?=.*))|({)|(})|(\\left\()|(\\right\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(\\pi)|(\^)|(\\cdot)|(\\frac)|(\+)|(-\()|(-)" 
 
         regex = r"(sin)|(cos)|(tan)|(ln)|(log)|(arcsin)|(arccos)|(arctan)|(cot)|(csc)|(sec)|(sinh)|(cosh)|(tanh)|(arccsc)|(arcsec)|(arccot)|(sigmoid)|(sqrt)|((?<=\))-(?=.*))|(\()|(\))|(\d+\.\d+)|((?<!=\.)\d+(?!=\.))|((?<=\B)-\d+\.\d+)|((?<=\B)(?<!=\.)-\d+(?!=\.))|(x|(?<=\B)-x)|(e)|(π)|(\^)|(\*)|(\/)|(\+)|(-\()|(-)"
         self.pattern = re.compile(regex)
@@ -91,7 +91,8 @@ class ShuntingYard:
             
             token = m.group()
             token = token.replace("\\","")
-            
+            if token == "cdot":
+                token = "*"
             if token == "{":
                 token = "("
             if token == "}":
@@ -101,7 +102,7 @@ class ShuntingYard:
             if token == "right)":
                 token = ")"
             tokenized.append(token)
-        print(tokenized)
+        
         #Turns all fraction symbols into division
         for index in range(len(tokenized)):
             if tokenized[index] == "frac":
@@ -128,6 +129,34 @@ class ShuntingYard:
                 upperBound += len(tokenized)
                 upperBound -= original
             lowerBound += 1
+        if tokenized[0] == "-":
+            temp = tokenized[1]
+            tokenized[0] = "-1"
+            tokenized.insert(1, "*")
+        if tokenized[0] == "-x":
+            tokenized[0] = "-1"
+            tokenized.insert(1, "*")
+            tokenized.insert(2,"x")
+        lowerBound = 1
+        upperBound = len(tokenized) - 1
+        while lowerBound < upperBound:
+            
+            if tokenized[lowerBound] == "-x":
+                tokenized[lowerBound] = "-1"
+                tokenized.insert(lowerBound + 1, "*")
+                tokenized.insert(lowerBound + 2, "x")
+                lowerBound + 2
+                upperBound + 2
+            lower = tokenized[lowerBound - 1]
+            if (tokenized[lowerBound] == "-" and (lower == "(")) or (tokenized[lowerBound - 1] in self.operations and tokenized[lowerBound] == "-"):
+                tokenized[lowerBound] = "-1"
+                
+                tokenized.insert(lowerBound + 1 , "*")
+                
+                lowerBound += 2
+                upperBound += 2
+            lowerBound += 1
+        
         for index in range(len(tokenized)):
             currentElement = tokenized[index]
             if self.isFunction(currentElement):
@@ -138,7 +167,7 @@ class ShuntingYard:
             if currentElement == "(":
                 if tokenized[index + 1] == ")":
                     raise EmptyExpression
-            if currentElement == "*" or currentElement == "+" or currentElement == "-":
+            if currentElement == "*" or currentElement == "+":
                 if index == 0 or index == len(tokenized) - 1:
                     raise UndefinedArguments
                 previousElement = tokenized[index - 1]
