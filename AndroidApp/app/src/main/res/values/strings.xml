@@ -11,4 +11,6 @@
     <string name="demoFrag_text">This is an another fragment!</string>
     <string name="navigation_about_title">About Us</string>
     <string name="navigation_home_title">Home</string>
+    <string name="equationFieldPlaceholder">Enter equation here...</string>
+    <string name="x_valuePlaceholder">Enter x_value here...</string>
 </resources>

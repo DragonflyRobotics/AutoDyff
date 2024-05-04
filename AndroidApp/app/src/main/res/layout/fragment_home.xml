@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/textBox_text"
-        android:background="#00BFFF"
+        android:background="#0091ff"
         android:textColor="#000000"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -19,32 +19,35 @@
 
     <TextView
         android:id="@+id/equationInputLabel"
+        android:labelFor="@+id/userEquationInputField"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:gravity="start|center_vertical"
         android:text="@string/equationLabelString"
         android:textColor="#000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleText"
-        android:labelFor="@+id/inputField"
         />
 
     <EditText
         android:id="@+id/userEquationInputField"
         android:inputType="text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:hint="@string/equationFieldPlaceholder"
         android:background="#CCCCCC"
+        android:textColor="#000000"
         android:autofillHints="equation"
         android:gravity="start|center_vertical"
         app:layout_constraintTop_toBottomOf="@+id/titleText"
         app:layout_constraintLeft_toRightOf="@+id/equationInputLabel"
-        />
+        tools:ignore="LabelFor" />
 
     <TextView
         android:id="@+id/user_x_valueInputLabel"
+        android:labelFor="@+id/user_x_valueInputField"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:gravity="start|center_vertical"
         android:text="@string/x_valueLabelString"
         android:textColor="#000000"
@@ -56,20 +59,23 @@
         android:id="@+id/user_x_valueInputField"
         android:inputType="text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:hint="@string/x_valuePlaceholder"
         android:background="#CCCCCC"
+        android:textColor="#000000"
         android:autofillHints="x value"
         android:gravity="start|center_vertical"
         app:layout_constraintLeft_toRightOf="@id/equationInputLabel"
         app:layout_constraintTop_toBottomOf="@id/userEquationInputField"
-        />
+        tools:ignore="LabelFor" />
 
     <Button
         android:id="@+id/inputConfirmButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/confirmInput_button"
-        android:background="#00BFFF"
+        android:backgroundTint="#0091ff"
+        android:textColor="#000000"
         android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_x_valueInputField"
@@ -81,8 +87,8 @@
         android:layout_height="wrap_content"
         android:text="@string/resultHeader_text"
         android:fontFamily="monospace"
-        android:background="#00BFFF"
-        android:textColor="#FFFFFF"
+        android:background="#0091ff"
+        android:textColor="#000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputConfirmButton"
         />

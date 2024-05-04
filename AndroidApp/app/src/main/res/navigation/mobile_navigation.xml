@@ -9,12 +9,12 @@
         android:id="@+id/navigation_home"
         android:name="com.example.betterapp.ui.home.HomeFragment"
         android:label="@string/navigation_home_title"
-        tools:layout="@layout/activity_home" />
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_about"
         android:name="com.example.betterapp.ui.about.AboutFragment"
         android:label="@string/navigation_about_title"
-        tools:layout="@layout/demo_fragment" />
+        tools:layout="@layout/fragment_about" />
 
 </navigation>
