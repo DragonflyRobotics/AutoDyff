@@ -12,5 +12,6 @@ class Tanh(Generic_Op):
         return ((1.0/math.cosh(b))**2) * a
 
     def __call__(self, a):
+        print(f"Tanh({a}) = {math.tanh(a)}")
         return math.tanh(a)
 

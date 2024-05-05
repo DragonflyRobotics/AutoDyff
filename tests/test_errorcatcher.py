@@ -15,8 +15,9 @@ myASTGraph = ASTGraph()
 def test_postfix_errors():
     with pytest.raises(ParenthesisMulError):
         myshunt.tokenize("(x+2)(x)")
-        myshunt.tokenize("e^5(x+5)")
         myshunt.tokenize("(x+7)5^4")
+    with pytest.raises(AmbiguousFunction):
+        myshunt.tokenize("e^5(x+5)")
 def test_function_errors():
     with pytest.raises(DomainError):
         solve("arcsin(x)",2)

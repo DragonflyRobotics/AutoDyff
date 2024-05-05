@@ -70,6 +70,7 @@ def numerical_engine_endpoint_latex():
         print(f"Processed Equation: {equation}")
         shuntres = myshunt.getPostfixLatex(equation)
         graph = myASTGraph.getAST(shuntres)
+        print("ATLEAST I GOT THIS FAR")
         image = myASTGraph.get_image_array(graph)
         ne = Numerical_Engine(graph, myASTGraph)
         ans = ne.solve(x)

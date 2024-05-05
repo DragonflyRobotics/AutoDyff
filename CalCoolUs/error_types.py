@@ -47,3 +47,8 @@ class InvalidFunctionFormat(Exception):
     def __init__(self, message="InvalidFunctionFormat: Functions must have parenthesis around argument"):
         self.message = message
         super().__init__(self.message)
+
+class AmbiguousFunction(Exception):
+    def __init__(self, message="AmbiguousFunction: Function has multiple arguments"):
+        self.message = message
+        super().__init__(self.message)
