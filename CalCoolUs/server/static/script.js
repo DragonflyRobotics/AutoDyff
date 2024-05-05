@@ -40,8 +40,8 @@ var answerMathField = MQ.MathField(answerSpan, {
     supSubsRequireOperand: true,
     charsThatBreakOutOfSupSub: '+-=<>',
     autoSubscriptNumerals: true,
-    autoCommands: 'pi theta sqrt',
-    autoOperatorNames: 'sin cos tan ln log arcsin arccos arctan cot csc sec sinh cosh tanh arccsc arcsec arccot sigmoid sqrt',
+    autoCommands: 'pi sqrt',
+    autoOperatorNames: 'sin cos tan ln log arcsin arccos arctan cot csc sec sinh cosh tanh arccsc arcsec arccot sigmoid',
     maxDepth: 10,
     substituteTextarea: function() {
         return document.createElement('textarea');
@@ -63,7 +63,7 @@ function calc(stringify) {
             document.getElementById("f_x").innerHTML = JSON.parse(this.responseText)['f']; // This console logs the output, just change it to whatever.
             document.getElementById("f_prime_x").innerHTML = JSON.parse(this.responseText)['f_prime']; // This console logs the output, just change it to whatever.
             document.getElementById("error").innerHTML = JSON.parse(this.responseText)['error']; // This console logs the output, just change it to whatever.
-        fetch('/vapor/brennan-coil/get_image')
+        fetch('get_image')
             .then(response => response.json()
                 )
             .then(data => {
@@ -72,7 +72,7 @@ function calc(stringify) {
         }
     };
 
-    xhttp.open("POST", "/vapor/brennan-coil/numerical_engine/endpoint_latex");
+    xhttp.open("POST", "numerical_engine/endpoint_latex");
 
     xhttp.send(stringify); 
 }

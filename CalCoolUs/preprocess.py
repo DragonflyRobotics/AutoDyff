@@ -10,7 +10,7 @@ import math # Importing math for mathematical operations
 from CalCoolUs.log_init import MainLogger # Importing the MainLogger class from the log_init.py file
 from CalCoolUs.error_types import * # Importing all error types from the error_types.py file
 
-import io
+import io, cv2
 from PIL import Image
 import numpy as np
 
@@ -757,6 +757,7 @@ class ASTGraph:
 
         # Convert the image data to a numpy array
         img_array = np.array(img)
+        # img_array = cv2.resize(img_array, dsize=(600, 600), interpolation=cv2.INTER_CUBIC)
 
         # Close the buffer
         buf.close()
