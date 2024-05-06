@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.ContextParams;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,16 +62,20 @@ public class HomeFragment extends Fragment {
         WindowManager windowManager = requireActivity().getWindowManager();
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // get android device dimensions
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        float displayHeight = displayMetrics.heightPixels;
-        int displayWidth = displayMetrics.widthPixels;
+        // these methods are deprecated
+        //DisplayMetrics displayMetrics = new DisplayMetrics();
+        //windowManager.getDefaultDisplay().getMetrics(displayMetrics);
 
-        // deprecated due to use of SVG as banner/title instead on the activity_main.xml
+        // get android device dimensions
+        Rect screenRect = windowManager.getCurrentWindowMetrics().getBounds();
+
+        float displayHeight = screenRect.height();
+        int displayWidth = screenRect.width();
+
+        // deprecated due to use of banner.svg as banner/title on the activity_main.xml instead
         // set title text display
-        TextView titleText = rootView.findViewById(R.id.titleText);
-        titleText.setTextSize(displayHeight * 0.015f);
+        //TextView titleText = rootView.findViewById(R.id.titleText);
+        //titleText.setTextSize(displayHeight * 0.015f);
 
         // set equation input label display size and its location
         TextView equationLabelText = rootView.findViewById(R.id.equationInputLabel);
