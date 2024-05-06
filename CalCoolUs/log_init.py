@@ -69,6 +69,7 @@ class MainLogger():
             logger.setLevel(logging.WARNING)
         else:
             logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.CRITICAL) # Set the logger level to critical
         # create file handler which logs even debug messages
         try: # Try to create a file handler
             fh = logging.FileHandler(os.path.join(self.log_dir, 'complete.log'))
