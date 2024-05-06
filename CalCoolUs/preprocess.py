@@ -137,6 +137,7 @@ class ShuntingYard:
         lowerBound = 0 
         upperBound = len(tokenized) - 1
 
+        #Replaces mathametical constants with their real value 
         for index in range(0, len(tokenized)):
             if tokenized[index] == "e":
                 tokenized[index] = f"{math.e}"
@@ -155,6 +156,7 @@ class ShuntingYard:
                 upperBound += len(tokenized)
                 upperBound -= original
             lowerBound += 1
+        #Converts negative functions and values by multiplying functions and values by -1 
         if tokenized[0] == "-":
             temp = tokenized[1]
             tokenized[0] = "-1"
@@ -182,7 +184,7 @@ class ShuntingYard:
                 lowerBound += 2
                 upperBound += 2
             lowerBound += 1
-
+        #Checks for invalid input and returns comprehensive error messages to user 
         for index in range(len(tokenized)):
             currentElement = tokenized[index]
             if self.isFunction(currentElement):
