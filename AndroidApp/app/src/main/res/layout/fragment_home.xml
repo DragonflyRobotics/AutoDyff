@@ -20,16 +20,17 @@
 
     <EditText
         android:id="@+id/userEquationInputField"
-        android:inputType="text"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:hint="@string/equationFieldPlaceholder"
-        android:background="#CCCCCC"
-        android:textColor="#000000"
         android:autofillHints="equation"
+        android:background="#BFFFFFFF"
         android:gravity="start|center_vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/equationFieldPlaceholder"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
         app:layout_constraintLeft_toRightOf="@+id/equationInputLabel"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="LabelFor" />
 
     <TextView
@@ -46,14 +47,15 @@
 
     <EditText
         android:id="@+id/user_x_valueInputField"
-        android:inputType="text"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:hint="@string/x_valuePlaceholder"
-        android:background="#CCCCCC"
-        android:textColor="#000000"
         android:autofillHints="x value"
+        android:background="#BFFFFFFF"
         android:gravity="start|center_vertical"
+        android:hint="@string/x_valuePlaceholder"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
         app:layout_constraintLeft_toRightOf="@id/equationInputLabel"
         app:layout_constraintTop_toBottomOf="@id/userEquationInputField"
         tools:ignore="LabelFor" />
@@ -74,25 +76,27 @@
         android:id="@+id/resultHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/resultHeader_text"
-        android:fontFamily="monospace"
+        android:layout_marginLeft="172dp"
+        android:layout_marginTop="28dp"
         android:background="#0091ff"
+        android:fontFamily="monospace"
+        android:text="@string/resultHeader_text"
         android:textColor="#000000"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputConfirmButton"
-        />
+        app:layout_constraintTop_toBottomOf="@id/inputConfirmButton" />
 
     <TextView
         android:id="@+id/resultText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#BFFFFFFF"
         android:fontFamily="monospace"
-        android:background="#CCCCCC"
-        android:textColor="#000000"
         android:text="@string/resultDefault_text"
-        app:layout_constraintTop_toBottomOf="@+id/resultHeader"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
         app:layout_constraintLeft_toLeftOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/resultHeader" />
 
     <!-- <Button
         android:id="@+id/faxButton"

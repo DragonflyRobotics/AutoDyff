@@ -223,7 +223,7 @@ public class HomeFragment extends Fragment {
 
     // sends a server request to the server that processes the JSON formatted data
     public static String apiRequest(String equation, String x_value) {
-        final String serverEndpoint = "https://autodyff.pythonanywhere.com/numerical_engine/endpoint";
+        final String serverEndpoint = "https://codermerlin.academy/vapor/krishna-shah/numerical_engine/endpoint";
         String errorReasoning = null;
 
         try {
@@ -254,9 +254,10 @@ public class HomeFragment extends Fragment {
             JSONObject resultJSON = new JSONObject(reader.readLine());
             errorReasoning = (String) resultJSON.get("error");
 
-            return "The value of the normal function is: \n" + resultJSON.get("f")
-                    + "\nThe value of the derivative is: \n" + resultJSON.get("f_prime"
-                    + "\nErrors: \n" + errorReasoning);
+
+            return "The value of the normal function is: \n" + (String) resultJSON.get("f")
+                    + "\nThe value of the derivative is: \n" + (String) resultJSON.get("f_prime")
+                    + "\nErrors: \n" + errorReasoning;
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
