@@ -1,6 +1,10 @@
 * {box-sizing: border-box;}
 
-body {   font-family: Arial, Helvetica, sans-serif;   margin: 0; }
+/*body {   font-family: Arial, Helvetica, sans-serif;   margin: 0; } */
+
+body {	 margin: 0;
+	 line-height: 1.5;
+	 font-family: "Poppins", Calibri, Tahoma, sans-serif;}
 
 h2 { text-align: center;}
 
@@ -136,3 +140,59 @@ input[type=submit]:hover {
     .navbar a {     float: none;     width: 100%;     padding: 7px 20px;    }
 }
 
+
+/*CODE FOR POPPINS FONT*/
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}

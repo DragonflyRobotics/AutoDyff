@@ -5,12 +5,18 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="icon" href="{{url_for('static', filename='favicon.ico')}}" type="image/x-icon"> 
+        <link rel="icon" href="/vapor/brennan-coil/{{url_for('static', filename='favicon.ico')}}" type="image/x-icon"> 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css"/> 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.js"></script>
-        <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-        <script>
+        <link rel="stylesheet" href="/vapor/brennan-coil/{{url_for('static', filename='style.css')}}">
+
+	<!--CODE FOR GETTING THE POPPINS FONT -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+	<script>
         var MQ = MathQuill.getInterface(2);
         fetch('get_image')
             .then(response => response.json()
@@ -22,11 +28,11 @@
         </script>
 	
         <body>
-            <video autoplay muted loop id="backgroundVideo"><source src="{{url_for('static', filename='video.mp4')}}" type="video/mp4">Your browser does not support HTML5 video.</video>
+            <video autoplay muted loop id="backgroundVideo"><source src="/vapor/brennan-coil/{{url_for('static', filename='video.mp4')}}" type="video/mp4">Your browser does not support HTML5 video.</video>
 
             <div class="content">
                 <div class="navbar">
-                    <a href="#" class="left"><img src="{{url_for('static', filename='FixedLogo.svg')}}" alt="AutoDyff" width="300" height="50"></a>
+                    <a href="#" class="left"><img src="/vapor/brennan-coil/{{url_for('static', filename='FixedLogo.svg')}}" alt="AutoDyff" width="300" height="50"></a>
                     <a href="#contact" class="right"><button class="button navbutton"><b>Contact</b></button></a>
                     <a href="#about" class="right"><button class="button navbutton"><b>About</b></button></a>
                     <a href="#calculator" class="right"><button class="button navbutton"><b>Calculator</b></button></a>
@@ -71,7 +77,7 @@
 		  <p><b>How the algorithm works:</b></p>
                   <p> The algorithm starts by sending a <b>JSON POST</b> request of a mathematical function in text along with a point on that function to a Python server. The server then begins by tokenizing the function from text into an array. Then, the array is converted from infix notation to postfix notation. The function is then converted into an <b>Abstract Syntax Tree (AST)</b>. By doing this, the algorithm can easily iterate through the layers of the functions and easily identify operations and values. <br><br>Then the differentiation algorithm begins; the differentiation starts at the topmost node of the graph (the final operation of the function). The algorithm goes down a layer and then <b>differentiates for each node respectively</b>. For example in an example like x^2, the algorithm will convert the function into an AST; then, it will look at the top node, which is power. Then, the function checks the 2 nodes below the power node. The function then uses the property of the operation (in this case power) to differentiate the node with respect to the 2 variables.</p>
                   <br>
-                  <img class="astimg" src="{{url_for('static', filename='diff.png')}}" alt="AST graph" width="auto" height="auto" >
+                  <img class="astimg" src="/vapor/brennan-coil/{{url_for('static', filename='diff.png')}}" alt="AST graph" width="auto" height="auto" >
                   <p style="text-align: center;"><i>Image of how calculation is processed (Abstract Syntax Tree)</i></p>
                   <br>
 		  <p>In more complex examples like <b>cos(x^2)*e^x</b>, the function will iterate through each function layer. In this case, <b>MUL_XLE</b> (we’ll call it M) is the final node, so it will differentiate with respect to x using the nodes under it, <b>COS_J62</b> (call it C) and <b>OW_Q5W</b> (call it P). This is equal to <b>dM/dx=P*dC/dx+C*dP/dx</b> by the product rule. How do we find dC/dx and dP/dx? By using <b>recursion</b> to repeat the process. This will continue until the algorithm either reaches x, whose derivative is defined as 1, or a constant, whose derivative is 0. By using <b>Object Oriented Programming</b>, we can easily integrate operations into our code to solve or differentiate the operations in functions.</p>
@@ -97,6 +103,6 @@
 		  <p><i>© AutoDyff 2024</i></p>
 		</div> 
 	    </div>
-	    <script src="{{url_for('static', filename='script.js')}}"></script>
+	    <script src="/vapor/brennan-coil/{{url_for('static', filename='script.js')}}"></script>
 	</body>
 </html>
